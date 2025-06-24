@@ -1,0 +1,44 @@
+{
+  "name": "tcoe-playwright-example",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=20.11.1"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.0",
+    "@eslint/js": "^9.11.1",
+    "@hmcts/playwright-common": "^1.0.26",
+    "@playwright/test": "^1.48.2",
+    "@types/node": "^22.15.32",
+    "@typescript-eslint/eslint-plugin": "^8.8.0",
+    "dotenv": "^16.4.7",
+    "eslint": "^9.11.1",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-playwright": "^1.6.2",
+    "eslint-plugin-prettier": "^5.5.0",
+    "get-port": "^7.1.0",
+    "globals": "^15.10.0",
+    "lighthouse": "^12.2.1",
+    "playwright": "^1.48.2",
+    "playwright-core": "^1.48.2",
+    "playwright-lighthouse": "^4.0.0",
+    "prettier": "^3.6.0",
+    "typescript": "^5.6.2",
+    "typescript-eslint": "^8.8.0"
+  },
+  "scripts": {
+    "lint": "yarn tsc -p tsconfig.json && yarn eslint .",
+    "setup": "yarn playwright install --with-deps",
+    "load-secrets": "yarn node scripts/get-secrets.js",
+    "build-container": "docker build -t playwright-container .",
+    "start-container": "docker run --rm -it --network host --ipc=host -v \"$(pwd)\":/playwright -w /playwright playwright-container /bin/bash",
+    "test:visual": "yarn playwright test tests/ --grep @visual --project=chromium",
+    "test:update-snapshots": "yarn playwright test tests/ --grep @visual --project=chromium --update-snapshots",
+    "format": "prettier --write ."
+  },
+  "packageManager": "yarn@4.9.2",
+  "dependencies": {
+    "uuid": "^11.1.0"
+  }
+}

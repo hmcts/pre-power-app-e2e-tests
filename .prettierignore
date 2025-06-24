@@ -1,0 +1,11 @@
+# Ignore everything by default
+*
+
+# Except the playwright-e2e folder and its contents
+!playwright-e2e/
+!playwright-e2e/**
+
+# But ignore these subfolders inside playwright-e2e
+playwright-e2e/.snapshots/
+playwright-e2e/.sessions/
+playwright-e2e/test-results/
