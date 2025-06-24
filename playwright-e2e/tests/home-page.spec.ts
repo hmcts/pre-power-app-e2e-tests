@@ -40,7 +40,11 @@ test.describe('Home Page', () => {
     async ({ page, homePage, headless }) => {
       test.skip(!headless, 'Skipping visual test in headed mode');
       await expect(page).toHaveScreenshot('home-page-visual.png', {
-        mask: [homePage.iFrame.locator('[aria-label="Current Version"]'), homePage.iFrame.locator('[class="appmagic-label-text"]')],
+        mask: [
+          homePage.iFrame.locator('[aria-label="Current Version"]'),
+          homePage.iFrame.locator('[class="appmagic-label-text"]'),
+          page.locator('[id*="HeaderContainer"]'),
+        ],
       });
     },
   );
