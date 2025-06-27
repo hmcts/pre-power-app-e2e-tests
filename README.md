@@ -41,9 +41,17 @@ Ensure you have the following installed on your machine:
 Clone the repository and install the dependencies:
 
 ```bash
-git clone https://github.com/your-username/playwright-template.git
-cd playwright-template
+git clone https://github.com/hmcts/pre-power-app-e2e-tests.git
+```
+
+within the cloned project run the following command to install dev dependencies:
+```bash
 yarn install
+```
+
+run the following command after running yarn install in order to install playwright browsers
+```bash
+yarn setup
 ```
 
 ### Running Tests
