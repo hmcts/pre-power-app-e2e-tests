@@ -111,6 +111,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@faker-js/faker@npm:^9.8.0":
+  version: 9.8.0
+  resolution: "@faker-js/faker@npm:9.8.0"
+  checksum: 10/d7d7940ba7f2bd0d266d507bb7a33ec5099654da624dc8647d7cfd2e908b75ba06ed7dd0ec3b771a18600a734f420370b3cecd1ee5d4799993b1ee3505f866d8
+  languageName: node
+  linkType: hard
+
 "@formatjs/ecma402-abstract@npm:2.3.4":
   version: 2.3.4
   resolution: "@formatjs/ecma402-abstract@npm:2.3.4"
@@ -2830,6 +2837,7 @@ __metadata:
   dependencies:
     "@axe-core/playwright": "npm:^4.10.0"
     "@eslint/js": "npm:^9.11.1"
+    "@faker-js/faker": "npm:^9.8.0"
     "@hmcts/playwright-common": "npm:^1.0.26"
     "@playwright/test": "npm:^1.48.2"
     "@types/node": "npm:^22.15.32"

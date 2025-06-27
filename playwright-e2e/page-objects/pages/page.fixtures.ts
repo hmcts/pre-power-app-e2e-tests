@@ -5,6 +5,8 @@ export interface PageFixtures {
   determinePage: Page;
   msSignInPage: Pages.MsSignInPage;
   homePage: Pages.HomePage;
+  caseDetailsPage: Pages.CaseDetailsPage;
+  scheduleRecordingPage: Pages.ScheduleRecording;
 }
 
 /* Instantiates pages and provides page to the test via use()
@@ -21,11 +23,19 @@ export const pageFixtures = {
     }
   },
   msSignInPage: async ({ determinePage }, use) => {
-    const homePage = new Pages.MsSignInPage(determinePage);
-    await use(homePage);
+    const msSignInPage = new Pages.MsSignInPage(determinePage);
+    await use(msSignInPage);
   },
   homePage: async ({ determinePage }, use) => {
     const homePage = new Pages.HomePage(determinePage);
     await use(homePage);
+  },
+  caseDetailsPage: async ({ determinePage }, use) => {
+    const caseDetailsPage = new Pages.CaseDetailsPage(determinePage);
+    await use(caseDetailsPage);
+  },
+  scheduleRecordingPage: async ({ determinePage }, use) => {
+    const scheduleRecordingPage = new Pages.ScheduleRecording(determinePage);
+    await use(scheduleRecordingPage);
   },
 };
