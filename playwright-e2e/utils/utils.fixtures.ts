@@ -2,21 +2,25 @@ import { AxeUtils, BrowserUtils, LighthouseUtils, SessionUtils, WaitUtils } from
 import os from 'os';
 import path from 'path';
 import { chromium, Page } from 'playwright/test';
-import { config, Config } from './config.utils';
+import * as utils from './index';
 
 export interface UtilsFixtures {
-  config: Config;
+  config: utils.Config;
   waitUtils: WaitUtils;
   axeUtils: AxeUtils;
   SessionUtils: typeof SessionUtils;
   browserUtils: BrowserUtils;
   lighthouseUtils: LighthouseUtils;
   lighthousePage: Page;
+  dataUtils: utils.DataUtils;
 }
 
 export const utilsFixtures = {
   config: async ({}, use) => {
-    await use(config);
+    await use(utils.config);
+  },
+  dataUtils: async ({}, use) => {
+    await use(new utils.DataUtils());
   },
   waitUtils: async ({}, use) => {
     await use(new WaitUtils());
@@ -43,7 +47,7 @@ export const utilsFixtures = {
         args: [`--remote-debugging-port=${lighthousePort}`],
       });
       // Using the cookies from global setup, inject to the new browser
-      await context.addCookies(SessionUtils.getCookies(config.users.preUser.sessionFile));
+      await context.addCookies(SessionUtils.getCookies(utils.config.users.preUser.sessionFile));
       // Provide the page to the test
       await use(context.pages()[0]);
       await context.close();
