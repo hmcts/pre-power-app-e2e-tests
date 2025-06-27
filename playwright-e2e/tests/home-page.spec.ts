@@ -2,12 +2,12 @@
 import { test, expect } from '../fixtures';
 import { config } from '../utils';
 
-test.describe('Home Page', () => {
+test.describe('Set of tests to verify the homepage UI', () => {
   test.use({ storageState: config.users.preUser.sessionFile });
 
   test.beforeEach(async ({ homePage }) => {
     await homePage.goTo();
-    await homePage.verifyHeadingIsVisible();
+    await homePage.verifyUserIsOnHomePage();
   });
 
   test(
@@ -17,17 +17,17 @@ test.describe('Home Page', () => {
     },
     async ({ homePage }) => {
       await test.step('Verify all buttons on homepage are visible', async () => {
-        await expect(homePage.$bookARecordingButton).toBeVisible();
-        await expect(homePage.$manageBookingsButton).toBeVisible();
-        await expect(homePage.$viewRecordingsButton).toBeVisible();
-        await expect(homePage.$adminButton).toBeVisible();
+        await expect(homePage.$interactive.bookARecordingButton).toBeVisible();
+        await expect(homePage.$interactive.manageBookingsButton).toBeVisible();
+        await expect(homePage.$interactive.viewRecordingsButton).toBeVisible();
+        await expect(homePage.$interactive.adminButton).toBeVisible();
       });
 
       await test.step('Verify all buttons on homepage are enabled', async () => {
-        await expect(homePage.$bookARecordingButton).toBeEnabled();
-        await expect(homePage.$manageBookingsButton).toBeEnabled();
-        await expect(homePage.$viewRecordingsButton).toBeEnabled();
-        await expect(homePage.$adminButton).toBeEnabled();
+        await expect(homePage.$interactive.bookARecordingButton).toBeEnabled();
+        await expect(homePage.$interactive.manageBookingsButton).toBeEnabled();
+        await expect(homePage.$interactive.viewRecordingsButton).toBeEnabled();
+        await expect(homePage.$interactive.adminButton).toBeEnabled();
       });
     },
   );
