@@ -22,12 +22,15 @@ export class CaseDetailsPage extends Base {
     modifyButton: this.iFrame.getByRole('button', { name: 'Modify' }),
     saveButton: this.iFrame.getByRole('button', { name: 'Save' }),
     bookingsButton: this.iFrame.getByRole('button', { name: 'Bookings' }),
+    validationErrorCloseButton: this.iFrame.getByRole('button', { name: 'Close' }),
   } as const satisfies Record<string, Locator>;
 
   public readonly $static = {
     pageHeading: this.iFrame.getByRole('heading', { name: 'Case Details' }),
     saveCaseSuccessLogo: this.iFrame.locator('[data-control-name*="SaveConfirmationCheck"]'),
     saveCaseSuccessText: this.iFrame.getByText('Case Opened', { exact: true }),
+    validationErrorHeading: this.iFrame.locator("div[appmagic-control*='errorLabel']"),
+    validationErrorText: this.iFrame.locator('[data-control-name="ErrorMessage"]'),
   } as const satisfies Record<string, Locator>;
 
   public async verifyUserIsOnCaseDetailsPage(): Promise<void> {
