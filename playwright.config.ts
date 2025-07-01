@@ -24,6 +24,11 @@ export default defineConfig({
     {
       ...ProjectsConfig.chromium,
       dependencies: ['setup'],
+      use: {
+        ...ProjectsConfig.chromium.use,
+        viewport: { width: 1280, height: 720 }, 
+        deviceScaleFactor: 1,
+      },
     },
   ],
 });

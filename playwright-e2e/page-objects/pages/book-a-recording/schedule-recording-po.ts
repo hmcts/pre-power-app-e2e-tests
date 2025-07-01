@@ -30,6 +30,7 @@ export class ScheduleRecording extends Base {
    * @param days Number of days to offset from today (optional)
    * @param months Number of months to offset from today (optional)
    * @param years Number of years to offset from today (optional)
+   * @returns The formatted date as a string in dd/mm/yyyy format
    */
 
   public async selectDateFromToday(days: number = 0, months: number = 0, years: number = 0): Promise<string> {
@@ -99,10 +100,10 @@ export class ScheduleRecording extends Base {
       await expect(listBox).toBeVisible();
     }
 
-    const listOfDefendants = await listBox.locator('li[role="option"]');
-    const defendantCount = await listOfDefendants.count();
+    const listOfDefendants = await listBox.locator('li[role="option"]').all();
+    const defendantCount = listOfDefendants.length;
     for (let i = 0; i < defendantCount; i++) {
-      const defendantToSelect = listOfDefendants.nth(i);
+      const defendantToSelect = listOfDefendants[i];
       await defendantToSelect.click();
       await expect(listBox).toBeVisible();
     }
