@@ -1,5 +1,6 @@
 import { Page } from '@playwright/test';
 import * as Pages from './index.js';
+import * as Components from '../components/index.js';
 
 export interface PageFixtures {
   determinePage: Page;
@@ -7,6 +8,7 @@ export interface PageFixtures {
   homePage: Pages.HomePage;
   caseDetailsPage: Pages.CaseDetailsPage;
   scheduleRecordingPage: Pages.ScheduleRecording;
+  navBarComponent: Components.NavBarComponent;
 }
 
 /* Instantiates pages and provides page to the test via use()
@@ -37,5 +39,9 @@ export const pageFixtures = {
   scheduleRecordingPage: async ({ determinePage }, use) => {
     const scheduleRecordingPage = new Pages.ScheduleRecording(determinePage);
     await use(scheduleRecordingPage);
+  },
+  navBarComponent: async ({ determinePage }, use) => {
+    const navBarComponent = new Components.NavBarComponent(determinePage);
+    await use(navBarComponent);
   },
 };
