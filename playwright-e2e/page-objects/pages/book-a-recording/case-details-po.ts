@@ -46,4 +46,16 @@ export class CaseDetailsPage extends Base {
     await this.$inputs.defendants.fill(details.defendants.join(', '));
     await this.$inputs.witnesses.fill(details.witnesses.join(', '));
   }
+
+  /**
+   * Searches for an existing case by its reference and selects it.
+   * @param caseReference - Reference of the case to search for.
+   */
+  public async searchAndSelectExistingCase(caseReference: string): Promise<void> {
+    const locator = this.iFrame.getByRole('button', { name: `Case reference ${caseReference}` });
+
+    await this.$inputs.caseReference.fill(caseReference);
+    await expect(locator).toBeVisible();
+    await locator.click();
+  }
 }
