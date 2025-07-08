@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-import { Page } from '@playwright/test';
+import { Page, expect } from '@playwright/test';
 
 export class NetworkInterceptUtils {
   constructor(public readonly page: Page) {}
@@ -13,41 +13,44 @@ export class NetworkInterceptUtils {
    */
   public async interceptAndStoreUserDataUponLogin(pathToFile: string): Promise<void> {
     const timeoutMs = 60000;
-    const startTime = Date.now();
 
-    let responseBody;
-    let userId: string | null = null;
-    let defaultCourtId: string | null = null;
+    let userId: string | undefined;
+    let defaultCourtId: string | undefined;
 
-    while ((!userId || !defaultCourtId) && Date.now() - startTime < timeoutMs) {
-      const response = await this.page
-        .waitForResponse((res) => res.url().includes('custom.uk.azure-apihub.net/invoke') && res.request().method() === 'POST', { timeout: 5000 })
-        .catch(() => null);
+    await expect
+      .poll(
+        async () => {
+          const response = await this.page
+            .waitForResponse((res) => res.url().includes('custom.uk.azure-apihub.net/invoke') && res.request().method() === 'POST', { timeout: 5000 })
+            .catch(() => null);
 
-      if (!response) {
-        continue;
-      }
+          if (!response) return false;
 
-      try {
-        responseBody = await response.json();
+          try {
+            const responseBody = await response.json();
 
-        if (Array.isArray(responseBody.app_access)) {
-          for (const access of responseBody.app_access) {
-            if (access.default_court === true) {
-              userId = access.id;
-              defaultCourtId = access.court.id;
-              break;
+            if (Array.isArray(responseBody.app_access)) {
+              for (const access of responseBody.app_access) {
+                if (access.default_court === true) {
+                  userId = access.id;
+                  defaultCourtId = access.court?.id;
+                  break;
+                }
+              }
             }
+          } catch (err) {
+            console.warn('Failed to parse response body:', err);
+            return false;
           }
-        }
-      } catch {
-        continue;
-      }
-    }
 
-    if (!userId || !defaultCourtId) {
-      throw new Error(`Timeout: Did not find valid /invoke response with default court within ${timeoutMs / 1000} seconds.`);
-    }
+          return !!userId && !!defaultCourtId;
+        },
+        {
+          timeout: timeoutMs,
+          message: `Timeout: Did not find valid /invoke response with default court within ${timeoutMs / 1000} seconds.`,
+        },
+      )
+      .toBeTruthy();
 
     const dir = path.dirname(pathToFile);
     if (!fs.existsSync(dir)) {

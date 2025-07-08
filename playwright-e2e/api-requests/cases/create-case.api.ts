@@ -1,4 +1,4 @@
-import { request } from '@playwright/test';
+import { expect, request } from '@playwright/test';
 import { DataUtils } from '../../utils';
 import { v4 as uuidv4 } from 'uuid';
 import { config } from '../../utils';
@@ -60,9 +60,7 @@ export class CreateNewCaseApi {
       data: requestBody,
     });
 
-    if (!response.ok()) {
-      throw new Error(`Failed to create new case: ${response.status()} ${response.statusText()}`);
-    }
+    await expect(response).toBeOK();
 
     return {
       caseReference: caseDetails.caseReference,

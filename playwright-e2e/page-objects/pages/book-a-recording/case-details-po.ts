@@ -50,6 +50,7 @@ export class CaseDetailsPage extends Base {
   /**
    * Searches for an existing case by its reference and selects it.
    * @param caseReference - Reference of the case to search for.
+   * Verifies the case reference provided has been selected.
    */
   public async searchAndSelectExistingCase(caseReference: string): Promise<void> {
     const locator = this.iFrame.getByRole('button', { name: `Case reference ${caseReference}` });
@@ -57,5 +58,6 @@ export class CaseDetailsPage extends Base {
     await this.$inputs.caseReference.fill(caseReference);
     await expect(locator).toBeVisible();
     await locator.click();
+    await expect(this.iFrame.locator('[data-control-name*="SelectedReference_Lbl"]').filter({ hasText: caseReference })).toBeVisible();
   }
 }
