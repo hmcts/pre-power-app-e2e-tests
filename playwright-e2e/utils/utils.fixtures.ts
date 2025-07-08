@@ -13,6 +13,7 @@ export interface UtilsFixtures {
   lighthouseUtils: LighthouseUtils;
   lighthousePage: Page;
   dataUtils: utils.DataUtils;
+  networkInterceptUtils: utils.NetworkInterceptUtils;
 }
 
 export const utilsFixtures = {
@@ -21,6 +22,9 @@ export const utilsFixtures = {
   },
   dataUtils: async ({}, use) => {
     await use(new utils.DataUtils());
+  },
+  networkInterceptUtils: async ({ page }, use) => {
+    await use(new utils.NetworkInterceptUtils(page));
   },
   waitUtils: async ({}, use) => {
     await use(new WaitUtils());
