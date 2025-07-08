@@ -15,10 +15,17 @@ See the [POM docs](https://github.com/hmcts/tcoe-playwright-example/blob/master/
 
 ```sh
 ├── tests/                  # Test files
+|                  
 ├── page-objects/           # Page objects
-├─── components/            # Common components shared across pages
-├─── pages/                 # Unique pages that contain locaters and functions
-├── utils/                  # Utility functions or common tasks (e.g., login, API methods etc) (Helpers for the project)
+├   ├── components/         # Common components shared across pages
+├   ├── pages/              # Unique pages that contain locators and functions
+|
+├── utils/                  # Utility functions or common tasks (Helpers for the project
+├── api-requests/           # Reusable api requests
+├── fixtures.ts             # Used to import corresponding fixtures from utils, page-objects and api-requests
+├── global.setup.ts         # Global setup logic
+├── global.teardown.ts      # Global teardown logic
+├── playwright.config.ts    # Playwright config
 ```
 
 TCoE Best Practices for setting up playwright in your service can be found in the [playwright-e2e/readme.md](https://github.com/hmcts/tcoe-playwright-example/blob/master/docs/BEST_PRACTICE.md).
