@@ -127,7 +127,7 @@ test.describe('Set of tests to verify case details page', () => {
   );
 
   test(
-    'Verify Defendants containing more than 25 characters are rejected',
+    'Verify Defendants first name or Last name containing more than 25 characters are rejected',
     {
       tag: '@Regression',
     },
@@ -136,14 +136,31 @@ test.describe('Set of tests to verify case details page', () => {
         await caseDetailsPage.$inputs.caseReference.fill(dataUtils.generateRandomCaseReference());
         await caseDetailsPage.$inputs.witnesses.fill(dataUtils.generateRandomNames('firstName', 1)[0]);
       });
-      const firstName = faker.string.alphanumeric(13);
-      const lastName = faker.string.alphanumeric(13);
-      await caseDetailsPage.$inputs.defendants.fill(`${firstName} ${lastName}`);
+      const validationErrorHeading = caseDetailsPage.$static.validationErrorHeading;
+      const validationErrorText = caseDetailsPage.$static.validationErrorText;
 
-      await caseDetailsPage.$interactive.saveButton.click();
-      await expect(caseDetailsPage.$static.validationErrorHeading).toBeVisible();
-      await expect(caseDetailsPage.$static.validationErrorText).toBeVisible();
-      await expect(caseDetailsPage.$static.validationErrorText).toHaveText('Defendant name must be between 1 and 25 characters');
+      await test.step('Verify defendants first name containing more than 25 is rejected', async () => {
+        const firstName = faker.string.alpha(26);
+        const lastName = faker.string.alpha(10);
+        await caseDetailsPage.$inputs.defendants.fill(`${firstName} ${lastName}`);
+
+        await caseDetailsPage.$interactive.saveButton.click();
+        await expect(validationErrorHeading).toBeVisible();
+        await expect(validationErrorText).toBeVisible();
+        await expect(validationErrorText).toHaveText('Defendant name must be between 1 and 25 characters.');
+        await caseDetailsPage.$interactive.validationErrorCloseButton.click();
+        await expect(validationErrorHeading).toBeHidden();
+      });
+      await test.step('Verify defendants last name containing more than 25 is rejected', async () => {
+        const firstName = faker.string.alpha(10);
+        const lastName = faker.string.alpha(26);
+        await caseDetailsPage.$inputs.defendants.fill(`${firstName} ${lastName}`);
+
+        await caseDetailsPage.$interactive.saveButton.click();
+        await expect(validationErrorHeading).toBeVisible();
+        await expect(validationErrorText).toBeVisible();
+        await expect(validationErrorText).toHaveText('Defendant name must be between 1 and 25 characters.');
+      });
     },
   );
 
