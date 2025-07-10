@@ -16,6 +16,7 @@ node_modules/
 .vscode/*
 .sessions/
 .dynamic/
+*ignore*
 # Ignore all PNGs in the snapshot folder
 /playwright-e2e/snapshots/tests/home-page.spec.ts-snapshots/*.png
 # But do NOT ignore PNGs that end in linux.png

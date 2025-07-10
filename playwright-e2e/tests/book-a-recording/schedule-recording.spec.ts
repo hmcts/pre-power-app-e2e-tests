@@ -1,10 +1,10 @@
 import { test, expect } from '../../fixtures';
+import { CreatedCaseSummary } from '../../types';
 import { config } from '../../utils';
-import { CaseDetailsType } from '../../page-objects/pages';
 
 test.describe('Set of tests to verify schedule a recording page for Level 1 user', () => {
   test.use({ storageState: config.users.preUser.sessionFile });
-  let caseData: CaseDetailsType;
+  let caseData: CreatedCaseSummary;
 
   test.beforeEach(async ({ homePage, caseDetailsPage, scheduleRecordingPage, createNewCaseApi, config }) => {
     const user = config.users.preUser;
@@ -29,7 +29,7 @@ test.describe('Set of tests to verify schedule a recording page for Level 1 user
 
       await test.step('Verify user is able to schedule a recording', async () => {
         dateSelected = await scheduleRecordingPage.selectDateFromToday();
-        await scheduleRecordingPage.selectWitnessFromDropDown(caseData.witnesses[0]);
+        await scheduleRecordingPage.selectWitnessFromDropDown(caseData.witnessNames[0]);
         await scheduleRecordingPage.selectAllDefendantsFromDropDown();
         await scheduleRecordingPage.$interactive.saveButton.click();
         await expect(scheduleRecordingPage.$static.saveCaseSuccessLogo).toBeVisible();
@@ -38,8 +38,8 @@ test.describe('Set of tests to verify schedule a recording page for Level 1 user
 
       await test.step('Verify correct details for case have been saved', async () => {
         await expect(scheduleRecordingPage.iFrame.getByText(`Recording Start: ${dateSelected}`)).toBeVisible();
-        await expect(scheduleRecordingPage.iFrame.getByText(`Witness Name: ${caseData.witnesses[0]}`)).toBeVisible();
-        for (const defendant of caseData.defendants) {
+        await expect(scheduleRecordingPage.iFrame.getByText(`Witness Name: ${caseData.witnessNames[0]}`)).toBeVisible();
+        for (const defendant of caseData.defendantNames) {
           await expect(scheduleRecordingPage.iFrame.getByText('Defendants: ')).toContainText(defendant);
         }
       });
