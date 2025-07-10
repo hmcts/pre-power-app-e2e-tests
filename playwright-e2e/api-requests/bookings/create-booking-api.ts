@@ -1,6 +1,6 @@
-import { request, APIRequestContext, expect } from '@playwright/test';
-import { config } from '../../utils';
+import { expect } from '@playwright/test';
 import { v4 as uuidv4 } from 'uuid';
+import ApiContext from '../api-context';
 
 export class CreateBookingApi {
   /**
@@ -34,14 +34,7 @@ export class CreateBookingApi {
     const scheduledForDate = this.getDateString(scheduledFor);
     const requestId = uuidv4();
 
-    const apiContext: APIRequestContext = await request.newContext({
-      baseURL: config.urls.powerAppApiUrl,
-      extraHTTPHeaders: {
-        accept: '*/*',
-        'Content-Type': 'application/json',
-        'X-User-Id': userId,
-      },
-    });
+    const apiContext = await ApiContext.createPowerAppApiContext(userId);
 
     const response = await apiContext.put(`/bookings/${requestId}`, {
       data: {

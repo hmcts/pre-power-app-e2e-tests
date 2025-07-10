@@ -1,8 +1,9 @@
-import { expect, request } from '@playwright/test';
+import { expect } from '@playwright/test';
 import { DataUtils } from '../../utils';
 import { v4 as uuidv4 } from 'uuid';
 import { config } from '../../utils';
 import { CreatedCaseSummary } from '../../types';
+import ApiContext from '../api-context';
 
 export class CreateNewCaseApi {
   private dataUtils = new DataUtils();
@@ -20,7 +21,7 @@ export class CreateNewCaseApi {
     const caseDetails = this.dataUtils.generateRandomCaseDetails(numberOfDefendants, numberOfWitnesses);
     const requestId = uuidv4();
 
-    const apiContext = await request.newContext();
+    const apiContext = await ApiContext.createPowerAppApiContext(userId);
 
     const witnessParticipants = caseDetails.witnessNames.map((nameOfWitness) => ({
       first_name: nameOfWitness,
@@ -56,11 +57,6 @@ export class CreateNewCaseApi {
     };
 
     const response = await apiContext.put(config.urls.powerAppApiUrl + '/cases/' + requestId, {
-      headers: {
-        accept: '*/*',
-        'Content-Type': 'application/json',
-        'X-User-Id': userId,
-      },
       data: requestBody,
     });
 
