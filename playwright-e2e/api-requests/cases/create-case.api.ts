@@ -1,7 +1,6 @@
 import { expect } from '@playwright/test';
 import { DataUtils } from '../../utils';
 import { v4 as uuidv4 } from 'uuid';
-import { config } from '../../utils';
 import { CreatedCaseSummary } from '../../types';
 import ApiContext from '../api-context';
 
@@ -56,7 +55,7 @@ export class CreateNewCaseApi {
       modified_at: dateTimeNow,
     };
 
-    const response = await apiContext.put(config.urls.powerAppApiUrl + '/cases/' + requestId, {
+    const response = await apiContext.put('/cases/' + requestId, {
       data: requestBody,
     });
 

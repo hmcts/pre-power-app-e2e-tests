@@ -1,5 +1,4 @@
 import { expect } from '@playwright/test';
-import { config } from '../../utils';
 import ApiContext from '../api-context';
 
 export class GetUserDetailsByEmailApi {
@@ -12,7 +11,7 @@ export class GetUserDetailsByEmailApi {
   public async request(userId: string, emailAddress: string): Promise<object> {
     const apiContext = await ApiContext.createPowerAppApiContext(userId);
 
-    const response = await apiContext.get(config.urls.powerAppApiUrl + '/users/by-email/' + emailAddress);
+    const response = await apiContext.get('/users/by-email/' + emailAddress);
 
     await expect(response).toBeOK();
 
