@@ -1,11 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { Base } from '../../base';
-
-export type CaseDetailsType = {
-  caseReference: string;
-  defendants: string[];
-  witnesses: string[];
-};
+import { BaseCaseDetails } from '../../../types';
 
 export class CaseDetailsPage extends Base {
   constructor(page: Page) {
@@ -41,10 +36,10 @@ export class CaseDetailsPage extends Base {
    * Populates the case details form with the provided details.
    * @param details - An object containing case reference, defendants, and witnesses.
    */
-  public async populateCaseDetails(details: CaseDetailsType): Promise<void> {
+  public async populateCaseDetails(details: BaseCaseDetails): Promise<void> {
     await this.$inputs.caseReference.fill(details.caseReference);
-    await this.$inputs.defendants.fill(details.defendants.join(', '));
-    await this.$inputs.witnesses.fill(details.witnesses.join(', '));
+    await this.$inputs.defendants.fill(details.defendantNames.join(', '));
+    await this.$inputs.witnesses.fill(details.witnessNames.join(', '));
   }
 
   /**

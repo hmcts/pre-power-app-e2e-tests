@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { CaseDetailsType } from '../page-objects/pages';
+import { BaseCaseDetails } from '../types';
 
 export class DataUtils {
   /**
@@ -8,15 +8,15 @@ export class DataUtils {
    * @param numberOfWitnesses - The number of witnesses to generate.
    * @returns An object containing the case reference, defendants, and witnesses.
    */
-  generateRandomCaseDetails(numberOfDefendants: number, numberOfWitnesses: number): CaseDetailsType {
+  generateRandomCaseDetails(numberOfDefendants: number, numberOfWitnesses: number): BaseCaseDetails {
     if (numberOfDefendants <= 0 || numberOfWitnesses <= 0) {
       throw new Error('Both numberOfDefendants and numberOfWitnesses must be greater than 0');
     }
 
     return {
       caseReference: this.generateRandomCaseReference(),
-      defendants: this.generateRandomNames('fullName', numberOfDefendants),
-      witnesses: this.generateRandomNames('firstName', numberOfWitnesses),
+      defendantNames: this.generateRandomNames('fullName', numberOfDefendants),
+      witnessNames: this.generateRandomNames('firstName', numberOfWitnesses),
     };
   }
 
@@ -36,13 +36,15 @@ export class DataUtils {
    */
   generateRandomNames(type: 'firstName' | 'fullName', numberOfNamesToGenerate: number): string[] {
     return Array.from({ length: numberOfNamesToGenerate }, () => {
+      const firstName = faker.person.firstName().trim().slice(0, 25);
+      const lastName = faker.person.lastName().trim().slice(0, 25);
       let name: string;
       if (type === 'firstName') {
-        name = faker.person.firstName();
+        name = firstName;
       } else {
-        name = `${faker.person.firstName()} ${faker.person.lastName()}`;
+        name = `${firstName} ${lastName}`;
       }
-      return name.trim().slice(0, 25);
+      return name;
     });
   }
 }

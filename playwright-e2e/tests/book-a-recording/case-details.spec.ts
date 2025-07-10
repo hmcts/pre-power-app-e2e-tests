@@ -1,6 +1,6 @@
 import { test, expect } from '../../fixtures';
+import { BaseCaseDetails } from '../../types';
 import { config } from '../../utils';
-import { CaseDetailsType } from '../../page-objects/pages';
 import { faker } from '@faker-js/faker';
 
 test.describe('Set of tests to verify case details page', () => {
@@ -19,12 +19,12 @@ test.describe('Set of tests to verify case details page', () => {
       tag: '@smoke',
     },
     async ({ caseDetailsPage, dataUtils, scheduleRecordingPage }) => {
-      const caseDetails: CaseDetailsType = dataUtils.generateRandomCaseDetails(2, 2);
+      const caseDetails: BaseCaseDetails = dataUtils.generateRandomCaseDetails(2, 2);
 
       await caseDetailsPage.populateCaseDetails({
         caseReference: caseDetails.caseReference,
-        defendants: caseDetails.defendants,
-        witnesses: caseDetails.witnesses,
+        defendantNames: caseDetails.defendantNames,
+        witnessNames: caseDetails.witnessNames,
       });
 
       await caseDetailsPage.$interactive.saveButton.click();
@@ -109,7 +109,7 @@ test.describe('Set of tests to verify case details page', () => {
   );
 
   test(
-    'Verify Defendants field when left emnpty shows validation error ',
+    'Verify Defendants field when left emnpty shows validation error',
     {
       tag: '@Regression',
     },
