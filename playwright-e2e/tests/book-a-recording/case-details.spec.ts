@@ -109,7 +109,7 @@ test.describe('Set of tests to verify case details page', () => {
   );
 
   test(
-    'Verify Defendants field when left emnpty shows validation error ',
+    'Verify Defendants field when left emnpty shows validation error',
     {
       tag: '@Regression',
     },
