@@ -64,8 +64,6 @@ export class CreateNewCaseApi {
     return {
       caseReference: caseDetails.caseReference,
       caseId: requestId,
-      created_at: requestBody.created_at,
-      modified_at: requestBody.modified_at,
       defendantNames: caseDetails.defendantNames,
       witnessNames: caseDetails.witnessNames,
       participants: {

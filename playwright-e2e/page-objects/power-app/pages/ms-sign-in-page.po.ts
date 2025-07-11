@@ -1,6 +1,6 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { Base } from '../base';
-import { config } from '../../utils';
+import { config } from '../../../utils';
 
 export class MsSignInPage extends Base {
   public readonly $inputs = {

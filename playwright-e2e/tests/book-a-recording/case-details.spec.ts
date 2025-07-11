@@ -6,11 +6,8 @@ import { faker } from '@faker-js/faker';
 test.describe('Set of tests to verify case details page', () => {
   test.use({ storageState: config.users.preUser.sessionFile });
 
-  test.beforeEach(async ({ homePage, caseDetailsPage }) => {
-    await homePage.goTo();
-    await homePage.verifyUserIsOnHomePage();
-    await homePage.$interactive.bookARecordingButton.click();
-    await caseDetailsPage.verifyUserIsOnCaseDetailsPage();
+  test.beforeEach(async ({ navigateToCaseDetailsPage }) => {
+    await navigateToCaseDetailsPage();
   });
 
   test(

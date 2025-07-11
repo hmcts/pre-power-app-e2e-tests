@@ -5,9 +5,8 @@ import { config } from '../utils';
 test.describe('Set of tests to verify the homepage UI', () => {
   test.use({ storageState: config.users.preUser.sessionFile });
 
-  test.beforeEach(async ({ homePage }) => {
-    await homePage.goTo();
-    await homePage.verifyUserIsOnHomePage();
+  test.beforeEach(async ({ navigateToHomePage }) => {
+    await navigateToHomePage();
   });
 
   test(

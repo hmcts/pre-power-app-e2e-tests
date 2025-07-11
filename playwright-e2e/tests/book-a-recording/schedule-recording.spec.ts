@@ -1,22 +1,13 @@
 import { test, expect } from '../../fixtures';
-import { CreatedCaseSummary } from '../../types';
 import { config } from '../../utils';
 
 test.describe('Set of tests to verify schedule a recording page for Level 1 user', () => {
-  test.use({ storageState: config.users.preUser.sessionFile });
-  let caseData: CreatedCaseSummary;
+  const user = config.users.preUser;
+  test.use({ storageState: user.sessionFile });
 
-  test.beforeEach(async ({ homePage, caseDetailsPage, scheduleRecordingPage, createNewCaseApi, config }) => {
-    const user = config.users.preUser;
-    caseData = await createNewCaseApi.request(user.userId, user.defaultCourtId, 2, 2);
-
-    await homePage.goTo();
-    await homePage.verifyUserIsOnHomePage();
-    await homePage.$interactive.bookARecordingButton.click();
-    await caseDetailsPage.verifyUserIsOnCaseDetailsPage();
-    await caseDetailsPage.searchAndSelectExistingCase(caseData.caseReference);
-    await caseDetailsPage.$interactive.bookingsButton.click();
-    await scheduleRecordingPage.verifyUserIsOnScheduleRecordingsPage();
+  test.beforeEach(async ({ navigateToScheduleRecordingsPage, apiClient }) => {
+    const caseData = await apiClient.createCase(user.userId, user.defaultCourtId, 2, 2);
+    await navigateToScheduleRecordingsPage(caseData.caseReference);
   });
 
   test(
@@ -24,7 +15,8 @@ test.describe('Set of tests to verify schedule a recording page for Level 1 user
     {
       tag: '@smoke',
     },
-    async ({ scheduleRecordingPage }) => {
+    async ({ scheduleRecordingPage, apiClient }) => {
+      const caseData = await apiClient.getCaseData();
       let dateSelected: string;
 
       await test.step('Verify user is able to schedule a recording', async () => {

@@ -1,6 +1,6 @@
 import { test as baseTest } from '@playwright/test';
 import getPort from 'get-port';
-import { PageFixtures, pageFixtures } from './page-objects/pages';
+import { PageFixtures, pageFixtures } from './page-objects/page.fixtures';
 import { UtilsFixtures, utilsFixtures } from './utils';
 import { ApiFixtures, apiFixtures } from './api-requests/api.fixtures';
 
