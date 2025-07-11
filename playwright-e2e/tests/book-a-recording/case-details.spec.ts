@@ -14,6 +14,24 @@ test.describe('Set of tests to verify case details page', () => {
   });
 
   test(
+    'Verify case reference field when left emnpty shows validation error',
+    {
+      tag: '@Regression',
+    },
+    async ({ caseDetailsPage, dataUtils }) => {
+      await test.step('Pre-requisite step in order to fill out defendants and wintness fields with valid values', async () => {
+        await caseDetailsPage.$inputs.defendants.fill(dataUtils.generateRandomNames('fullName', 1)[0]);
+        await caseDetailsPage.$inputs.witnesses.fill(dataUtils.generateRandomNames('firstName', 1)[0]);
+      });
+
+      await caseDetailsPage.$interactive.saveButton.click();
+      await expect(caseDetailsPage.$static.validationErrorHeading).toBeVisible();
+      await expect(caseDetailsPage.$static.validationErrorText).toBeVisible();
+      await expect(caseDetailsPage.$static.validationErrorText).toHaveText('Please enter a case reference between 9 and 13 characters.');
+    },
+  );
+
+  test(
     'Verify user is able to open a new case and is redirected to the schedule recordings page',
     {
       tag: '@smoke',
@@ -215,6 +233,107 @@ test.describe('Set of tests to verify case details page', () => {
           await expect(headingLocator).toBeHidden();
         });
       }
+    },
+  );
+
+  test(
+    'Verify Witnesses field when left emnpty shows validation error',
+    {
+      tag: '@Regression',
+    },
+    async ({ caseDetailsPage, dataUtils }) => {
+      await test.step('Pre-requisite step in order to fill out case Reference and Defendants fields with valid values', async () => {
+        await caseDetailsPage.$inputs.caseReference.fill(dataUtils.generateRandomCaseReference());
+        await caseDetailsPage.$inputs.defendants.fill(dataUtils.generateRandomNames('fullName', 1)[0]);
+      });
+
+      await caseDetailsPage.$interactive.saveButton.click();
+      await expect(caseDetailsPage.$static.validationErrorHeading).toBeVisible();
+      await expect(caseDetailsPage.$static.validationErrorText).toBeVisible();
+      await expect(caseDetailsPage.$static.validationErrorText).toHaveText('Please enter a witness name into the witness field.');
+    },
+  );
+
+  test(
+    'Verify Witnesses containing first name and last name is rejected',
+    {
+      tag: '@Regression',
+    },
+    async ({ caseDetailsPage, dataUtils }) => {
+      await test.step('Pre-requisite step in order to fill out case Reference and Defendants fields with valid values', async () => {
+        await caseDetailsPage.$inputs.caseReference.fill(dataUtils.generateRandomCaseReference());
+        await caseDetailsPage.$inputs.defendants.fill(dataUtils.generateRandomNames('fullName', 1)[0]);
+      });
+      const name = dataUtils.generateRandomNames('fullName', 1)[0];
+
+      await caseDetailsPage.$inputs.witnesses.fill(name);
+
+      await caseDetailsPage.$interactive.saveButton.click();
+      await expect(caseDetailsPage.$static.validationErrorHeading).toBeVisible();
+      await expect(caseDetailsPage.$static.validationErrorText).toBeVisible();
+      await expect(caseDetailsPage.$static.validationErrorText).toHaveText('Witness names should be first name only.');
+    },
+  );
+
+  test(
+    'Verify Witnesses name containing special characters is rejected',
+    {
+      tag: '@Regression',
+    },
+    async ({ caseDetailsPage, dataUtils }) => {
+      await test.step('Pre-requisite step in order to fill out case Reference and Defendants fields with valid values', async () => {
+        await caseDetailsPage.$inputs.caseReference.fill(dataUtils.generateRandomCaseReference());
+        await caseDetailsPage.$inputs.defendants.fill(dataUtils.generateRandomNames('fullName', 1)[0]);
+      });
+
+      const specialCharacters = Array.from(new Set(';#<>?+_{}@:~=¬`|\\/*&^%$£"!'));
+
+      for (const char of specialCharacters) {
+        await test.step(`Validate Witnesses name containing special character '${char}' is rejected`, async () => {
+          const invalidValue = dataUtils.generateRandomNames('firstName', 1)[0] + char;
+          await caseDetailsPage.$inputs.witnesses.clear();
+          await caseDetailsPage.$inputs.witnesses.fill(invalidValue);
+          await caseDetailsPage.$interactive.saveButton.click();
+
+          const errorTextLocator = caseDetailsPage.$static.validationErrorText;
+          const headingLocator = caseDetailsPage.$static.validationErrorHeading;
+
+          await expect(headingLocator).toBeVisible();
+          await expect(errorTextLocator).toBeVisible();
+          await expect(errorTextLocator).toHaveText('Witness name cannot include special characters: ;#<?>+_{}@:~=¬`|\\/*&^%$£\\""!');
+
+          await caseDetailsPage.$interactive.validationErrorCloseButton.click();
+          await expect(headingLocator).toBeHidden();
+        });
+      }
+    },
+  );
+
+  test(
+    'Verify Witnesses first name containing more than 25 characters are rejected',
+    {
+      tag: '@Regression',
+    },
+    async ({ caseDetailsPage, dataUtils }) => {
+      await test.step('Pre-requisite step in order to fill out case Reference and Defendants fields with valid values', async () => {
+        await caseDetailsPage.$inputs.caseReference.fill(dataUtils.generateRandomCaseReference());
+        await caseDetailsPage.$inputs.defendants.fill(dataUtils.generateRandomNames('fullName', 1)[0]);
+      });
+      const validationErrorHeading = caseDetailsPage.$static.validationErrorHeading;
+      const validationErrorText = caseDetailsPage.$static.validationErrorText;
+
+      await test.step('Verify Witnesses first name containing more than 25 is rejected', async () => {
+        const firstName = faker.string.alpha(26);
+
+        await caseDetailsPage.$inputs.witnesses.fill(firstName);
+
+        await caseDetailsPage.$interactive.saveButton.click();
+        await expect(validationErrorHeading).toBeVisible();
+        await expect(validationErrorText).toBeVisible();
+        await expect(validationErrorText).toHaveText('Witness name must be between 1 and 25 characters.');
+        await caseDetailsPage.$interactive.validationErrorCloseButton.click();
+        await expect(validationErrorHeading).toBeHidden();
+      });
     },
   );
 });
