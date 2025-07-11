@@ -14,7 +14,7 @@ test.describe('Set of tests to verify case details page', () => {
   });
 
   test(
-    'Verify case reference field when left emnpty shows validation error',
+    'Verify case reference field when left empty shows validation error',
     {
       tag: '@Regression',
     },
@@ -127,7 +127,7 @@ test.describe('Set of tests to verify case details page', () => {
   );
 
   test(
-    'Verify Defendants field when left emnpty shows validation error',
+    'Verify Defendants field when left empty shows validation error',
     {
       tag: '@Regression',
     },
@@ -237,7 +237,7 @@ test.describe('Set of tests to verify case details page', () => {
   );
 
   test(
-    'Verify Witnesses field when left emnpty shows validation error',
+    'Verify Witness field when left empty shows validation error',
     {
       tag: '@Regression',
     },
@@ -255,7 +255,7 @@ test.describe('Set of tests to verify case details page', () => {
   );
 
   test(
-    'Verify Witnesses containing first name and last name is rejected',
+    'Verify Witness containing last name is rejected',
     {
       tag: '@Regression',
     },
@@ -276,7 +276,7 @@ test.describe('Set of tests to verify case details page', () => {
   );
 
   test(
-    'Verify Witnesses name containing special characters is rejected',
+    'Verify Witness name containing special characters is rejected',
     {
       tag: '@Regression',
     },
@@ -310,7 +310,7 @@ test.describe('Set of tests to verify case details page', () => {
   );
 
   test(
-    'Verify Witnesses first name containing more than 25 characters are rejected',
+    'Verify Witness first name containing more than 25 characters are rejected',
     {
       tag: '@Regression',
     },
