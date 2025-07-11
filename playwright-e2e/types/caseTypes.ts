@@ -21,8 +21,6 @@ export interface Participant {
 // Created case summary returned from API
 export interface CreatedCaseSummary extends BaseCaseDetails {
   caseId: string;
-  created_at: string;
-  modified_at: string;
   participants: {
     defendants: Participant[];
     witnesses: Participant[];
