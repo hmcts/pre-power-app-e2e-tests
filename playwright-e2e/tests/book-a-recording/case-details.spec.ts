@@ -1,6 +1,4 @@
-import { validate } from 'uuid';
 import { test, expect } from '../../fixtures';
-import { CaseDetailsPage } from '../../page-objects/power-app/pages';
 import { BaseCaseDetails } from '../../types';
 import { config } from '../../utils';
 import { faker } from '@faker-js/faker';
@@ -337,36 +335,17 @@ test.describe('Set of tests to verify case details page', () => {
   );
 
   test(
-    'Verify the modify button is disabled',
+    'Verify the modify and bookings button are disabled when accessing the caseDetailsPage ',
     {
       tag: '@Regression',
     },
 
     async ({ caseDetailsPage, dataUtils }) => {
-      await caseDetailsPage.$inputs.caseReference.fill(dataUtils.generateRandomCaseReference());
-      await caseDetailsPage.$inputs.defendants.fill(dataUtils.generateRandomNames('fullName', 1)[0]);
-      await caseDetailsPage.$inputs.witnesses.fill(dataUtils.generateRandomNames('firstName', 1)[0]);
+      const modifyButton = caseDetailsPage.$interactive.modifyButton.isDisabled();
+      const bookingsButton = caseDetailsPage.$interactive.bookingsButton.isDisabled();
 
-      const button = caseDetailsPage.$interactive.modifyButton;
-
-      await expect(button).toBeDisabled();
-    },
-  );
-
-  test(
-    'Verify the Bookings button is disabled',
-    {
-      tag: '@Regression',
-    },
-
-    async ({ caseDetailsPage, dataUtils }) => {
-      await caseDetailsPage.$inputs.caseReference.fill(dataUtils.generateRandomCaseReference());
-      await caseDetailsPage.$inputs.defendants.fill(dataUtils.generateRandomNames('fullName', 1)[0]);
-      await caseDetailsPage.$inputs.witnesses.fill(dataUtils.generateRandomNames('firstName', 1)[0]);
-
-      const button = caseDetailsPage.$interactive.bookingsButton;
-
-      await expect(button).toBeDisabled();
+      await caseDetailsPage.$interactive.modifyButton.isDisabled();
+      await caseDetailsPage.$interactive.bookingsButton.isDisabled();
     },
   );
 });
