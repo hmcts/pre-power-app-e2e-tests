@@ -2,7 +2,7 @@ import { test, expect } from '../../fixtures';
 import { config } from '../../utils';
 
 test.describe('Set of tests to verify schedule a recording page for Level 1 user', () => {
-  const user = config.users.preUser;
+  const user = config.powerAppUsers.preUser;
   test.use({ storageState: user.sessionFile });
 
   test.beforeEach(async ({ navigateToScheduleRecordingsPage, apiClient }) => {

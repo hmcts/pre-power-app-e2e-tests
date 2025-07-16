@@ -4,7 +4,7 @@ import { config } from '../../utils';
 import { faker } from '@faker-js/faker';
 
 test.describe('Set of tests to verify case details page', () => {
-  test.use({ storageState: config.users.preUser.sessionFile });
+  test.use({ storageState: config.powerAppUsers.preUser.sessionFile });
 
   test.beforeEach(async ({ navigateToCaseDetailsPage }) => {
     await navigateToCaseDetailsPage();
