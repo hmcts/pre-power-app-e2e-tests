@@ -58,4 +58,41 @@ export class NetworkInterceptUtils {
     }
     fs.writeFileSync(pathToFile, JSON.stringify({ userId, defaultCourtId }));
   }
+
+  /**
+   * Intercepts a network request to verify that a recording is taking place for a specific case reference.
+   * It waits for a response from the Power App API and checks if the response body contains the expected case reference
+   * and that the status is 'RECORDING'. If the expected response is not received within the specified timeout, an error is thrown.
+   * @param caseReference - The case reference to verify in the response.
+   * @param timeoutMs - The maximum time to wait for the expected response.
+   */
+  public async interceptNetworkRequestToVerifyRecordingIsTakingPlace(caseReference: string, timeoutMs: number): Promise<void> {
+    await expect
+      .poll(
+        async () => {
+          const response = await this.page
+            .waitForResponse((res) => res.url().includes('/invoke') && res.request().method() === 'POST', { timeout: 5000 })
+            .catch(() => null);
+
+          if (!response) return false;
+
+          try {
+            const body = await response.json();
+
+            const hasExpectedReference = body?.case_dto?.reference === caseReference;
+            const isRecording = body?.capture_sessions?.[0]?.status === 'RECORDING';
+
+            return hasExpectedReference && isRecording;
+          } catch (err) {
+            console.warn('Error parsing JSON response:', err);
+            return false;
+          }
+        },
+        {
+          timeout: timeoutMs,
+          message: `Timeout: Expected POST /invoke response with 'RECORDING' status and reference '${caseReference}' within ${timeoutMs / 1000} seconds.`,
+        },
+      )
+      .toBeTruthy();
+  }
 }
