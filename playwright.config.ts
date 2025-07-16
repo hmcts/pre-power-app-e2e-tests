@@ -1,7 +1,7 @@
 import { CommonConfig, ProjectsConfig } from '@hmcts/playwright-common';
 import { defineConfig } from '@playwright/test';
-
 import * as dotenv from 'dotenv';
+
 dotenv.config();
 
 /**
@@ -26,8 +26,14 @@ export default defineConfig({
       dependencies: ['setup'],
       use: {
         ...ProjectsConfig.chromium.use,
-        viewport: { width: 1280, height: 720 }, 
+        viewport: { width: 1280, height: 720 },
         deviceScaleFactor: 1,
+        launchOptions: {
+          args: [
+            '--use-fake-ui-for-media-stream',
+            '--use-fake-device-for-media-stream',
+          ],
+        }, 
       },
     },
   ],
