@@ -2,29 +2,29 @@ import { AxeUtils, BrowserUtils, LighthouseUtils, SessionUtils, WaitUtils } from
 import os from 'os';
 import path from 'path';
 import { chromium, Page } from 'playwright/test';
-import * as utils from './index';
+import { config, Config, DataUtils, NetworkInterceptUtils } from './index';
 
 export interface UtilsFixtures {
-  config: utils.Config;
+  config: Config;
   waitUtils: WaitUtils;
   axeUtils: AxeUtils;
   SessionUtils: typeof SessionUtils;
   browserUtils: BrowserUtils;
   lighthouseUtils: LighthouseUtils;
   lighthousePage: Page;
-  dataUtils: utils.DataUtils;
-  networkInterceptUtils: utils.NetworkInterceptUtils;
+  dataUtils: DataUtils;
+  networkInterceptUtils: NetworkInterceptUtils;
 }
 
 export const utilsFixtures = {
   config: async ({}, use) => {
-    await use(utils.config);
+    await use(config);
   },
   dataUtils: async ({}, use) => {
-    await use(new utils.DataUtils());
+    await use(new DataUtils());
   },
   networkInterceptUtils: async ({ page }, use) => {
-    await use(new utils.NetworkInterceptUtils(page));
+    await use(new NetworkInterceptUtils(page));
   },
   waitUtils: async ({}, use) => {
     await use(new WaitUtils());
@@ -51,7 +51,7 @@ export const utilsFixtures = {
         args: [`--remote-debugging-port=${lighthousePort}`],
       });
       // Using the cookies from global setup, inject to the new browser
-      await context.addCookies(SessionUtils.getCookies(utils.config.powerAppUsers.preUser.sessionFile));
+      await context.addCookies(SessionUtils.getCookies(config.powerAppUsers.preUser.sessionFile));
       // Provide the page to the test
       await use(context.pages()[0]);
       await context.close();

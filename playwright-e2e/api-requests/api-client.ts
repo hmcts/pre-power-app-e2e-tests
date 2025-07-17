@@ -1,14 +1,14 @@
 import { expect } from '@playwright/test';
 import { BookingDetails, CreatedCaseSummary } from '../types';
-import * as apiRequests from './index';
+import { CreateNewCaseApi, CreateBookingApi, GetCaseDetailsByCaseReferenceApi } from './index.js';
 
 export class ApiClient {
   private caseData?: CreatedCaseSummary;
   private bookingData?: BookingDetails;
 
-  private createNewCaseApi = new apiRequests.CreateNewCaseApi();
-  private createBookingApi = new apiRequests.CreateBookingApi();
-  private getCaseDetailsByCaseReferenceApi = new apiRequests.GetCaseDetailsByCaseReferenceApi();
+  private createNewCaseApi = new CreateNewCaseApi();
+  private createBookingApi = new CreateBookingApi();
+  private getCaseDetailsByCaseReferenceApi = new GetCaseDetailsByCaseReferenceApi();
 
   /**
    * Creates a new case using the provided user and court IDs, number of defendants, and witnesses.
