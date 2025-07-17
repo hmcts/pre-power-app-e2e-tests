@@ -4,11 +4,17 @@ import fs from 'fs';
 export interface UserCredentials {
   username: string;
   password: string;
-  sessionFile: string;
-  cookieName?: string;
+}
+
+interface cvpUserCredentials extends UserCredentials {
+  serviceId: string;
+  locationCode: string;
+  cvpConferenceUser: string;
 }
 
 interface UserData {
+  sessionFile: string;
+  cookieName?: string;
   userId: string;
   defaultCourtId: string;
   userDataFile: string;
@@ -17,17 +23,20 @@ interface UserData {
 interface Urls {
   powerAppUrl: string;
   powerAppApiUrl: string;
+  cvpSettingsUrl: string;
+  cvpConferenceUrl: string;
 }
 
 export interface Config {
-  users: {
+  powerAppUsers: {
     preUser: UserCredentials & UserData;
   };
+  cvpUser: cvpUserCredentials;
   urls: Urls;
 }
 
 export const config: Config = {
-  users: {
+  powerAppUsers: {
     preUser: {
       username: getEnvVar('USER_EMAIL'),
       password: getEnvVar('USER_PASSWORD'),
@@ -37,9 +46,18 @@ export const config: Config = {
       defaultCourtId: getUserIdAndDefaultCourtId(pathToFile('.dynamic/', `${getEnvVar('USER_EMAIL')}.json`)).defaultCourtId,
     },
   },
+  cvpUser: {
+    username: getEnvVar('CVP_USER_EMAIL'),
+    password: getEnvVar('CVP_USER_PASSWORD'),
+    cvpConferenceUser: getEnvVar('CVP_CONFERENCE_USER_EMAIL'),
+    serviceId: getEnvVar('CVP_SERICE_ID'),
+    locationCode: getEnvVar('CVP_LOCATION_CODE'),
+  },
   urls: {
     powerAppUrl: getEnvVar('BASE_URL'),
     powerAppApiUrl: getEnvVar('API_URL'),
+    cvpSettingsUrl: getEnvVar('CVP_SETTINGS_BASE_URL'),
+    cvpConferenceUrl: getEnvVar('CVP_CONFERENCE_BASE_URL'),
   },
 };
 

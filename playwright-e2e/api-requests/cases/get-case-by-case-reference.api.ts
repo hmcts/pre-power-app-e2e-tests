@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import ApiContext from '../api-context';
 
-export class GetCaseDeatilsByCaseReferenceApi {
+export class GetCaseDetailsByCaseReferenceApi {
   /**
    * Fetches case details by case reference.
    * @param userId - The ID of the user making the request.

@@ -3,7 +3,7 @@ import { test, expect } from '../fixtures';
 import { config } from '../utils';
 
 test.describe('Set of tests to verify the homepage UI', () => {
-  test.use({ storageState: config.users.preUser.sessionFile });
+  test.use({ storageState: config.powerAppUsers.preUser.sessionFile });
 
   test.beforeEach(async ({ navigateToHomePage }) => {
     await navigateToHomePage();
