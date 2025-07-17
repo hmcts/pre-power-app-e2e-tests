@@ -335,17 +335,25 @@ test.describe('Set of tests to verify case details page', () => {
   );
 
   test(
-    'Verify the modify and bookings button are disabled when accessing the caseDetailsPage ',
+    'Verify when accessing the caseDetailsPage all the three buttons are stated correctly',
+
     {
       tag: '@Regression',
     },
 
-    async ({ caseDetailsPage, dataUtils }) => {
-      const modifyButton = caseDetailsPage.$interactive.modifyButton.isDisabled();
-      const bookingsButton = caseDetailsPage.$interactive.bookingsButton.isDisabled();
-
-      await caseDetailsPage.$interactive.modifyButton.isDisabled();
-      await caseDetailsPage.$interactive.bookingsButton.isDisabled();
+    async ({ caseDetailsPage }) => {
+      (await test.step('Verify all the buttons are on casedetailspage should be visible', async () => {
+        await expect(caseDetailsPage.$interactive.modifyButton).toBeVisible();
+        await expect(caseDetailsPage.$interactive.saveButton).toBeVisible();
+        await expect(caseDetailsPage.$interactive.bookingsButton).toBeVisible();
+      }),
+        await test.step('Verify modify and bookings buttons are disabled when accessing a casedetails page', async () => {
+          await expect(caseDetailsPage.$interactive.modifyButton).toBeDisabled();
+          await expect(caseDetailsPage.$interactive.bookingsButton).toBeDisabled();
+        }),
+        await test.step('Verify save button is Enabled when accessing a casedetails page', async () => {
+          await expect(caseDetailsPage.$interactive.saveButton).toBeEnabled();
+        }));
     },
   );
 });
