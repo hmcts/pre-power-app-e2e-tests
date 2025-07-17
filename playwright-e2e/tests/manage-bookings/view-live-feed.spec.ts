@@ -42,7 +42,7 @@ test.describe('Set of tests to verify view live feed page for Level 1 user', () 
         await cvp_SignInPage.signIn(config.cvpUser.username, config.cvpUser.password);
 
         await cvp_RoomSettingsPage.verifyUserIsOnCvpRoomSettingsPage();
-        await cvp_RoomSettingsPage.selectRoomFromDropdown('PRE008');
+        await cvp_RoomSettingsPage.selectRoomFromDropdown('PRE009');
         hostPin = await cvp_RoomSettingsPage.editRoomSettings(rtmpsLink);
       });
 
