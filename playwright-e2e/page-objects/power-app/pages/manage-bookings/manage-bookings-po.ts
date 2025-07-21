@@ -17,6 +17,7 @@ export class ManageBookingsPage extends Base {
 
   public readonly $static = {
     pageHeading: this.iFrame.locator('[data-control-name="manageBookingScrn_BookedSrchRef_Lbl"]').filter({ hasText: 'Case Reference' }),
+    caseReferenceLabelInSearchList: this.iFrame.locator('[data-control-name="manageBookingScrn_CaseRef_Lbl"]'),
   } as const satisfies Record<string, Locator>;
 
   public async verifyUserIsOnManageBookingsPage(): Promise<void> {
@@ -29,16 +30,21 @@ export class ManageBookingsPage extends Base {
    * @param caseReference - The case reference to search for.
    */
   public async searchForABooking(caseReference: string): Promise<void> {
-    const foundCaseReflocator = this.iFrame.locator('[data-control-name="manageBookingScrn_CaseRef_Lbl"]').filter({ hasText: caseReference });
-
     await this.$inputs.caseReference.fill(caseReference);
     await expect(this.$inputs.caseReference).toHaveValue(caseReference);
 
-    try {
-      await expect(foundCaseReflocator).toBeVisible({ timeout: 3000 });
-    } catch {
+    await expect(async () => {
+      await this.refreshResultsIfMoreThenOneCaseReference();
+      await expect(this.$static.caseReferenceLabelInSearchList).toHaveText(caseReference, { timeout: 2000 });
+    }).toPass({ intervals: [2500], timeout: 10000 });
+  }
+
+  public async refreshResultsIfMoreThenOneCaseReference(): Promise<void> {
+    const caseReferenceList = this.iFrame.locator('[data-control-name="manageBookingScrn_Recordings_Gal"]').locator('[role="listitem"]');
+
+    if ((await caseReferenceList.count()) > 1) {
       await this.$interactive.refreshResultsButton.click();
-      await expect(foundCaseReflocator).toBeVisible({ timeout: 5000 });
+      await expect(caseReferenceList).toHaveCount(1);
     }
   }
 }
