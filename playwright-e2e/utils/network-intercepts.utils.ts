@@ -15,6 +15,7 @@ export class NetworkInterceptUtils {
     const timeoutMs = 60000;
 
     let userId: string | undefined;
+    let x_userId: string | undefined;
     let defaultCourtId: string | undefined;
 
     await expect
@@ -28,11 +29,12 @@ export class NetworkInterceptUtils {
 
           try {
             const responseBody = await response.json();
+            userId = responseBody?.user?.id;
+            x_userId = responseBody?.app_access?.[0]?.id;
 
             if (Array.isArray(responseBody.app_access)) {
               for (const access of responseBody.app_access) {
                 if (access.default_court === true) {
-                  userId = access.id;
                   defaultCourtId = access.court?.id;
                   break;
                 }
@@ -43,7 +45,7 @@ export class NetworkInterceptUtils {
             return false;
           }
 
-          return !!userId && !!defaultCourtId;
+          return !!userId && !!x_userId && !!defaultCourtId;
         },
         {
           timeout: timeoutMs,
@@ -56,7 +58,7 @@ export class NetworkInterceptUtils {
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
-    fs.writeFileSync(pathToFile, JSON.stringify({ userId, defaultCourtId }));
+    fs.writeFileSync(pathToFile, JSON.stringify({ userId, x_userId, defaultCourtId }));
   }
 
   /**

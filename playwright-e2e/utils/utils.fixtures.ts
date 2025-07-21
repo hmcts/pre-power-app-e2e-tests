@@ -51,7 +51,7 @@ export const utilsFixtures = {
         args: [`--remote-debugging-port=${lighthousePort}`],
       });
       // Using the cookies from global setup, inject to the new browser
-      await context.addCookies(SessionUtils.getCookies(config.powerAppUsers.preUser.sessionFile));
+      await context.addCookies(SessionUtils.getCookies(config.powerAppUsers.preLevel1User.sessionFile));
       // Provide the page to the test
       await use(context.pages()[0]);
       await context.close();

@@ -2,11 +2,11 @@ import { test, expect } from '../../fixtures';
 import { config } from '../../utils';
 
 test.describe('Set of tests to verify schedule a recording page for Level 1 user', () => {
-  const user = config.powerAppUsers.preUser;
+  const user = config.powerAppUsers.preLevel1User;
   test.use({ storageState: user.sessionFile });
 
   test.beforeEach(async ({ navigateToScheduleRecordingsPage, apiClient }) => {
-    const caseData = await apiClient.createCase(user.userId, user.defaultCourtId, 2, 2);
+    const caseData = await apiClient.createCase(2, 2);
     await navigateToScheduleRecordingsPage(caseData.caseReference);
   });
 
