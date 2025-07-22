@@ -2,11 +2,11 @@ import { test, expect } from '../../fixtures';
 import { config } from '../../utils';
 
 test.describe('Set of tests to verify view live feed page for Level 1 user', () => {
-  const user = config.powerAppUsers.preUser;
+  const user = config.powerAppUsers.preLevel1User;
   test.use({ storageState: user.sessionFile });
 
   test.beforeEach(async ({ navigateToViewLiveFeedPage, apiClient }) => {
-    const bookingData = await apiClient.createBooking(user.userId, user.defaultCourtId, 2, 2, 'today');
+    const bookingData = await apiClient.createBooking(2, 2, 'today');
     await navigateToViewLiveFeedPage(bookingData.caseReference);
   });
 

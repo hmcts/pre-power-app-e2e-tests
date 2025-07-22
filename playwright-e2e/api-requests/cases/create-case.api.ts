@@ -1,26 +1,27 @@
-import { expect } from '@playwright/test';
+import { APIRequestContext, expect } from '@playwright/test';
 import { DataUtils } from '../../utils';
 import { v4 as uuidv4 } from 'uuid';
 import { CreatedCaseSummary } from '../../types';
-import ApiContext from '../api-context';
 
 export class CreateNewCaseApi {
+  private apiContext: APIRequestContext;
+  private courtId: string;
   private dataUtils = new DataUtils();
 
+  constructor(apiContext: APIRequestContext, courtId: string) {
+    this.apiContext = apiContext;
+    this.courtId = courtId;
+  }
+
   /**
-   * Creates a new case via Power App API.
-   *
-   * @param userId - The ID of the user creating the case.
-   * @param courtId - The ID of the court where the case is being created.
+   * Creates a new case with the specified number of defendants and witnesses.
    * @param numberOfDefendants - The number of defendants in the case.
    * @param numberOfWitnesses - The number of witnesses in the case.
-   * @returns A promise that resolves to a CreatedCaseSummary object containing details of the created case.
+   * @returns A promise that resolves to the created case summary.
    */
-  public async request(userId: string, courtId: string, numberOfDefendants: number, numberOfWitnesses: number): Promise<CreatedCaseSummary> {
+  public async request(numberOfDefendants: number, numberOfWitnesses: number): Promise<CreatedCaseSummary> {
     const caseDetails = this.dataUtils.generateRandomCaseDetails(numberOfDefendants, numberOfWitnesses);
-    const requestId = uuidv4();
-
-    const apiContext = await ApiContext.createPowerAppApiContext(userId);
+    const caseId = uuidv4();
 
     const witnessParticipants = caseDetails.witnessNames.map((nameOfWitness) => ({
       first_name: nameOfWitness,
@@ -44,8 +45,8 @@ export class CreateNewCaseApi {
 
     const requestBody = {
       closed_at: null,
-      court_id: courtId,
-      id: requestId,
+      court_id: this.courtId,
+      id: caseId,
       origin: 'PRE',
       participants,
       reference: caseDetails.caseReference,
@@ -55,7 +56,7 @@ export class CreateNewCaseApi {
       modified_at: dateTimeNow,
     };
 
-    const response = await apiContext.put('/cases/' + requestId, {
+    const response = await this.apiContext.put('/cases/' + caseId, {
       data: requestBody,
     });
 
@@ -63,7 +64,7 @@ export class CreateNewCaseApi {
 
     return {
       caseReference: caseDetails.caseReference,
-      caseId: requestId,
+      caseId: caseId,
       defendantNames: caseDetails.defendantNames,
       witnessNames: caseDetails.witnessNames,
       participants: {

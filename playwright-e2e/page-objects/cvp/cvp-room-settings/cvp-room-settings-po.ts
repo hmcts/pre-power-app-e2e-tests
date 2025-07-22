@@ -83,9 +83,12 @@ export class CvpRoomSettingsPage {
    * @returns The host PIN as a string.
    */
   private async captureHostPin(): Promise<string> {
-    await expect(this.page.getByRole('button', { name: 'Show' })).toBeEnabled();
-    await this.page.getByRole('button', { name: 'Show' }).click();
-    await expect(this.page.getByRole('button', { name: 'Hide' })).toBeVisible();
+    await expect(async () => {
+      await expect(this.page.getByRole('button', { name: 'Show' })).toBeEnabled();
+      await this.page.getByRole('button', { name: 'Show' }).click();
+      await expect(this.page.getByRole('button', { name: 'Hide' })).toBeVisible({ timeout: 1000 });
+    }).toPass({ intervals: [1500], timeout: 10000 });
+
     const hostPin = await this.page.getByRole('spinbutton', { name: 'Host PIN:' }).inputValue();
     return hostPin;
   }

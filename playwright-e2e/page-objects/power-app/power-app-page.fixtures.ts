@@ -7,6 +7,7 @@ import {
   ManageBookingsPage,
   ViewLiveFeedPage,
   ProcessingRecordingsPage,
+  ViewRecordingsPage,
 } from './pages/index.js';
 import { NavBarComponent } from './components/index.js';
 
@@ -20,11 +21,13 @@ export interface PowerAppPageFixtures {
   manageBookingsPage: ManageBookingsPage;
   viewLiveFeedPage: ViewLiveFeedPage;
   processingRecordingsPage: ProcessingRecordingsPage;
+  viewRecordingsPage: ViewRecordingsPage;
   navigateToHomePage: () => Promise<void>;
   navigateToCaseDetailsPage: () => Promise<void>;
   navigateToScheduleRecordingsPage: (caseReference: string) => Promise<void>;
   navigateToManageBookingsPage: () => Promise<void>;
   navigateToViewLiveFeedPage: (caseReference: string) => Promise<void>;
+  navigateToViewRecordingsPage: () => Promise<void>;
 }
 
 /* Instantiates pages and provides page to the test via use()
@@ -72,6 +75,10 @@ export const powerAppPageFixtures = {
     const processingRecordingsPage = new ProcessingRecordingsPage(determinePage);
     await use(processingRecordingsPage);
   },
+  viewRecordingsPage: async ({ determinePage }, use) => {
+    const viewRecordingsPage = new ViewRecordingsPage(determinePage);
+    await use(viewRecordingsPage);
+  },
   navigateToHomePage: async ({ homePage }, use) => {
     await use(async () => {
       await homePage.goTo();
@@ -106,6 +113,13 @@ export const powerAppPageFixtures = {
       await manageBookingsPage.searchForABooking(caseReference);
       await manageBookingsPage.$interactive.recordButton.click();
       await viewLiveFeedPage.verifyUserIsOnViewLiveFeedPage();
+    });
+  },
+  navigateToViewRecordingsPage: async ({ navigateToHomePage, homePage, viewRecordingsPage }: PowerAppPageFixtures, use) => {
+    await use(async () => {
+      await navigateToHomePage();
+      await homePage.$interactive.viewRecordingsButton.click();
+      await viewRecordingsPage.verifyUserIsOnViewRecordingsPage();
     });
   },
 };

@@ -16,6 +16,7 @@ interface UserData {
   sessionFile: string;
   cookieName?: string;
   userId: string;
+  x_userId: string;
   defaultCourtId: string;
   userDataFile: string;
 }
@@ -29,7 +30,7 @@ interface Urls {
 
 export interface Config {
   powerAppUsers: {
-    preUser: UserCredentials & UserData;
+    preLevel1User: UserCredentials & UserData;
   };
   cvpUser: cvpUserCredentials;
   urls: Urls;
@@ -37,13 +38,14 @@ export interface Config {
 
 export const config: Config = {
   powerAppUsers: {
-    preUser: {
+    preLevel1User: {
       username: getEnvVar('USER_EMAIL'),
       password: getEnvVar('USER_PASSWORD'),
       sessionFile: pathToFile('.sessions/', `${getEnvVar('USER_EMAIL')}.json`),
       userDataFile: pathToFile('.dynamic/', `${getEnvVar('USER_EMAIL')}.json`),
-      userId: getUserIdAndDefaultCourtId(pathToFile('.dynamic/', `${getEnvVar('USER_EMAIL')}.json`)).userId,
-      defaultCourtId: getUserIdAndDefaultCourtId(pathToFile('.dynamic/', `${getEnvVar('USER_EMAIL')}.json`)).defaultCourtId,
+      userId: getDynamicUserData(pathToFile('.dynamic/', `${getEnvVar('USER_EMAIL')}.json`)).userId,
+      x_userId: getDynamicUserData(pathToFile('.dynamic/', `${getEnvVar('USER_EMAIL')}.json`)).x_userId,
+      defaultCourtId: getDynamicUserData(pathToFile('.dynamic/', `${getEnvVar('USER_EMAIL')}.json`)).defaultCourtId,
     },
   },
   cvpUser: {
@@ -81,16 +83,17 @@ export function getEnvVar(name: string): string {
  * @param pathToConfig - The path to the configuration file.
  * @returns An object containing userId and courtId.
  */
-function getUserIdAndDefaultCourtId(pathToConfig: string): { userId: string; defaultCourtId: string } {
+function getDynamicUserData(pathToConfig: string): { userId: string; x_userId: string; defaultCourtId: string } {
   const dynamicDataPath = pathToConfig;
   if (!fs.existsSync(dynamicDataPath)) {
     // File does not exist yet (e.g., first run before setup)
-    return { userId: '', defaultCourtId: '' };
+    return { userId: '', x_userId: '', defaultCourtId: '' };
   }
   const dynamicDataRaw = fs.readFileSync(dynamicDataPath, 'utf-8');
   const parsed = JSON.parse(dynamicDataRaw);
   return {
     userId: parsed.userId,
+    x_userId: parsed.x_userId,
     defaultCourtId: parsed.defaultCourtId,
   };
 }

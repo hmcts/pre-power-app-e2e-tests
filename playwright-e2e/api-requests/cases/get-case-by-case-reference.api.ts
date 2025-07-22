@@ -1,21 +1,24 @@
-import { expect } from '@playwright/test';
-import ApiContext from '../api-context';
+import { APIRequestContext, expect } from '@playwright/test';
 
 export class GetCaseDetailsByCaseReferenceApi {
+  private apiContext: APIRequestContext;
+  private courtId: string;
+
+  constructor(apiContext: APIRequestContext, courtId: string) {
+    this.apiContext = apiContext;
+    this.courtId = courtId;
+  }
+
   /**
    * Fetches case details by case reference.
-   * @param userId - The ID of the user making the request.
-   * @param courtId - The ID of the court to which the case belongs.
-   * @param caseReference - The reference number of the case to be fetched.
-   * @return A promise that resolves to the case details response.
+   * @param caseReference - The reference of the case to fetch details for.
+   * @returns A promise that resolves to the case details.
    */
-  public async request(userId: string, courtId: string, caseReference: string): Promise<object> {
-    const apiContext = await ApiContext.createPowerAppApiContext(userId);
-
-    const response = await apiContext.get('/cases', {
+  public async request(caseReference: string): Promise<object> {
+    const response = await this.apiContext.get('/cases', {
       params: {
         reference: caseReference,
-        courtId: courtId,
+        courtId: this.courtId,
         includeDeleted: 'true',
         page: '0',
         size: '1',

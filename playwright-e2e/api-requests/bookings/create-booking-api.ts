@@ -1,20 +1,22 @@
-import { expect } from '@playwright/test';
+import { expect, APIRequestContext } from '@playwright/test';
 import { v4 as uuidv4 } from 'uuid';
-import ApiContext from '../api-context';
 
 export class CreateBookingApi {
+  private apiContext: APIRequestContext;
+
+  constructor(apiContext: APIRequestContext) {
+    this.apiContext = apiContext;
+  }
+
   /**
    * Creates a new booking via Power App API.
-   *
-   * @param userId - The ID of the user creating the booking.
    * @param caseId - The ID of the case for which the booking is being created.
    * @param witness - The witness details.
    * @param defendants - An array of defendant details.
    * @param scheduledFor - The date for which the recording is scheduled ('today' or 'tomorrow').
-   * @returns A promise that resolves when the booking is successfully created.
+   * @returns A promise that returns the ID of the created booking.
    */
   public async request(
-    userId: string,
     caseId: string,
     witness: {
       first_name: string;
@@ -29,23 +31,22 @@ export class CreateBookingApi {
       participant_type: string;
     }[],
     scheduledFor: 'today' | 'tomorrow',
-  ): Promise<void> {
+  ): Promise<string> {
     const participants = [witness, ...defendants];
     const scheduledForDate = this.getDateString(scheduledFor);
-    const requestId = uuidv4();
+    const bookingId = uuidv4();
 
-    const apiContext = await ApiContext.createPowerAppApiContext(userId);
-
-    const response = await apiContext.put(`/bookings/${requestId}`, {
+    const response = await this.apiContext.put(`/bookings/${bookingId}`, {
       data: {
         case_id: caseId,
-        id: requestId,
+        id: bookingId,
         participants,
         scheduled_for: `${scheduledForDate}T00:00:00.000Z`,
       },
     });
 
     await expect(response).toBeOK();
+    return bookingId;
   }
 
   private getDateString(date: 'today' | 'tomorrow' = 'today'): string {

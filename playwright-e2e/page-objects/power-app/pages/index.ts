@@ -5,3 +5,4 @@ export * from './book-a-recording/schedule-recording-po';
 export * from './manage-bookings/manage-bookings-po';
 export * from './manage-bookings/view-live-feed-po';
 export * from './manage-bookings/processing-recordings-po';
+export * from './view-recordings/view-recordings-po';

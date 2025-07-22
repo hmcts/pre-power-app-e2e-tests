@@ -38,8 +38,10 @@ export class ViewLiveFeedPage extends Base {
    * @returns The generated RTMPS link as a trimmed string.
    */
   public async startRecordingAndCaptureRtmpsLink(): Promise<string> {
-    await this.$interactive.startRecordingButton.click();
-    await expect(this.iFrame.locator('[data-control-name="RTMPSWindow"]')).toBeVisible();
+    await expect(async () => {
+      await this.$interactive.startRecordingButton.click();
+      await expect(this.iFrame.locator('[data-control-name="RTMPSWindow"]')).toBeVisible({ timeout: 1000 });
+    }).toPass({ intervals: [1500], timeout: 10000 });
     await expect(this.$startRecordingModal.recordingLinkIsBeingGeneratedText).toBeVisible();
     await expect(this.$startRecordingModal.recordingLinkGeneratedText).toBeVisible({ timeout: 60000 });
     await expect(this.$startRecordingModal.generatedRtmpsLink).toBeVisible();

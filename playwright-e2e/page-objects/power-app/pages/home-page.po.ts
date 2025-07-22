@@ -3,6 +3,10 @@ import { Base } from '../base';
 import { config } from '../../../utils';
 
 export class HomePage extends Base {
+  constructor(page: Page) {
+    super(page);
+  }
+
   public readonly $interactive = {
     bookARecordingButton: this.iFrame.getByText('Book a Recording', { exact: true }),
     manageBookingsButton: this.iFrame.getByText('Manage Bookings', { exact: true }),
@@ -13,10 +17,6 @@ export class HomePage extends Base {
   public readonly $static = {
     heading: this.iFrame.getByRole('heading', { name: 'Pre-Recorded Evidence' }),
   } as const satisfies Record<string, Locator>;
-
-  constructor(page: Page) {
-    super(page);
-  }
 
   public async goTo(): Promise<void> {
     await this.page.goto(config.urls.powerAppUrl);
