@@ -356,4 +356,61 @@ test.describe('Set of tests to verify case details page', () => {
       });
     },
   );
+  test(
+    'Verify case details are correct when searching and selecting an exisiting case',
+    {
+      tag: '@Regression',
+    },
+    async ({ caseDetailsPage, apiClient }) => {
+      await test.step('Pre-requisite step in order to create a case via api', async () => {
+        await apiClient.createCase(2, 2);
+      });
+      const caseData = await apiClient.getCaseData();
+
+      await test.step('Verify case appears in searchlist when searched for', async () => {
+        await caseDetailsPage.$inputs.caseReference.fill(caseData.caseReference);
+        await expect(caseDetailsPage.$inputs.caseReference).toHaveValue(caseData.caseReference);
+
+        await expect(caseDetailsPage.$static.searchResultExistingCasesTitle).toBeVisible();
+        await expect(caseDetailsPage.$interactive.exsitingCaseFoundButtonInSearchList).toHaveCount(1);
+        await expect(caseDetailsPage.$interactive.exsitingCaseFoundButtonInSearchList).toContainText(caseData.caseReference);
+        await expect(caseDetailsPage.$interactive.exsitingCaseFoundButtonInSearchList).toContainText('Open');
+        await expect(caseDetailsPage.$interactive.exsitingCaseFoundButtonInSearchList).toContainText('PRE');
+        await expect(caseDetailsPage.$interactive.exsitingCaseFoundButtonInSearchList).toBeVisible();
+      });
+
+      await test.step('Verfiy test deatils are correct when exisiting case is selected from search list', async () => {
+        await caseDetailsPage.$interactive.exsitingCaseFoundButtonInSearchList.click();
+        await expect(caseDetailsPage.$static.selectedExistingCaseReferenceLable).toContainText(caseData.caseReference);
+        await expect(caseDetailsPage.$static.selectedExistingCaseReferenceLable).toBeVisible();
+
+        //Verify source lable is contain PRE .
+        await expect(caseDetailsPage.$static.selectedExisitingCaseSourceLable).toContainText('PRE');
+        await expect(caseDetailsPage.$static.selectedExisitingCaseSourceLable).toBeVisible();
+
+        //Verify case status is  Active.
+
+        await expect(caseDetailsPage.$static.selectedExisitingCaseStatusLable).toContainText('Active');
+        await expect(caseDetailsPage.$static.selectedExisitingCaseStatusLable).toBeVisible();
+
+        //Verify defendant value appears correctly.
+
+        const defendantValue = await caseDetailsPage.$inputs.defendants.inputValue();
+
+        for (const defendantName of caseData.defendantNames) {
+          expect(defendantValue).toContain(defendantName);
+        }
+        await expect(caseDetailsPage.$inputs.defendants).toBeVisible();
+
+        //Verify witness value appears correctly.
+
+        const witnessValue = await caseDetailsPage.$inputs.witnesses.inputValue();
+
+        for (const witnessName of caseData.witnessNames) {
+          expect(witnessValue).toContain(witnessName);
+        }
+        await expect(caseDetailsPage.$inputs.witnesses).toBeVisible();
+      });
+    },
+  );
 });
