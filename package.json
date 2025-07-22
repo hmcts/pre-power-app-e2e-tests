@@ -16,7 +16,7 @@
     "dotenv": "^17.0.0",
     "eslint": "^9.11.1",
     "eslint-config-prettier": "^10.1.5",
-    "eslint-plugin-playwright": "^1.6.2",
+    "eslint-plugin-playwright": "^2.0.0",
     "eslint-plugin-prettier": "^5.5.0",
     "get-port": "^7.1.0",
     "globals": "^15.10.0",
