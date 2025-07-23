@@ -384,11 +384,11 @@ test.describe('Set of tests to verify case details page', () => {
         await expect(caseDetailsPage.$static.selectedExistingCaseReferenceLable).toContainText(caseData.caseReference);
         await expect(caseDetailsPage.$static.selectedExistingCaseReferenceLable).toBeVisible();
 
-        //Verify source lable is contain PRE .
+        //Verify source lable contains PRE .
         await expect(caseDetailsPage.$static.selectedExisitingCaseSourceLable).toContainText('PRE');
         await expect(caseDetailsPage.$static.selectedExisitingCaseSourceLable).toBeVisible();
 
-        //Verify case status is  Active.
+        //Verify case status is Active.
 
         await expect(caseDetailsPage.$static.selectedExisitingCaseStatusLable).toContainText('Active');
         await expect(caseDetailsPage.$static.selectedExisitingCaseStatusLable).toBeVisible();
