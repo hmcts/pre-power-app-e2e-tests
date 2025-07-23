@@ -1,8 +1,8 @@
 /* eslint-disable playwright/no-skipped-test */
-import { test, expect } from '../fixtures';
-import { config } from '../utils';
+import { test, expect } from '../../fixtures';
+import { config } from '../../utils';
 
-test.describe('Set of tests to verify the homepage UI', () => {
+test.describe('Set of tests to verify the homepage buttons are in the correct state', () => {
   test.use({ storageState: config.powerAppUsers.preLevel1User.sessionFile });
 
   test.beforeEach(async ({ navigateToHomePage }) => {
@@ -10,7 +10,7 @@ test.describe('Set of tests to verify the homepage UI', () => {
   });
 
   test(
-    'Verify user is presented with the homepage',
+    'Verify all buttons on the homepage are visible and enabled',
     {
       tag: '@smoke',
     },
@@ -27,23 +27,6 @@ test.describe('Set of tests to verify the homepage UI', () => {
         await expect(homePage.$interactive.manageBookingsButton).toBeEnabled();
         await expect(homePage.$interactive.viewRecordingsButton).toBeEnabled();
         await expect(homePage.$interactive.adminButton).toBeEnabled();
-      });
-    },
-  );
-
-  test(
-    'Verify homepage is visually correct',
-    {
-      tag: '@visual',
-    },
-    async ({ page, homePage, headless }) => {
-      test.skip(!headless, 'Skipping visual test in headed mode');
-      await expect(page).toHaveScreenshot('home-page-visual.png', {
-        mask: [
-          homePage.iFrame.locator('[aria-label="Current Version"]'),
-          homePage.iFrame.locator('[class="appmagic-label-text"]'),
-          page.locator('[id*="HeaderContainer"]'),
-        ],
       });
     },
   );

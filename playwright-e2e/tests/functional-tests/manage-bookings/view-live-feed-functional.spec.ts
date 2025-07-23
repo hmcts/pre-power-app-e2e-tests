@@ -1,7 +1,7 @@
-import { test, expect } from '../../fixtures';
-import { config } from '../../utils';
+import { test, expect } from '../../../fixtures';
+import { config } from '../../../utils';
 
-test.describe('Set of tests to verify view live feed page for Level 1 user', () => {
+test.describe('Set of tests to verify functionality of view live feed page for Level 1 user', () => {
   const user = config.powerAppUsers.preLevel1User;
   test.use({ storageState: user.sessionFile });
 
