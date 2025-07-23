@@ -18,6 +18,9 @@ export class CaseDetailsPage extends Base {
     saveButton: this.iFrame.getByRole('button', { name: 'Save' }),
     bookingsButton: this.iFrame.getByRole('button', { name: 'Bookings' }),
     validationErrorCloseButton: this.iFrame.getByRole('button', { name: 'Close' }),
+    exsitingCaseFoundButtonInSearchList: this.iFrame
+      .locator('[data-control-name="bookingScrn_ExistingCasesGallery_Gal"]')
+      .locator('[data-control-part="gallery-item"]'),
   } as const satisfies Record<string, Locator>;
 
   public readonly $static = {
@@ -26,6 +29,12 @@ export class CaseDetailsPage extends Base {
     saveCaseSuccessText: this.iFrame.getByText('Case Opened', { exact: true }),
     validationErrorHeading: this.iFrame.locator("div[appmagic-control*='errorLabel']"),
     validationErrorText: this.iFrame.locator('[data-control-name="ErrorMessage"]'),
+    searchResultExistingCasesTitle: this.iFrame.locator('[data-control-name="bookingScrn_ExistingCasesTitle_Txt"]'),
+    selectedExistingCaseReferenceLable: this.iFrame.locator('[data-control-name="bookingScrn_SelectedReference_Lbl"]'),
+    selectedExisitingCaseSourceLable: this.iFrame.locator('[data-control-name="bookingScrn_ClosureStatusLabel_Lbl_2"]'),
+    selectedExisitingCaseStatusLable: this.iFrame.locator('[data-control-name="bookingScrn_ClosureStatus_Lbl"]'),
+    selectedExisitingCaseDefendantNames: this.iFrame.locator('[data-control-name="bookingScrn_DefendantsHintText_lbl"]'),
+    selectedExisitingCaseWitnessNames: this.iFrame.locator('[data-control-name="bookingScrn_WitnessesHintText_lbl"]'),
   } as const satisfies Record<string, Locator>;
 
   public async verifyUserIsOnCaseDetailsPage(): Promise<void> {
