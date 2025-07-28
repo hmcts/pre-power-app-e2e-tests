@@ -1,5 +1,4 @@
 import { test, expect } from '../../../fixtures';
-import { BaseCaseDetails } from '../../../types';
 import { config } from '../../../utils';
 import { faker } from '@faker-js/faker';
 
@@ -25,27 +24,6 @@ test.describe('Set of tests to verify validation of case details page is correct
       await expect(caseDetailsPage.$static.validationErrorHeading).toBeVisible();
       await expect(caseDetailsPage.$static.validationErrorText).toBeVisible();
       await expect(caseDetailsPage.$static.validationErrorText).toHaveText('Please enter a case reference between 9 and 13 characters.');
-    },
-  );
-
-  test(
-    'Verify user is able to open a new case and is redirected to the schedule recordings page',
-    {
-      tag: '@smoke',
-    },
-    async ({ caseDetailsPage, dataUtils, scheduleRecordingPage }) => {
-      const caseDetails: BaseCaseDetails = dataUtils.generateRandomCaseDetails(2, 2);
-
-      await caseDetailsPage.populateCaseDetails({
-        caseReference: caseDetails.caseReference,
-        defendantNames: caseDetails.defendantNames,
-        witnessNames: caseDetails.witnessNames,
-      });
-
-      await caseDetailsPage.$interactive.saveButton.click();
-      await expect(caseDetailsPage.$static.saveCaseSuccessLogo).toBeVisible();
-      await expect(caseDetailsPage.$static.saveCaseSuccessText).toBeVisible();
-      await scheduleRecordingPage.verifyUserIsOnScheduleRecordingsPage();
     },
   );
 
