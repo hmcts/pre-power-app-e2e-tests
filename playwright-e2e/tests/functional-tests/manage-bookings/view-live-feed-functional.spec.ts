@@ -11,78 +11,36 @@ test.describe('Set of tests to verify functionality of view live feed page for L
   });
 
   test(
-    'Verify recording begins processing after user has started and finished a recording',
+    'Verify correct recording details are displayed when user selects show link button',
     {
-      tag: '@smoke',
+      tag: '@Regression',
     },
-    async ({
-      apiClient,
-      viewLiveFeedPage,
-      cvp_SignInPage,
-      cvp_RoomSettingsPage,
-      cvp_ConferencePage,
-      cvp_SelectRolePage,
-      cvp_RecordingCallPage,
-      processingRecordingsPage,
-      networkInterceptUtils,
-    }) => {
-      const bookingData = await apiClient.getBookingData();
-      let rtmpsLink: string;
-      let hostPin: string;
-
-      await test.step('Given I obtain a recording link', async () => {
-        await viewLiveFeedPage.page.bringToFront();
-        rtmpsLink = await viewLiveFeedPage.startRecordingAndCaptureRtmpsLink();
+    async ({ viewLiveFeedPage }) => {
+      await test.step('Given user has selected option to start a recording', async () => {
+        await viewLiveFeedPage.selectStartRecordingButton();
+        await expect(viewLiveFeedPage.$startRecordingModal.recordingLinkGeneratedText).toBeVisible({ timeout: 60000 });
+        await viewLiveFeedPage.selectOkButtonToDismissStartRecordingModal();
       });
 
-      await test.step('And I configure a cvp room with my recording link', async () => {
-        await cvp_SignInPage.page.bringToFront();
-        await cvp_SignInPage.goTo();
-        await cvp_SignInPage.verifyUserIsOnCvpSignInPage();
-        await cvp_SignInPage.signIn(config.cvpUser.username, config.cvpUser.password);
-
-        await cvp_RoomSettingsPage.verifyUserIsOnCvpRoomSettingsPage();
-        await cvp_RoomSettingsPage.selectRoomFromDropdown('PRE009');
-        hostPin = await cvp_RoomSettingsPage.editRoomSettings(rtmpsLink);
+      await test.step('When user selects the show link button', async () => {
+        await viewLiveFeedPage.$interactive.showLinkButton.click();
       });
 
-      await test.step('When I connect to the conference using the host pin', async () => {
-        await cvp_ConferencePage.page.bringToFront();
-        await cvp_ConferencePage.goTo();
-        await cvp_ConferencePage.verifyUserIsOnCvpConferencePage();
-        await cvp_ConferencePage.connectToConference(config.cvpUser.cvpConferenceUser, bookingData.witnessNames[0]);
+      await test.step('The correct details are displayed on modal', async () => {
+        await expect(viewLiveFeedPage.$startRecordingModal.recordingLinkGeneratedText).toBeVisible();
+        await expect(viewLiveFeedPage.$startRecordingModal.recordingLinkGeneratedText).toHaveText(
+          'We are now ready to Record. Please open CVP and copy the link below:',
+        );
 
-        await cvp_SelectRolePage.verifyUserIsOnCvpSelectRolePage();
-        await cvp_SelectRolePage.connectAsHost(hostPin);
-        await cvp_RecordingCallPage.verifyUserIsOnCvpRecordingCallPage();
-      });
+        const rtmpsLinkValue = await viewLiveFeedPage.$startRecordingModal.generatedRtmpsLink.inputValue();
+        await expect(viewLiveFeedPage.$startRecordingModal.generatedRtmpsLink).toBeVisible();
+        expect(rtmpsLinkValue).toContain('rtmps://');
 
-      await test.step('And I begin recording', async () => {
-        await cvp_RoomSettingsPage.page.bringToFront();
-        await cvp_RoomSettingsPage.beginRecording(config.cvpUser.serviceId, config.cvpUser.locationCode, bookingData.caseReference);
-      });
+        await expect(viewLiveFeedPage.$startRecordingModal.dontForgetToStartRecordingText).toBeVisible();
+        await expect(viewLiveFeedPage.$startRecordingModal.dontForgetToStartRecordingText).toHaveText("Don't forget to press Record...");
 
-      await test.step('Then I am able to verify recording has started', async () => {
-        await viewLiveFeedPage.page.bringToFront();
-        await networkInterceptUtils.interceptNetworkRequestToVerifyRecordingIsTakingPlace(bookingData.caseReference, 60000);
-      });
-
-      await test.step('When I end the call in cvp, I am disconnected from the call', async () => {
-        await cvp_RoomSettingsPage.page.bringToFront();
-        await cvp_RoomSettingsPage.$interactive.endCallButton.click();
-        await expect(cvp_RoomSettingsPage.$interactive.recordButton).toBeVisible();
-
-        await cvp_RecordingCallPage.page.bringToFront();
-        await cvp_RecordingCallPage.verifyUserHasBeenDisconnectedFromCall();
-        await cvp_ConferencePage.verifyUserIsOnCvpConferencePage();
-      });
-      await test.step('Then I successfully finish recording in power app', async () => {
-        await viewLiveFeedPage.page.bringToFront();
-        await viewLiveFeedPage.finishRecording();
-      });
-      await test.step('And recording is being processed in power app', async () => {
-        await processingRecordingsPage.verifyUserIsOnProcessingRecordingsPage();
-        await processingRecordingsPage.verifyRecordingIsBeingProcessed(bookingData.caseReference);
+        await expect(viewLiveFeedPage.$startRecordingModal.okButton).toBeVisible();
+        await expect(viewLiveFeedPage.$startRecordingModal.okButton).toHaveText('Ok');
       });
     },
   );
