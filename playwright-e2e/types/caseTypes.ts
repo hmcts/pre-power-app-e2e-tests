@@ -8,7 +8,7 @@ export interface BaseCaseDetails {
 // Booking details returned from API
 export interface BookingDetails extends BaseCaseDetails {
   bookingId: string;
-  defendantSelectedForCase: string;
+  witnessSelectedForCaseRecording: string;
 }
 
 // Recording details from API requests
