@@ -7,6 +7,7 @@ import {
   CreateOrUpdateCaptureSessionApi,
   GetLatestRecordingApi,
   CreateOrUpdateRecordingApi,
+  GetBookingDetailsByCaseReferenceApi,
 } from './index.js';
 
 export class ApiClient {
@@ -20,6 +21,7 @@ export class ApiClient {
   private createOrUpdateRecordingApi: CreateOrUpdateRecordingApi;
   private getCaseDetailsByCaseReferenceApi: GetCaseDetailsByCaseReferenceApi;
   private getLatestRecordingApi: GetLatestRecordingApi;
+  private getBookingDetailsByCaseReferenceApi: GetBookingDetailsByCaseReferenceApi;
 
   constructor(apiContext: APIRequestContext, userId: string, courtId: string) {
     this.createNewCaseApi = new CreateNewCaseApi(apiContext, courtId);
@@ -28,6 +30,7 @@ export class ApiClient {
     this.createOrUpdateRecordingApi = new CreateOrUpdateRecordingApi(apiContext);
     this.getCaseDetailsByCaseReferenceApi = new GetCaseDetailsByCaseReferenceApi(apiContext, courtId);
     this.getLatestRecordingApi = new GetLatestRecordingApi(apiContext);
+    this.getBookingDetailsByCaseReferenceApi = new GetBookingDetailsByCaseReferenceApi(apiContext, courtId);
   }
 
   /**
@@ -78,8 +81,8 @@ export class ApiClient {
     const caseData: CreatedCaseSummary = await this.createCase(numberOfDefendants, numberOfWitnesses);
     const bookingId = await this.createBookingApi.request(
       caseData.caseId,
-      caseData.participants.defendants[0],
-      caseData.participants.witnesses,
+      caseData.participants.witnesses[0],
+      caseData.participants.defendants,
       scheduleDate,
     );
     const bookingData: BookingDetails = {
@@ -87,7 +90,7 @@ export class ApiClient {
       defendantNames: caseData.defendantNames,
       witnessNames: caseData.witnessNames,
       bookingId: bookingId,
-      defendantSelectedForCase: caseData.defendantNames[0],
+      witnessSelectedForCaseRecording: caseData.witnessNames[0],
     };
     this.bookingData = bookingData;
     return bookingData;
@@ -156,6 +159,41 @@ export class ApiClient {
     const paddedSeconds = String(seconds).padStart(2, '0');
 
     return `${paddedHours}:${paddedMinutes}:${paddedSeconds}`;
+  }
+
+  /**
+   * Polls the booking details API to verify that the recording for the given case reference
+   * has been successfully processed. It checks the status of the capture session relating to the case,
+   * and waits until the status becomes 'RECORDING_AVAILABLE'. If the status is 'FAILURE', or if no
+   * status is found, it throws an error. The polling will timeout after 30 seconds if the expected
+   * status is not reached.
+   * @param caseReference - The reference of the case to check for recording processing status.
+   */
+  public async verifyRecordingHasBeenSuccessfullyProcessedForCase(caseReference: string) {
+    await expect
+      .poll(
+        async () => {
+          const response = await this.getBookingDetailsByCaseReferenceApi.request(caseReference);
+          const responseBody = await response.json();
+
+          const status = responseBody?._embedded?.bookingDTOList?.[0]?.capture_sessions?.[0]?.status;
+
+          if (!status) {
+            throw new Error(
+              `No recording status found for case: ${caseReference} whilst trying to establish recording has been processed successfully.`,
+            );
+          }
+          if (status === 'FAILURE') {
+            throw new Error(
+              `Recording processing has failed for case: ${caseReference}, status of recording is: ${status}. Please check available logs for more details.`,
+            );
+          }
+
+          return status;
+        },
+        { timeout: 30_000, intervals: [2_000] },
+      )
+      .toBe('RECORDING_AVAILABLE');
   }
 
   /**
