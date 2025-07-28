@@ -5,6 +5,10 @@ import { config } from '../../utils';
 test.describe('Set of tests to verify the homepage UI is visually correct', () => {
   test.use({ storageState: config.powerAppUsers.preLevel1User.sessionFile });
 
+  test.beforeAll(async ({ headless }) => {
+    test.skip(!headless, 'Skipping visual tests in headed mode');
+  });
+
   test.beforeEach(async ({ navigateToHomePage }) => {
     await navigateToHomePage();
   });
@@ -14,8 +18,7 @@ test.describe('Set of tests to verify the homepage UI is visually correct', () =
     {
       tag: '@visual',
     },
-    async ({ page, homePage, headless }) => {
-      test.skip(!headless, 'Skipping visual test in headed mode');
+    async ({ page, homePage }) => {
       await expect(page).toHaveScreenshot('home-page-visual.png', {
         mask: [
           homePage.iFrame.locator('[aria-label="Current Version"]'),

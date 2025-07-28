@@ -12,7 +12,7 @@ test.describe('Set of tests to verify functionality of case details page as a Le
   test(
     'Verify user is able to open a new case and is redirected to the schedule recordings page',
     {
-      tag: '@smoke',
+      tag: '@Regression',
     },
     async ({ caseDetailsPage, dataUtils, scheduleRecordingPage }) => {
       const caseDetails: BaseCaseDetails = dataUtils.generateRandomCaseDetails(2, 2);

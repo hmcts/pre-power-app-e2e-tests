@@ -1,4 +1,3 @@
-/* eslint-disable playwright/no-skipped-test */
 import { test, expect } from '../../fixtures';
 import { config } from '../../utils';
 
@@ -12,7 +11,7 @@ test.describe('Set of tests to verify the homepage buttons are in the correct st
   test(
     'Verify all buttons on the homepage are visible and enabled',
     {
-      tag: '@smoke',
+      tag: '@Regression',
     },
     async ({ homePage }) => {
       await test.step('Verify all buttons on homepage are visible', async () => {
