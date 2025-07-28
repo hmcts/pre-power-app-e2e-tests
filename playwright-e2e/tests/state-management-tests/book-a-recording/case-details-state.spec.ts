@@ -11,7 +11,7 @@ test.describe('Set of tests to verify buttons on the case details page are in th
   test(
     'Verify when accessing the caseDetailsPage all the three buttons are in the correct state',
     {
-      tag: '@Regression',
+      tag: '@regression',
     },
     async ({ caseDetailsPage }) => {
       await test.step('Verify all the buttons on case details page are visible', async () => {
@@ -31,7 +31,7 @@ test.describe('Set of tests to verify buttons on the case details page are in th
   test(
     'Verify when selecting an exisiting case, four buttons are in the correct state',
     {
-      tag: '@Regression',
+      tag: '@regression',
     },
     async ({ caseDetailsPage, apiClient }) => {
       await test.step('Pre-requisite step in order to create a case via api', async () => {

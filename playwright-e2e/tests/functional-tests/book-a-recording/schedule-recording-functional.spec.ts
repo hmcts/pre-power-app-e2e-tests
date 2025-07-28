@@ -13,7 +13,7 @@ test.describe('Set of tests to verify functionality of schedule a recording page
   test(
     'Verify user is able to book a recording for an existing case',
     {
-      tag: '@smoke',
+      tag: '@regression',
     },
     async ({ scheduleRecordingPage, apiClient }) => {
       const caseData = await apiClient.getCaseData();

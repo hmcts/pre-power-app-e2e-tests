@@ -13,7 +13,7 @@ test.describe('Set of tests to verify functionality of view recordings page for 
   test(
     'Verify user is able to search for a case and confirm the list search details are correct',
     {
-      tag: '@smoke',
+      tag: '@regression',
     },
     async ({ apiClient, viewRecordingsPage }) => {
       const bookingData = await apiClient.getBookingData();
@@ -29,11 +29,11 @@ test.describe('Set of tests to verify functionality of view recordings page for 
       // Verify recording ID label contains the correct recording ID
       await expect(viewRecordingsPage.$static.recordingIdLabelInSearchList).toHaveText(`Recording UID: ${recordingData.recordingId}`);
       // Verify witness label contains the correct witness names
-      for (const witnessName of bookingData.witnessNames) {
-        await expect(viewRecordingsPage.$static.WitnessLabelInSearchList.filter({ hasText: 'Witness:' })).toContainText(witnessName);
-      }
+      await expect(viewRecordingsPage.$static.WitnessLabelInSearchList).toHaveText(`Witness: ${bookingData.witnessSelectedForCaseRecording}`);
       // Verify defendant label contains the correct defendant name
-      await expect(viewRecordingsPage.$static.defendantLabelInSearchList).toHaveText(`Defendants: ${bookingData.defendantSelectedForCase}`);
+      for (const defendantName of bookingData.defendantNames) {
+        await expect(viewRecordingsPage.$static.defendantLabelInSearchList.filter({ hasText: 'Defendants:' })).toContainText(defendantName);
+      }
       // Verify recording date label contains the correct recording date and time
       await expect(viewRecordingsPage.$static.recordingDateLabelInSearchList).toHaveText(
         `Recording Date: ${recordingData.recordingDate} ${recordingData.recordingTime}`,

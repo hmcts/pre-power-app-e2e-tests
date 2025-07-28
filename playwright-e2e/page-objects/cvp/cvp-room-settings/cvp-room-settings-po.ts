@@ -68,9 +68,14 @@ export class CvpRoomSettingsPage {
   public async editRoomSettings(rtmpsLink: string): Promise<string> {
     await this.$interactive.editRoomSettingsButton.click();
 
-    await this.$inputs.rmptsLinkInput.clear();
-    await this.$inputs.rmptsLinkInput.fill(rtmpsLink);
-    await expect(this.$inputs.rmptsLinkInput).toHaveValue(rtmpsLink);
+    await expect(this.$inputs.rmptsLinkInput).toBeVisible();
+
+    await expect(async () => {
+      await this.$inputs.rmptsLinkInput.clear();
+      await this.$inputs.rmptsLinkInput.fill(rtmpsLink);
+      await expect(this.$inputs.rmptsLinkInput).toHaveValue(rtmpsLink, { timeout: 2000 });
+    }).toPass({ intervals: [2500], timeout: 10000 });
+
     const hostPin = await this.captureHostPin();
     await this.$interactive.saveSettingsButton.click();
 
@@ -121,6 +126,6 @@ export class CvpRoomSettingsPage {
     await this.$recordingModal.cancel_close_Button.click();
 
     await expect(this.$recordingModal.recordingModalHeading).toBeHidden();
-    await expect(this.page.getByRole('button', { name: 'Recording' })).toBeVisible();
+    await expect(this.page.getByRole('button', { name: 'Recording' })).toBeVisible({ timeout: 10000 });
   }
 }

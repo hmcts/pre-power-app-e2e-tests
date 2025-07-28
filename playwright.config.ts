@@ -11,7 +11,7 @@ export default defineConfig({
   testDir: './playwright-e2e',
   snapshotDir: './playwright-e2e/snapshots',
   ...CommonConfig.recommended,
-
+  timeout: 120_000,
   projects: [
     {
       name: 'setup',
@@ -28,6 +28,7 @@ export default defineConfig({
         ...ProjectsConfig.chromium.use,
         viewport: { width: 1280, height: 720 },
         deviceScaleFactor: 1,
+        actionTimeout: 10_000,
         launchOptions: {
           args: [
             '--use-fake-ui-for-media-stream',

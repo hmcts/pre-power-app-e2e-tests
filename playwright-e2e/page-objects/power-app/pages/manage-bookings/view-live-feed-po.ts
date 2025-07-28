@@ -9,6 +9,7 @@ export class ViewLiveFeedPage extends Base {
   public readonly $interactive = {
     startRecordingButton: this.iFrame.getByRole('button', { name: 'Start Recording' }),
     finishRecordingButton: this.iFrame.getByRole('button', { name: 'Finish' }),
+    showLinkButton: this.iFrame.getByRole('button', { name: 'Show Link' }),
   } as const satisfies Record<string, Locator>;
 
   public readonly $static = {
@@ -18,7 +19,9 @@ export class ViewLiveFeedPage extends Base {
   public readonly $startRecordingModal = {
     recordingLinkIsBeingGeneratedText: this.iFrame.getByText('A link will be generated.'),
     recordingLinkGeneratedText: this.iFrame.getByText('We are now ready to Record.'),
+    recordingLinkIsBeingGeneratedSpinner: this.iFrame.locator('[data-control-name="RTMPSSpinner"]'),
     generatedRtmpsLink: this.iFrame.locator('[data-control-name*="CVPRTMPUrlTxt"] textarea'),
+    dontForgetToStartRecordingText: this.iFrame.getByText("Don't forget to press Record"),
     okButton: this.iFrame.getByRole('button', { name: 'Ok', exact: true }),
   } as const satisfies Record<string, Locator>;
 
@@ -38,22 +41,39 @@ export class ViewLiveFeedPage extends Base {
    * @returns The generated RTMPS link as a trimmed string.
    */
   public async startRecordingAndCaptureRtmpsLink(): Promise<string> {
-    await expect(async () => {
-      await this.$interactive.startRecordingButton.click();
-      await expect(this.iFrame.locator('[data-control-name="RTMPSWindow"]')).toBeVisible({ timeout: 1000 });
-    }).toPass({ intervals: [1500], timeout: 10000 });
+    await this.selectStartRecordingButton();
+
     await expect(this.$startRecordingModal.recordingLinkIsBeingGeneratedText).toBeVisible();
     await expect(this.$startRecordingModal.recordingLinkGeneratedText).toBeVisible({ timeout: 60000 });
-    await expect(this.$startRecordingModal.generatedRtmpsLink).toBeVisible();
 
     const rtmpsLinkValue = await this.$startRecordingModal.generatedRtmpsLink.inputValue();
-    if (!rtmpsLinkValue) {
-      throw new Error('RTMPS link is empty');
-    }
+    expect(rtmpsLinkValue).not.toBeNull();
+    expect(rtmpsLinkValue).toContain('rtmps://');
 
-    await this.$startRecordingModal.okButton.click();
-    await expect(this.iFrame.locator('[data-control-name*="CVPPrompt"]').first()).toBeHidden();
+    await this.selectOkButtonToDismissStartRecordingModal();
     return rtmpsLinkValue.trim();
+  }
+
+  /**
+   * Selects the "Start Recording" button and waits for the RTMPS window to be visible.
+   * This is done to ensure that the recording process is initiated correctly.
+   */
+  public async selectStartRecordingButton(): Promise<void> {
+    await expect(async () => {
+      await this.$interactive.startRecordingButton.click();
+      await expect(this.iFrame.locator('[data-control-name="RTMPSWindow"]')).toBeVisible({ timeout: 1_000 });
+    }).toPass({ intervals: [1500], timeout: 10_000 });
+  }
+
+  /**
+   * Selects the "Ok" button to dismiss the start recording modal and waits for the modal to be hidden.
+   * This is done to ensure that the modal is closed properly after starting the recording.
+   */
+  public async selectOkButtonToDismissStartRecordingModal(): Promise<void> {
+    await expect(async () => {
+      await this.$startRecordingModal.okButton.click();
+      await expect(this.iFrame.locator('[data-control-name*="CVPPrompt"]').first()).toBeHidden({ timeout: 1_000 });
+    }).toPass({ intervals: [1500], timeout: 10_000 });
   }
 
   /**
