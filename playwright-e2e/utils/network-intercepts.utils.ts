@@ -92,7 +92,7 @@ export class NetworkInterceptUtils {
         },
         {
           timeout: timeoutMs,
-          message: `Timeout: Expected POST /invoke response with 'RECORDING' status and reference '${caseReference}' within ${timeoutMs / 1000} seconds in order to confrim recording is taking place in powerapps.`,
+          message: `Timeout: Expected POST /invoke response with 'RECORDING' status and reference '${caseReference}' within ${timeoutMs / 1000} seconds in order to confirm recording is taking place in powerapps.`,
         },
       )
       .toBeTruthy();

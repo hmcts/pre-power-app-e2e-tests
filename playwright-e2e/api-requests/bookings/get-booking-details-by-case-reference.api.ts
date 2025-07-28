@@ -19,7 +19,6 @@ export class GetBookingDetailsByCaseReferenceApi {
       params: {
         caseReference: caseReference,
         courtId: this.courtId,
-        sort: 'createdAt,desc',
         page: '0',
         size: '1',
       },

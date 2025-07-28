@@ -12,7 +12,7 @@ test.describe('Set of tests to verify functionality of case details page as a Le
   test(
     'Verify user is able to open a new case and is redirected to the schedule recordings page',
     {
-      tag: '@Regression',
+      tag: '@regression',
     },
     async ({ caseDetailsPage, dataUtils, scheduleRecordingPage }) => {
       const caseDetails: BaseCaseDetails = dataUtils.generateRandomCaseDetails(2, 2);
@@ -33,7 +33,7 @@ test.describe('Set of tests to verify functionality of case details page as a Le
   test(
     'Verify case details are correct when searching and selecting an exisiting case',
     {
-      tag: '@Regression',
+      tag: '@regression',
     },
     async ({ caseDetailsPage, apiClient }) => {
       await test.step('Pre-requisite step in order to create a case via api', async () => {

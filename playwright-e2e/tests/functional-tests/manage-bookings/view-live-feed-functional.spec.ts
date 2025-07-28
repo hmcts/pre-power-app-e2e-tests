@@ -13,7 +13,7 @@ test.describe('Set of tests to verify functionality of view live feed page for L
   test(
     'Verify correct recording details are displayed when user selects show link button',
     {
-      tag: '@Regression',
+      tag: '@regression',
     },
     async ({ viewLiveFeedPage }) => {
       await test.step('Given user has selected option to start a recording', async () => {

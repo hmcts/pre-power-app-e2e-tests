@@ -2,7 +2,7 @@ import { test, expect } from '../../fixtures';
 import { BaseCaseDetails } from '../../types';
 import { config } from '../../utils';
 
-test.describe('Ensure e2e jounrey is working as expected', () => {
+test.describe('Ensure e2e journey is working as expected', () => {
   test.use({ storageState: config.powerAppUsers.preLevel1User.sessionFile });
 
   test.beforeEach(async ({ navigateToHomePage }) => {
@@ -12,7 +12,7 @@ test.describe('Ensure e2e jounrey is working as expected', () => {
   test(
     'Verify user is able to complete the e2e journey',
     {
-      tag: '@Smoke',
+      tag: '@smoke',
     },
     async ({
       navBarComponent,
@@ -41,7 +41,7 @@ test.describe('Ensure e2e jounrey is working as expected', () => {
        * Waiting for the recording to be processed and appear in the view recordings page.
        * Note: The processing of recordings can take a significant amount of time, I have for now placed a limit of 5 minutes prompting investigation when exceeded.
        * Video processing is done by media kind which works in order of a queue to process 2 at a time, so if there are multiple recordings being processed, it can take longer.
-       * There has recently been an addition of a Cron job to check the status of recordings which has a default polling interval of 5 minutes however reduced to 1 minute for lower Envs.
+       * There has been an addition of a Cron job on (24/07/2025) to check the status of recordings which has a default polling interval of 5 minutes however reduced to 1 minute for lower Envs.
        */
       test.setTimeout(540_000);
       const caseDetails: BaseCaseDetails = dataUtils.generateRandomCaseDetails(2, 2);

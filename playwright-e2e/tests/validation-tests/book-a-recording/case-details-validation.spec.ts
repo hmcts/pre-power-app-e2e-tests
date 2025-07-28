@@ -12,7 +12,7 @@ test.describe('Set of tests to verify validation of case details page is correct
   test(
     'Verify case reference field when left empty shows validation error',
     {
-      tag: '@Regression',
+      tag: '@regression',
     },
     async ({ caseDetailsPage, dataUtils }) => {
       await test.step('Pre-requisite step in order to fill out defendants and wintness fields with valid values', async () => {
@@ -30,7 +30,7 @@ test.describe('Set of tests to verify validation of case details page is correct
   test(
     'Verify case reference containing less than 9 characters is rejected',
     {
-      tag: '@Regression',
+      tag: '@regression',
     },
     async ({ caseDetailsPage, dataUtils }) => {
       await test.step('Pre-requisite step in order to fill out defendant and wintness fields with valid values', async () => {
@@ -57,7 +57,7 @@ test.describe('Set of tests to verify validation of case details page is correct
   test(
     'Verify case reference field trims values above 13 characters',
     {
-      tag: '@Regression',
+      tag: '@regression',
     },
     async ({ caseDetailsPage }) => {
       const value = faker.string.alphanumeric(14);
@@ -69,7 +69,7 @@ test.describe('Set of tests to verify validation of case details page is correct
   test(
     'Verify case reference containing special characters is rejected',
     {
-      tag: '@Regression',
+      tag: '@regression',
     },
     async ({ caseDetailsPage, dataUtils }) => {
       await test.step('Fill out prerequisite fields with valid data', async () => {
@@ -104,7 +104,7 @@ test.describe('Set of tests to verify validation of case details page is correct
   test(
     'Verify Defendants field when left empty shows validation error',
     {
-      tag: '@Regression',
+      tag: '@regression',
     },
     async ({ caseDetailsPage, dataUtils }) => {
       await test.step('Pre-requisite step in order to fill out case Reference and wintness fields with valid values', async () => {
@@ -122,7 +122,7 @@ test.describe('Set of tests to verify validation of case details page is correct
   test(
     'Verify Defendants first name or Last name containing more than 25 characters are rejected',
     {
-      tag: '@Regression',
+      tag: '@regression',
     },
     async ({ caseDetailsPage, dataUtils }) => {
       await test.step('Pre-requisite step in order to fill out case Reference and witness fields with valid values', async () => {
@@ -160,7 +160,7 @@ test.describe('Set of tests to verify validation of case details page is correct
   test(
     'Verify Defendants containing first name only is rejected',
     {
-      tag: '@Regression',
+      tag: '@regression',
     },
     async ({ caseDetailsPage, dataUtils }) => {
       await test.step('Pre-requisite step in order to fill out case Reference and wintness fields with valid values', async () => {
@@ -180,7 +180,7 @@ test.describe('Set of tests to verify validation of case details page is correct
   test(
     'Verify Defendants name containing special characters is rejected',
     {
-      tag: '@Regression',
+      tag: '@regression',
     },
     async ({ caseDetailsPage, dataUtils }) => {
       await test.step('Pre-requisite step in order to fill out case Reference and witness fields with valid values', async () => {
@@ -214,7 +214,7 @@ test.describe('Set of tests to verify validation of case details page is correct
   test(
     'Verify Witness field when left empty shows validation error',
     {
-      tag: '@Regression',
+      tag: '@regression',
     },
     async ({ caseDetailsPage, dataUtils }) => {
       await test.step('Pre-requisite step in order to fill out case Reference and Defendants fields with valid values', async () => {
@@ -232,7 +232,7 @@ test.describe('Set of tests to verify validation of case details page is correct
   test(
     'Verify Witness containing last name is rejected',
     {
-      tag: '@Regression',
+      tag: '@regression',
     },
     async ({ caseDetailsPage, dataUtils }) => {
       await test.step('Pre-requisite step in order to fill out case Reference and Defendants fields with valid values', async () => {
@@ -253,7 +253,7 @@ test.describe('Set of tests to verify validation of case details page is correct
   test(
     'Verify Witness name containing special characters is rejected',
     {
-      tag: '@Regression',
+      tag: '@regression',
     },
     async ({ caseDetailsPage, dataUtils }) => {
       await test.step('Pre-requisite step in order to fill out case Reference and Defendants fields with valid values', async () => {
@@ -287,7 +287,7 @@ test.describe('Set of tests to verify validation of case details page is correct
   test(
     'Verify Witness first name containing more than 25 characters are rejected',
     {
-      tag: '@Regression',
+      tag: '@regression',
     },
     async ({ caseDetailsPage, dataUtils }) => {
       await test.step('Pre-requisite step in order to fill out case Reference and Defendants fields with valid values', async () => {

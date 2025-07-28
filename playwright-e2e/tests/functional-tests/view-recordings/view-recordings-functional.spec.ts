@@ -13,7 +13,7 @@ test.describe('Set of tests to verify functionality of view recordings page for 
   test(
     'Verify user is able to search for a case and confirm the list search details are correct',
     {
-      tag: '@Regression',
+      tag: '@regression',
     },
     async ({ apiClient, viewRecordingsPage }) => {
       const bookingData = await apiClient.getBookingData();
