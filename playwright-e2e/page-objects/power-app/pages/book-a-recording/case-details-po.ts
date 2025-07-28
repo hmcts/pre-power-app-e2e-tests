@@ -21,6 +21,7 @@ export class CaseDetailsPage extends Base {
     exsitingCaseFoundButtonInSearchList: this.iFrame
       .locator('[data-control-name="bookingScrn_ExistingCasesGallery_Gal"]')
       .locator('[data-control-part="gallery-item"]'),
+    searchedCaseCloseButton: this.iFrame.getByRole('button', { name: 'Close Case' }),
   } as const satisfies Record<string, Locator>;
 
   public readonly $static = {
