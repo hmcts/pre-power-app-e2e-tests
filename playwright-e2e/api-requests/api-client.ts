@@ -182,14 +182,13 @@ export class ApiClient {
             throw new Error(
               `No recording status found for case: ${caseReference} whilst trying to establish recording has been processed successfully.`,
             );
-          }
-          if (status === 'FAILURE') {
+          } else if (status === 'FAILURE') {
             throw new Error(
               `Recording processing has failed for case: ${caseReference}, status of recording is: ${status}. Please check available logs for more details.`,
             );
+          } else {
+            return status;
           }
-
-          return status;
         },
         { timeout: 30_000, intervals: [2_000] },
       )
