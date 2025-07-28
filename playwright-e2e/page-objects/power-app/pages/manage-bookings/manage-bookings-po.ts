@@ -18,6 +18,7 @@ export class ManageBookingsPage extends Base {
   public readonly $static = {
     pageHeading: this.iFrame.locator('[data-control-name="manageBookingScrn_BookedSrchRef_Lbl"]').filter({ hasText: 'Case Reference' }),
     caseReferenceLabelInSearchList: this.iFrame.locator('[data-control-name="manageBookingScrn_CaseRef_Lbl"]'),
+    caseActionsStatusLabelInSearchList: this.iFrame.locator('[data-control-name="manageBookingScrn_Status_Lbl"]'),
   } as const satisfies Record<string, Locator>;
 
   public async verifyUserIsOnManageBookingsPage(): Promise<void> {

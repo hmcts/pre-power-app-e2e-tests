@@ -35,6 +35,12 @@ export class ViewRecordingsPage extends Base {
     await expect(this.navBar.$interactive.ViewRecordings).toBeVisible();
   }
 
+  /**
+   * Verifies that the case reference is visible in the search results.
+   * Checks that the case reference label in the search list contains the provided case reference.
+   * Ensures only one case reference is present in the search results.
+   * @param caseReference - The case reference to check for visibility in the search results.
+   */
   public async searchForCaseReference(caseReference: string): Promise<void> {
     await this.$inputs.caseReference.fill(caseReference);
     await expect(this.$inputs.caseReference).toHaveValue(caseReference);
