@@ -20,9 +20,9 @@ test.describe('Set of tests to verify the case details page UI is visually corre
     },
     async ({ page, caseDetailsPage }) => {
       const maskedElements = [
-        caseDetailsPage.$globalMaskedLocatersForVisualTesting.powerAppsHeaderContainer,
-        caseDetailsPage.$globalMaskedLocatersForVisualTesting.applicationCourtTitle,
-        caseDetailsPage.$globalMaskedLocatersForVisualTesting.applicationEnvironment,
+        caseDetailsPage.$globalMaskedlocatorsForVisualTesting.powerAppsHeaderContainer,
+        caseDetailsPage.$globalMaskedlocatorsForVisualTesting.applicationCourtTitle,
+        caseDetailsPage.$globalMaskedlocatorsForVisualTesting.applicationEnvironment,
       ];
 
       await Promise.all(maskedElements.map((element) => expect(element).toBeAttached()));
@@ -46,10 +46,10 @@ test.describe('Set of tests to verify the case details page UI is visually corre
 
       await test.step('Verify UI is visually correct when searching for a case', async () => {
         const maskedElements = [
-          caseDetailsPage.$globalMaskedLocatersForVisualTesting.powerAppsHeaderContainer,
-          caseDetailsPage.$globalMaskedLocatersForVisualTesting.applicationCourtTitle,
-          caseDetailsPage.$globalMaskedLocatersForVisualTesting.applicationEnvironment,
-          caseDetailsPage.$maskedLocatersForVisualTesting.searchResultExistingCaseContainer,
+          caseDetailsPage.$globalMaskedlocatorsForVisualTesting.powerAppsHeaderContainer,
+          caseDetailsPage.$globalMaskedlocatorsForVisualTesting.applicationCourtTitle,
+          caseDetailsPage.$globalMaskedlocatorsForVisualTesting.applicationEnvironment,
+          caseDetailsPage.$maskedlocatorsForVisualTesting.searchResultExistingCaseContainer,
         ];
 
         await Promise.all(maskedElements.map((element) => expect(element).toBeAttached()));
@@ -74,9 +74,9 @@ test.describe('Set of tests to verify the case details page UI is visually corre
 
       await test.step('Verify UI is visually correct once an existing case has been selected', async () => {
         const maskedElements = [
-          caseDetailsPage.$globalMaskedLocatersForVisualTesting.powerAppsHeaderContainer,
-          caseDetailsPage.$globalMaskedLocatersForVisualTesting.applicationCourtTitle,
-          caseDetailsPage.$globalMaskedLocatersForVisualTesting.applicationEnvironment,
+          caseDetailsPage.$globalMaskedlocatorsForVisualTesting.powerAppsHeaderContainer,
+          caseDetailsPage.$globalMaskedlocatorsForVisualTesting.applicationCourtTitle,
+          caseDetailsPage.$globalMaskedlocatorsForVisualTesting.applicationEnvironment,
           caseDetailsPage.$static.searchResultExistingCaseReference,
           caseDetailsPage.$static.selectedExistingCaseReferenceLabel,
           caseDetailsPage.$inputs.defendants,
@@ -104,9 +104,9 @@ test.describe('Set of tests to verify the case details page UI is visually corre
       });
 
       const sharedMaskedElements = [
-        caseDetailsPage.$globalMaskedLocatersForVisualTesting.powerAppsHeaderContainer,
-        caseDetailsPage.$globalMaskedLocatersForVisualTesting.applicationCourtTitle,
-        caseDetailsPage.$globalMaskedLocatersForVisualTesting.applicationEnvironment,
+        caseDetailsPage.$globalMaskedlocatorsForVisualTesting.powerAppsHeaderContainer,
+        caseDetailsPage.$globalMaskedlocatorsForVisualTesting.applicationCourtTitle,
+        caseDetailsPage.$globalMaskedlocatorsForVisualTesting.applicationEnvironment,
         caseDetailsPage.$static.selectedExistingCaseReferenceLabel,
       ];
 
@@ -167,9 +167,9 @@ test.describe('Set of tests to verify the case details page UI is visually corre
       });
 
       const maskedElements = [
-        caseDetailsPage.$globalMaskedLocatersForVisualTesting.powerAppsHeaderContainer,
-        caseDetailsPage.$globalMaskedLocatersForVisualTesting.applicationCourtTitle,
-        caseDetailsPage.$globalMaskedLocatersForVisualTesting.applicationEnvironment,
+        caseDetailsPage.$globalMaskedlocatorsForVisualTesting.powerAppsHeaderContainer,
+        caseDetailsPage.$globalMaskedlocatorsForVisualTesting.applicationCourtTitle,
+        caseDetailsPage.$globalMaskedlocatorsForVisualTesting.applicationEnvironment,
         caseDetailsPage.$static.selectedExistingCaseReferenceLabel,
       ];
       await Promise.all(maskedElements.map((element) => expect(element).toBeAttached()));

@@ -18,7 +18,7 @@ export class HomePage extends Base {
     heading: this.iFrame.getByRole('heading', { name: 'Pre-Recorded Evidence' }),
   } as const satisfies Record<string, Locator>;
 
-  public readonly $maskedLocatersForVisualTesting = {
+  public readonly $maskedlocatorsForVisualTesting = {
     applicationVersion: this.iFrame.locator('[data-control-name="landingScrn_AppVersion_Txt"]'),
     welcomeTextForUser: this.iFrame.locator('[data-control-name="landingScrn_WelcomeText_Lbl"]'),
   } as const satisfies Record<string, Locator>;

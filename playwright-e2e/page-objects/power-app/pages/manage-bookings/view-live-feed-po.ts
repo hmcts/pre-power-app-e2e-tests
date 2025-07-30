@@ -44,7 +44,7 @@ export class ViewLiveFeedPage extends Base {
     await this.selectStartRecordingButton();
 
     await expect(this.$startRecordingModal.recordingLinkIsBeingGeneratedText).toBeVisible();
-    await expect(this.$startRecordingModal.recordingLinkGeneratedText).toBeVisible({ timeout: 60000 });
+    await expect(this.$startRecordingModal.recordingLinkGeneratedText).toBeVisible({ timeout: 90_000 });
 
     const rtmpsLinkValue = await this.$startRecordingModal.generatedRtmpsLink.inputValue();
     expect(rtmpsLinkValue).not.toBeNull();

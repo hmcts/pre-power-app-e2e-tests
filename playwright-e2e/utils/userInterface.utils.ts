@@ -28,7 +28,7 @@ export class UserInterfaceUtils {
   /**
    * Replaces dynamic text using specified string or regex to identify what needs replacing with an alternative string provided.
    * This is useful for visual testing where you want to ensure dynamic information is not visible in screenshots.
-   * Verifies that the locater is a <textarea> element before proceeding with the replacement.
+   * Verifies that the locator is a <textarea> element before proceeding with the replacement.
    * Verifies that the locator is visible and not empty before replacing text.
    * Verifies that the locator's value has been updated with the replaced text after applying the replacements.
    * example usage:

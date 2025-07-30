@@ -6,7 +6,7 @@ export abstract class Base {
   public readonly iFrame: FrameLocator = this.page.frameLocator('#fullscreen-app-host');
   constructor(public readonly page: Page) {}
 
-  public readonly $globalMaskedLocatersForVisualTesting = {
+  public readonly $globalMaskedlocatorsForVisualTesting = {
     powerAppsHeaderContainer: this.page.locator('[id*="HeaderContainer"]'),
     applicationCourtTitle: this.iFrame.locator('[data-control-name="HeaderCourtTitle"]'),
     applicationEnvironment: this.iFrame.locator('[data-control-name="HeaderEnvLabel"]'),

@@ -20,11 +20,11 @@ test.describe('Set of tests to verify the homepage UI is visually correct', () =
     },
     async ({ page, homePage }) => {
       const maskedElements = [
-        homePage.$globalMaskedLocatersForVisualTesting.powerAppsHeaderContainer,
-        homePage.$globalMaskedLocatersForVisualTesting.applicationCourtTitle,
-        homePage.$globalMaskedLocatersForVisualTesting.applicationEnvironment,
-        homePage.$maskedLocatersForVisualTesting.applicationVersion,
-        homePage.$maskedLocatersForVisualTesting.welcomeTextForUser,
+        homePage.$globalMaskedlocatorsForVisualTesting.powerAppsHeaderContainer,
+        homePage.$globalMaskedlocatorsForVisualTesting.applicationCourtTitle,
+        homePage.$globalMaskedlocatorsForVisualTesting.applicationEnvironment,
+        homePage.$maskedlocatorsForVisualTesting.applicationVersion,
+        homePage.$maskedlocatorsForVisualTesting.welcomeTextForUser,
       ];
 
       await Promise.all(maskedElements.map((element) => expect(element).toBeAttached()));

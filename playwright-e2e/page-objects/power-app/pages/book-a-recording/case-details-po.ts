@@ -18,7 +18,7 @@ export class CaseDetailsPage extends Base {
     saveButton: this.iFrame.getByRole('button', { name: 'Save' }),
     bookingsButton: this.iFrame.getByRole('button', { name: 'Bookings' }),
     validationErrorCloseButton: this.iFrame.getByRole('button', { name: 'Close' }),
-    exsitingCaseFoundButtonInSearchList: this.iFrame
+    existingCaseFoundButtonInSearchList: this.iFrame
       .locator('[data-control-name="bookingScrn_ExistingCasesGallery_Gal"]')
       .locator('[data-control-part="gallery-item"]'),
     selectedCaseCloseButton: this.iFrame.getByRole('button', { name: 'Close Case' }),
@@ -41,7 +41,7 @@ export class CaseDetailsPage extends Base {
     closedCaseStatusInfo: this.iFrame.locator('[data-control-name="bookingScrn_ClosureStatusInfo_Lbl"]'),
   } as const satisfies Record<string, Locator>;
 
-  public readonly $maskedLocatersForVisualTesting = {
+  public readonly $maskedlocatorsForVisualTesting = {
     searchResultExistingCaseContainer: this.iFrame.locator('[aria-label="Existing Cases"]'),
   } as const satisfies Record<string, Locator>;
 

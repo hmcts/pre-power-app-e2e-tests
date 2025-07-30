@@ -46,15 +46,15 @@ test.describe('Set of tests to verify functionality of case details page as a Le
         await expect(caseDetailsPage.$inputs.caseReference).toHaveValue(caseData.caseReference);
 
         await expect(caseDetailsPage.$static.searchResultExistingCasesTitle).toBeVisible();
-        await expect(caseDetailsPage.$interactive.exsitingCaseFoundButtonInSearchList).toHaveCount(1);
-        await expect(caseDetailsPage.$interactive.exsitingCaseFoundButtonInSearchList).toContainText(caseData.caseReference);
-        await expect(caseDetailsPage.$interactive.exsitingCaseFoundButtonInSearchList).toContainText('Open');
-        await expect(caseDetailsPage.$interactive.exsitingCaseFoundButtonInSearchList).toContainText('PRE');
-        await expect(caseDetailsPage.$interactive.exsitingCaseFoundButtonInSearchList).toBeVisible();
+        await expect(caseDetailsPage.$interactive.existingCaseFoundButtonInSearchList).toHaveCount(1);
+        await expect(caseDetailsPage.$interactive.existingCaseFoundButtonInSearchList).toContainText(caseData.caseReference);
+        await expect(caseDetailsPage.$interactive.existingCaseFoundButtonInSearchList).toContainText('Open');
+        await expect(caseDetailsPage.$interactive.existingCaseFoundButtonInSearchList).toContainText('PRE');
+        await expect(caseDetailsPage.$interactive.existingCaseFoundButtonInSearchList).toBeVisible();
       });
 
       await test.step('Verfiy test deatils are correct when exisiting case is selected from search list', async () => {
-        await caseDetailsPage.$interactive.exsitingCaseFoundButtonInSearchList.click();
+        await caseDetailsPage.$interactive.existingCaseFoundButtonInSearchList.click();
         await expect(caseDetailsPage.$static.selectedExistingCaseReferenceLabel).toContainText(caseData.caseReference);
         await expect(caseDetailsPage.$static.selectedExistingCaseReferenceLabel).toBeVisible();
 
