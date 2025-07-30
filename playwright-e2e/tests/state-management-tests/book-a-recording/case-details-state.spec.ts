@@ -41,13 +41,13 @@ test.describe('Set of tests to verify buttons on the case details page are in th
       await caseDetailsPage.searchAndSelectExistingCase(caseData.caseReference);
 
       await test.step('Verify all four buttons are visible', async () => {
-        await expect(caseDetailsPage.$interactive.searchedCaseCloseButton).toBeVisible();
+        await expect(caseDetailsPage.$interactive.selectedCaseCloseButton).toBeVisible();
         await expect(caseDetailsPage.$interactive.modifyButton).toBeVisible();
         await expect(caseDetailsPage.$interactive.bookingsButton).toBeVisible();
         await expect(caseDetailsPage.$interactive.saveButton).toBeVisible();
       });
       await test.step('Verify three buttons are enabled', async () => {
-        await expect(caseDetailsPage.$interactive.searchedCaseCloseButton).toBeEnabled();
+        await expect(caseDetailsPage.$interactive.selectedCaseCloseButton).toBeEnabled();
         await expect(caseDetailsPage.$interactive.modifyButton).toBeEnabled();
         await expect(caseDetailsPage.$interactive.bookingsButton).toBeEnabled();
       });

@@ -13,7 +13,7 @@ export class CvpRoomSettingsPage {
   } as const satisfies Record<string, Locator>;
 
   public readonly $inputs = {
-    rmptsLinkInput: this.page.getByRole('textbox', { name: 'Recording URI:' }),
+    rtmpsLinkInput: this.page.getByRole('textbox', { name: 'Recording URI:' }),
   } as const satisfies Record<string, Locator>;
 
   public readonly $recordingModal = {
@@ -68,12 +68,12 @@ export class CvpRoomSettingsPage {
   public async editRoomSettings(rtmpsLink: string): Promise<string> {
     await this.$interactive.editRoomSettingsButton.click();
 
-    await expect(this.$inputs.rmptsLinkInput).toBeVisible();
+    await expect(this.$inputs.rtmpsLinkInput).toBeVisible();
 
     await expect(async () => {
-      await this.$inputs.rmptsLinkInput.clear();
-      await this.$inputs.rmptsLinkInput.fill(rtmpsLink);
-      await expect(this.$inputs.rmptsLinkInput).toHaveValue(rtmpsLink, { timeout: 2000 });
+      await this.$inputs.rtmpsLinkInput.clear();
+      await this.$inputs.rtmpsLinkInput.fill(rtmpsLink);
+      await expect(this.$inputs.rtmpsLinkInput).toHaveValue(rtmpsLink, { timeout: 2000 });
     }).toPass({ intervals: [2500], timeout: 10000 });
 
     const hostPin = await this.captureHostPin();
