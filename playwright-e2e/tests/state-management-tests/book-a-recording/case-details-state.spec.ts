@@ -51,8 +51,43 @@ test.describe('Set of tests to verify buttons on the case details page are in th
         await expect(caseDetailsPage.$interactive.modifyButton).toBeEnabled();
         await expect(caseDetailsPage.$interactive.bookingsButton).toBeEnabled();
       });
-      await test.step('Verify save button is disabled', async () => {
+      await test.step('Verify save button is disabled upon selecting an exisiting case', async () => {
         await expect(caseDetailsPage.$interactive.saveButton).toBeDisabled();
+      });
+    },
+  );
+
+  test(
+    'Verify when selecting options to close case,all the buttons are in the correct state',
+    {
+      tag: '@regression',
+    },
+    async ({ caseDetailsPage, apiClient }) => {
+      await test.step('Pre-requisite step in order to create and select a new case', async () => {
+        const caseData = await apiClient.createCase(2, 2);
+        await caseDetailsPage.searchAndSelectExistingCase(caseData.caseReference);
+        await caseDetailsPage.$interactive.selectedCaseCloseButton.click();
+      });
+
+      await test.step('Verify buttons to cancel or save are visible upon selecting close case button', async () => {
+        await expect(caseDetailsPage.$interactive.closeCaseCancelButton).toBeVisible();
+        await expect(caseDetailsPage.$closeCaseModal.saveButton).toBeVisible();
+      });
+
+      await test.step('Verify buttons to cancel or save are enabled upon selecting close case button', async () => {
+        await expect(caseDetailsPage.$interactive.closeCaseCancelButton).toBeEnabled();
+        await expect(caseDetailsPage.$closeCaseModal.saveButton).toBeEnabled();
+      });
+
+      await test.step('Verify buttons to select yes or no are visible upon selecting save button', async () => {
+        await caseDetailsPage.$closeCaseModal.saveButton.click();
+        await expect(caseDetailsPage.$closeCaseModal.yesButton).toBeVisible();
+        await expect(caseDetailsPage.$closeCaseModal.noButton).toBeVisible();
+      });
+
+      await test.step('Verify buttons to select yes or no are enabled upon selecting save button', async () => {
+        await expect(caseDetailsPage.$closeCaseModal.yesButton).toBeEnabled();
+        await expect(caseDetailsPage.$closeCaseModal.noButton).toBeEnabled();
       });
     },
   );

@@ -15,8 +15,9 @@ export class CaseDetailsPage extends Base {
 
   public readonly $interactive = {
     modifyButton: this.iFrame.getByRole('button', { name: 'Modify' }),
-    saveButton: this.iFrame.getByRole('button', { name: 'Save' }),
+    saveButton: this.iFrame.getByTitle('Save'),
     bookingsButton: this.iFrame.getByRole('button', { name: 'Bookings' }),
+    closeCaseCancelButton: this.iFrame.getByRole('button', { name: 'Cancel' }),
     validationErrorCloseButton: this.iFrame.getByRole('button', { name: 'Close' }),
     existingCaseFoundButtonInSearchList: this.iFrame
       .locator('[data-control-name="bookingScrn_ExistingCasesGallery_Gal"]')
@@ -50,6 +51,7 @@ export class CaseDetailsPage extends Base {
     datePicker: this.iFrame.getByPlaceholder('Date'),
     saveButton: this.iFrame.getByTitle('Save'),
     yesButton: this.iFrame.getByRole('button', { name: 'Yes' }),
+    noButton: this.iFrame.getByRole('button', { name: 'No' }),
   } as const satisfies Record<string, Locator>;
 
   public readonly $cancelClosureOfCaseModal = {
