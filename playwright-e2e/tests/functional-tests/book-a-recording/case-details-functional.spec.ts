@@ -55,16 +55,16 @@ test.describe('Set of tests to verify functionality of case details page as a Le
 
       await test.step('Verfiy test deatils are correct when exisiting case is selected from search list', async () => {
         await caseDetailsPage.$interactive.exsitingCaseFoundButtonInSearchList.click();
-        await expect(caseDetailsPage.$static.selectedExistingCaseReferenceLable).toContainText(caseData.caseReference);
-        await expect(caseDetailsPage.$static.selectedExistingCaseReferenceLable).toBeVisible();
+        await expect(caseDetailsPage.$static.selectedExistingCaseReferenceLabel).toContainText(caseData.caseReference);
+        await expect(caseDetailsPage.$static.selectedExistingCaseReferenceLabel).toBeVisible();
 
-        //Verify source lable contains PRE .
-        await expect(caseDetailsPage.$static.selectedExisitingCaseSourceLable).toContainText('PRE');
-        await expect(caseDetailsPage.$static.selectedExisitingCaseSourceLable).toBeVisible();
+        //Verify source label contains PRE .
+        await expect(caseDetailsPage.$static.selectedExisitingCaseSourceLabel).toContainText('PRE');
+        await expect(caseDetailsPage.$static.selectedExisitingCaseSourceLabel).toBeVisible();
 
         //Verify case status is Active.
-        await expect(caseDetailsPage.$static.selectedExisitingCaseStatusLable).toContainText('Active');
-        await expect(caseDetailsPage.$static.selectedExisitingCaseStatusLable).toBeVisible();
+        await expect(caseDetailsPage.$static.selectedExisitingCaseStatusLabel).toContainText('Active');
+        await expect(caseDetailsPage.$static.selectedExisitingCaseStatusLabel).toBeVisible();
 
         //Verify defendant value appears correctly.
         const defendantValue = await caseDetailsPage.$inputs.defendants.inputValue();

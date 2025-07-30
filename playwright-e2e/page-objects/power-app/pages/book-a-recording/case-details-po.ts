@@ -35,9 +35,9 @@ export class CaseDetailsPage extends Base {
     searchResultExistingCaseReference: this.iFrame.locator('[data-control-name="bookingScrn_ExistingCasesReference_Lbl"]'),
     searchResultExistingCaseStatus: this.iFrame.locator('[data-control-name="bookingScrn_ExistingCasesCourt_Lbl"]'),
     searchResultExistingCaseSource: this.iFrame.locator('[data-control-name="bookingScrn_ExistingCasesSource_Lbl_1"]'),
-    selectedExistingCaseReferenceLable: this.iFrame.locator('[data-control-name="bookingScrn_SelectedReference_Lbl"]'),
-    selectedExisitingCaseSourceLable: this.iFrame.locator('[data-control-name="bookingScrn_ClosureStatusLabel_Lbl_2"]'),
-    selectedExisitingCaseStatusLable: this.iFrame.locator('[data-control-name="bookingScrn_ClosureStatus_Lbl"]'),
+    selectedExistingCaseReferenceLabel: this.iFrame.locator('[data-control-name="bookingScrn_SelectedReference_Lbl"]'),
+    selectedExisitingCaseSourceLabel: this.iFrame.locator('[data-control-name="bookingScrn_ClosureStatusLabel_Lbl_2"]'),
+    selectedExisitingCaseStatusLabel: this.iFrame.locator('[data-control-name="bookingScrn_ClosureStatus_Lbl"]'),
     closedCaseStatusInfo: this.iFrame.locator('[data-control-name="bookingScrn_ClosureStatusInfo_Lbl"]'),
   } as const satisfies Record<string, Locator>;
 
@@ -100,6 +100,6 @@ export class CaseDetailsPage extends Base {
     await expect(this.$closeCaseModal.yesButton).toBeVisible();
     await this.$closeCaseModal.yesButton.click();
     await expect(this.$closeCaseModal.closeCaseModalWindow).toBeHidden();
-    await expect(this.$static.selectedExisitingCaseStatusLable).toHaveText('Pending Closure');
+    await expect(this.$static.selectedExisitingCaseStatusLabel).toHaveText('Pending Closure');
   }
 }

@@ -78,7 +78,7 @@ test.describe('Set of tests to verify the case details page UI is visually corre
           caseDetailsPage.$globalMaskedLocatersForVisualTesting.applicationCourtTitle,
           caseDetailsPage.$globalMaskedLocatersForVisualTesting.applicationEnvironment,
           caseDetailsPage.$static.searchResultExistingCaseReference,
-          caseDetailsPage.$static.selectedExistingCaseReferenceLable,
+          caseDetailsPage.$static.selectedExistingCaseReferenceLabel,
           caseDetailsPage.$inputs.defendants,
           caseDetailsPage.$inputs.witnesses,
         ];
@@ -107,7 +107,7 @@ test.describe('Set of tests to verify the case details page UI is visually corre
         caseDetailsPage.$globalMaskedLocatersForVisualTesting.powerAppsHeaderContainer,
         caseDetailsPage.$globalMaskedLocatersForVisualTesting.applicationCourtTitle,
         caseDetailsPage.$globalMaskedLocatersForVisualTesting.applicationEnvironment,
-        caseDetailsPage.$static.selectedExistingCaseReferenceLable,
+        caseDetailsPage.$static.selectedExistingCaseReferenceLabel,
       ];
 
       /* 
@@ -170,7 +170,7 @@ test.describe('Set of tests to verify the case details page UI is visually corre
         caseDetailsPage.$globalMaskedLocatersForVisualTesting.powerAppsHeaderContainer,
         caseDetailsPage.$globalMaskedLocatersForVisualTesting.applicationCourtTitle,
         caseDetailsPage.$globalMaskedLocatersForVisualTesting.applicationEnvironment,
-        caseDetailsPage.$static.selectedExistingCaseReferenceLable,
+        caseDetailsPage.$static.selectedExistingCaseReferenceLabel,
       ];
       await Promise.all(maskedElements.map((element) => expect(element).toBeAttached()));
 
@@ -190,8 +190,8 @@ test.describe('Set of tests to verify the case details page UI is visually corre
         // Replace dynamic text in the modal with placeholders for visual testing
         const dynamicTextArea = caseDetailsPage.$cancelClosureOfCaseModal.modalTextArea;
         await userInterfaceUtils.replaceTextWithinTextArea(dynamicTextArea, [
-          [caseData.caseReference, 'XXXXXXXXXXXXX'],
-          [/\d{2}\/\d{2}\/\d{4}/, 'DD/MM/YYYY'],
+          [caseData.caseReference, '{masked-visual}'],
+          [/\d{2}\/\d{2}\/\d{4}/, '{masked-visual}'],
         ]);
 
         await expect(page).toHaveScreenshot('case-details-page-cancel-closure-of-case-modal-visual.png', {
