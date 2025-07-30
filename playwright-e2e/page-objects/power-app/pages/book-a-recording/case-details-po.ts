@@ -51,6 +51,7 @@ export class CaseDetailsPage extends Base {
     datePicker: this.iFrame.getByPlaceholder('Date'),
     saveButton: this.iFrame.getByTitle('Save'),
     yesButton: this.iFrame.getByRole('button', { name: 'Yes' }),
+    noButton: this.iFrame.getByRole('button', { name: 'No' }),
   } as const satisfies Record<string, Locator>;
 
   public readonly $cancelClosureOfCaseModal = {
