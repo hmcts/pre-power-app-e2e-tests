@@ -15,9 +15,12 @@ export class CaseDetailsPage extends Base {
 
   public readonly $interactive = {
     modifyButton: this.iFrame.getByRole('button', { name: 'Modify' }),
-    saveButton: this.iFrame.getByRole('button', { name: 'Save' }),
+    saveButton: this.iFrame.getByTitle('Save'),
     bookingsButton: this.iFrame.getByRole('button', { name: 'Bookings' }),
+    closeCaseCancelButton: this.iFrame.getByRole('button', { name: 'Cancel' }),
     validationErrorCloseButton: this.iFrame.getByRole('button', { name: 'Close' }),
+    yesButton: this.iFrame.getByRole('button', { name: 'Yes' }),
+    noButton: this.iFrame.getByRole('button', { name: 'No' }),
     exsitingCaseFoundButtonInSearchList: this.iFrame
       .locator('[data-control-name="bookingScrn_ExistingCasesGallery_Gal"]')
       .locator('[data-control-part="gallery-item"]'),

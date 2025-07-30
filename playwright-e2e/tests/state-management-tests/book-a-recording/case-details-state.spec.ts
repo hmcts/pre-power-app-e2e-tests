@@ -46,13 +46,61 @@ test.describe('Set of tests to verify buttons on the case details page are in th
         await expect(caseDetailsPage.$interactive.bookingsButton).toBeVisible();
         await expect(caseDetailsPage.$interactive.saveButton).toBeVisible();
       });
-      await test.step('Verify three buttons are enabled', async () => {
+      await test.step('Verify three buttons are enabled upon selecting an exisiting case', async () => {
         await expect(caseDetailsPage.$interactive.searchedCaseCloseButton).toBeEnabled();
         await expect(caseDetailsPage.$interactive.modifyButton).toBeEnabled();
         await expect(caseDetailsPage.$interactive.bookingsButton).toBeEnabled();
       });
-      await test.step('Verify save button is disabled', async () => {
+      await test.step('Verify save button is disabled upon selecting an exisiting case', async () => {
         await expect(caseDetailsPage.$interactive.saveButton).toBeDisabled();
+      });
+    },
+  );
+
+  test(
+    'Verify when selecting options to close case,all the buttons are in the correct state',
+    {
+      tag: '@regression',
+    },
+    async ({ caseDetailsPage, apiClient }) => {
+      await test.step('Pre-requisite step in order to select the exisitig case and check all the buttons are in correct states', async () => {
+        await apiClient.createCase(2, 2);
+      });
+      const caseData = await apiClient.getCaseData();
+      await caseDetailsPage.searchAndSelectExistingCase(caseData.caseReference);
+      await caseDetailsPage.$interactive.searchedCaseCloseButton.click();
+
+      await test.step('Verify two buttons in order to cancel or save are visible selecting close case button', async () => {
+        await expect(caseDetailsPage.$interactive.closeCaseCancelButton).toBeEnabled();
+        await expect(caseDetailsPage.$interactive.saveButton).toBeEnabled();
+
+        await test.step('Verify by clicking a cancle button', async () => {
+          await caseDetailsPage.$interactive.closeCaseCancelButton.click();
+        });
+      });
+    },
+  );
+
+  test(
+    'Verify once save button has been selected within close case modal, option to select yes and no buttons are visible',
+    {
+      tag: '@regression',
+    },
+    async ({ caseDetailsPage, apiClient }) => {
+      await test.step('Pre-requisite step in order to click save and check all the buttons are in correct states', async () => {
+        await apiClient.createCase(2, 2);
+      });
+      const caseData = await apiClient.getCaseData();
+      await caseDetailsPage.searchAndSelectExistingCase(caseData.caseReference);
+      await caseDetailsPage.$interactive.searchedCaseCloseButton.click();
+
+      await test.step('Verify by clicking a save button', async () => {
+        await caseDetailsPage.$interactive.saveButton.click();
+      });
+
+      await test.step('Verify all the buttons are visible when click save', async () => {
+        await expect(caseDetailsPage.$interactive.yesButton).toBeVisible();
+        await expect(caseDetailsPage.$interactive.noButton).toBeVisible();
       });
     },
   );
