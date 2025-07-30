@@ -19,12 +19,18 @@ test.describe('Set of tests to verify the homepage UI is visually correct', () =
       tag: '@visual',
     },
     async ({ page, homePage }) => {
+      const maskedElements = [
+        homePage.$globalMaskedLocatersForVisualTesting.powerAppsHeaderContainer,
+        homePage.$globalMaskedLocatersForVisualTesting.applicationCourtTitle,
+        homePage.$globalMaskedLocatersForVisualTesting.applicationEnvironment,
+        homePage.$maskedLocatersForVisualTesting.applicationVersion,
+        homePage.$maskedLocatersForVisualTesting.welcomeTextForUser,
+      ];
+
+      await Promise.all(maskedElements.map((element) => expect(element).toBeAttached()));
+
       await expect(page).toHaveScreenshot('home-page-visual.png', {
-        mask: [
-          homePage.iFrame.locator('[aria-label="Current Version"]'),
-          homePage.iFrame.locator('[class="appmagic-label-text"]'),
-          page.locator('[id*="HeaderContainer"]'),
-        ],
+        mask: maskedElements,
       });
     },
   );

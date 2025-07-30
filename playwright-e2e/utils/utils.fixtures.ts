@@ -2,7 +2,7 @@ import { AxeUtils, BrowserUtils, LighthouseUtils, SessionUtils, WaitUtils } from
 import os from 'os';
 import path from 'path';
 import { chromium, Page } from 'playwright/test';
-import { config, Config, DataUtils, NetworkInterceptUtils } from './index';
+import { config, Config, DataUtils, NetworkInterceptUtils, UserInterfaceUtils } from './index';
 
 export interface UtilsFixtures {
   config: Config;
@@ -14,6 +14,7 @@ export interface UtilsFixtures {
   lighthousePage: Page;
   dataUtils: DataUtils;
   networkInterceptUtils: NetworkInterceptUtils;
+  userInterfaceUtils: UserInterfaceUtils;
 }
 
 export const utilsFixtures = {
@@ -25,6 +26,9 @@ export const utilsFixtures = {
   },
   networkInterceptUtils: async ({ page }, use) => {
     await use(new NetworkInterceptUtils(page));
+  },
+  userInterfaceUtils: async ({ page }, use) => {
+    await use(new UserInterfaceUtils(page));
   },
   waitUtils: async ({}, use) => {
     await use(new WaitUtils());

@@ -21,7 +21,8 @@ export class CaseDetailsPage extends Base {
     exsitingCaseFoundButtonInSearchList: this.iFrame
       .locator('[data-control-name="bookingScrn_ExistingCasesGallery_Gal"]')
       .locator('[data-control-part="gallery-item"]'),
-    searchedCaseCloseButton: this.iFrame.getByRole('button', { name: 'Close Case' }),
+    selectedCaseCloseButton: this.iFrame.getByRole('button', { name: 'Close Case' }),
+    selectedCaseCancelPendingClosureButton: this.iFrame.getByRole('button', { name: 'Cancel' }),
   } as const satisfies Record<string, Locator>;
 
   public readonly $static = {
@@ -31,11 +32,30 @@ export class CaseDetailsPage extends Base {
     validationErrorHeading: this.iFrame.locator("div[appmagic-control*='errorLabel']"),
     validationErrorText: this.iFrame.locator('[data-control-name="ErrorMessage"]'),
     searchResultExistingCasesTitle: this.iFrame.locator('[data-control-name="bookingScrn_ExistingCasesTitle_Txt"]'),
+    searchResultExistingCaseReference: this.iFrame.locator('[data-control-name="bookingScrn_ExistingCasesReference_Lbl"]'),
+    searchResultExistingCaseStatus: this.iFrame.locator('[data-control-name="bookingScrn_ExistingCasesCourt_Lbl"]'),
+    searchResultExistingCaseSource: this.iFrame.locator('[data-control-name="bookingScrn_ExistingCasesSource_Lbl_1"]'),
     selectedExistingCaseReferenceLable: this.iFrame.locator('[data-control-name="bookingScrn_SelectedReference_Lbl"]'),
     selectedExisitingCaseSourceLable: this.iFrame.locator('[data-control-name="bookingScrn_ClosureStatusLabel_Lbl_2"]'),
     selectedExisitingCaseStatusLable: this.iFrame.locator('[data-control-name="bookingScrn_ClosureStatus_Lbl"]'),
-    selectedExisitingCaseDefendantNames: this.iFrame.locator('[data-control-name="bookingScrn_DefendantsHintText_lbl"]'),
-    selectedExisitingCaseWitnessNames: this.iFrame.locator('[data-control-name="bookingScrn_WitnessesHintText_lbl"]'),
+    closedCaseStatusInfo: this.iFrame.locator('[data-control-name="bookingScrn_ClosureStatusInfo_Lbl"]'),
+  } as const satisfies Record<string, Locator>;
+
+  public readonly $maskedLocatersForVisualTesting = {
+    searchResultExistingCaseContainer: this.iFrame.locator('[aria-label="Existing Cases"]'),
+  } as const satisfies Record<string, Locator>;
+
+  public readonly $closeCaseModal = {
+    closeCaseModalWindow: this.iFrame.locator('[data-control-name="CloseCaseWindow"]'),
+    datePicker: this.iFrame.getByPlaceholder('Date'),
+    saveButton: this.iFrame.getByTitle('Save'),
+    yesButton: this.iFrame.getByRole('button', { name: 'Yes' }),
+  } as const satisfies Record<string, Locator>;
+
+  public readonly $cancelClosureOfCaseModal = {
+    cancelClosureOfCaseModalWindow: this.iFrame.locator('[data-control-name="CancelCaseClosureWindow"]'),
+    modalTextArea: this.iFrame.locator('[appmagic-control="CancelCaseClosureBodyInputtextarea"]'),
+    yesButton: this.iFrame.getByRole('button', { name: 'Yes' }),
   } as const satisfies Record<string, Locator>;
 
   public async verifyUserIsOnCaseDetailsPage(): Promise<void> {
@@ -64,5 +84,22 @@ export class CaseDetailsPage extends Base {
     await expect(locator).toBeVisible();
     await locator.click();
     await expect(this.iFrame.locator('[data-control-name*="SelectedReference_Lbl"]').filter({ hasText: caseReference })).toBeVisible();
+  }
+
+  /**
+   * Sets the current case to pending closure.
+   * Clicks the "Close Case" button, confirms the modal, and waits for the modal to close.
+   * Verifies the case status is updated to "Pending Closure".
+   * This simulates the user flow for marking a case as pending closure.
+   * Before using this method, ensure the case is already selected.
+   */
+  public async setCaseToPendingClosure(): Promise<void> {
+    await this.$interactive.selectedCaseCloseButton.click();
+    await expect(this.$closeCaseModal.closeCaseModalWindow).toBeVisible();
+    await this.$closeCaseModal.saveButton.click();
+    await expect(this.$closeCaseModal.yesButton).toBeVisible();
+    await this.$closeCaseModal.yesButton.click();
+    await expect(this.$closeCaseModal.closeCaseModalWindow).toBeHidden();
+    await expect(this.$static.selectedExisitingCaseStatusLable).toHaveText('Pending Closure');
   }
 }
