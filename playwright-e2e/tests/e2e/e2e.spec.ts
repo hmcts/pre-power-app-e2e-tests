@@ -71,7 +71,7 @@ test.describe('Ensure e2e journey is working as expected', () => {
         ).toBeVisible();
       });
 
-      await test.step('Verify user is able to begin recording by obtaining rmpts link', async () => {
+      await test.step('Verify user is able to begin recording by obtaining rtmps link', async () => {
         await navBarComponent.$interactive.HomeButton.click();
         await homePage.verifyUserIsOnHomePage();
         await homePage.$interactive.manageBookingsButton.click();
@@ -82,7 +82,7 @@ test.describe('Ensure e2e journey is working as expected', () => {
         rtmpsLink = await viewLiveFeedPage.startRecordingAndCaptureRtmpsLink();
       });
 
-      await test.step('Verify user is able to configure a cvp room with rmpts link', async () => {
+      await test.step('Verify user is able to configure a cvp room with rtmps link', async () => {
         await cvp_SignInPage.page.bringToFront();
         await cvp_SignInPage.goTo();
         await cvp_SignInPage.verifyUserIsOnCvpSignInPage();
