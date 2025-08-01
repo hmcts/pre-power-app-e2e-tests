@@ -8,3 +8,4 @@ export * from './recordings/create-or-update-recording-api';
 export * from './api-client';
 export * from './api-context';
 export * from './bookings/get-booking-details-by-case-reference.api';
+export * from './cases/delete-case.api';

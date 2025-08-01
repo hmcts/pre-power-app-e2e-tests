@@ -1,6 +1,7 @@
 import { APIRequestContext, expect } from '@playwright/test';
 
 type RecordingData = {
+  caseIdTheRecordingBelongsTO: string;
   recordingId: string;
   recordingFilename: string;
   recordingDuration: string;
@@ -32,11 +33,12 @@ export class GetLatestRecordingApi {
     const responseBody = await response.json();
     const latestRecording = responseBody._embedded?.recordingDTOList?.[0];
 
-    if (!latestRecording || !latestRecording.id || !latestRecording.filename || !latestRecording.duration) {
+    if (!latestRecording || !latestRecording.id || !latestRecording.filename || !latestRecording.duration || !latestRecording.case_id) {
       throw new Error('Latest recording data is missing or incomplete');
     }
 
     return {
+      caseIdTheRecordingBelongsTO: latestRecording.case_id,
       recordingId: latestRecording.id,
       recordingFilename: latestRecording.filename,
       recordingDuration: latestRecording.duration,

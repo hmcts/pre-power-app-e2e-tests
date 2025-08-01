@@ -8,6 +8,7 @@ import {
   GetLatestRecordingApi,
   CreateOrUpdateRecordingApi,
   GetBookingDetailsByCaseReferenceApi,
+  DeleteCaseApi,
 } from './index.js';
 
 export class ApiClient {
@@ -22,6 +23,7 @@ export class ApiClient {
   private getCaseDetailsByCaseReferenceApi: GetCaseDetailsByCaseReferenceApi;
   private getLatestRecordingApi: GetLatestRecordingApi;
   private getBookingDetailsByCaseReferenceApi: GetBookingDetailsByCaseReferenceApi;
+  private deleteCaseApi: DeleteCaseApi;
 
   constructor(apiContext: APIRequestContext, userId: string, courtId: string) {
     this.createNewCaseApi = new CreateNewCaseApi(apiContext, courtId);
@@ -31,6 +33,7 @@ export class ApiClient {
     this.getCaseDetailsByCaseReferenceApi = new GetCaseDetailsByCaseReferenceApi(apiContext, courtId);
     this.getLatestRecordingApi = new GetLatestRecordingApi(apiContext);
     this.getBookingDetailsByCaseReferenceApi = new GetBookingDetailsByCaseReferenceApi(apiContext, courtId);
+    this.deleteCaseApi = new DeleteCaseApi(apiContext);
   }
 
   /**
@@ -110,12 +113,12 @@ export class ApiClient {
     // Create a capture session for the booking with status 'STANDBY'
     const captureSessionDetails = await this.createOrUpdateCaptureSessionApi.request(bookingDetails.bookingId, 'STANDBY');
     // Retrieve the latest recording created by the test suite
-    const recordingDetails = await this.getLatestRecordingApi.request();
+    const latestRecordingDetailsFetched = await this.getLatestRecordingApi.request();
     // Update the capture session with the recording details obtained from the latest recording
     await this.createOrUpdateRecordingApi.request(captureSessionDetails.captureSessionId, {
-      recordingDuration: recordingDetails.recordingDuration,
-      recordingFileName: recordingDetails.recordingFilename,
-      recordingId: recordingDetails.recordingId,
+      recordingDuration: latestRecordingDetailsFetched.recordingDuration,
+      recordingFileName: latestRecordingDetailsFetched.recordingFilename,
+      recordingId: latestRecordingDetailsFetched.recordingId,
     });
     // Complete the capture session with the recording details by setting the status to 'RECORDING_AVAILABLE'
     const captureSessionDetailsUponCompletion = await this.createOrUpdateCaptureSessionApi.request(
@@ -124,17 +127,21 @@ export class ApiClient {
       captureSessionDetails.captureSessionId,
     );
 
+    // Delete case which previously had a recording associated with it.
+    // By assigning the recording to a new case, the previous case is no longer needed.
+    await this.deleteCaseApi.request(latestRecordingDetailsFetched.caseIdTheRecordingBelongsTO);
+
     // Set the recording details with the correct format to be used in test assertions
     const sessionDate = new Date(captureSessionDetailsUponCompletion.sessionDateTime);
     const recordingData: RecordingDetails = {
-      recordingId: recordingDetails.recordingId,
+      recordingId: latestRecordingDetailsFetched.recordingId,
       recordingDate: sessionDate.toLocaleDateString('en-GB'),
       recordingTime: sessionDate.toLocaleTimeString('en-GB', {
         hour: '2-digit',
         minute: '2-digit',
         hour12: false,
       }),
-      recordingDuration: await this.formatDuration(recordingDetails.recordingDuration),
+      recordingDuration: await this.formatDuration(latestRecordingDetailsFetched.recordingDuration),
     };
     this.recordingData = recordingData;
     return recordingData;
@@ -193,6 +200,14 @@ export class ApiClient {
         { timeout: 30_000, intervals: [2_000] },
       )
       .toBe('RECORDING_AVAILABLE');
+  }
+
+  /**
+   * Deletes a case by its case ID using the DeleteCaseApi.
+   * @param caseId - The ID of the case to delete.
+   */
+  public async deleteCaseByCaseId(caseId: string): Promise<void> {
+    await this.deleteCaseApi.request(caseId);
   }
 
   /**
