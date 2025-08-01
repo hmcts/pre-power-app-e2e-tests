@@ -70,12 +70,12 @@ test.describe('Set of tests to verify buttons on the case details page are in th
       });
 
       await test.step('Verify buttons to cancel or save are visible upon selecting close case button', async () => {
-        await expect(caseDetailsPage.$interactive.closeCaseCancelButton).toBeVisible();
+        await expect(caseDetailsPage.$interactive.selectedCloseCaseCancelButton).toBeVisible();
         await expect(caseDetailsPage.$closeCaseModal.saveButton).toBeVisible();
       });
 
       await test.step('Verify buttons to cancel or save are enabled upon selecting close case button', async () => {
-        await expect(caseDetailsPage.$interactive.closeCaseCancelButton).toBeEnabled();
+        await expect(caseDetailsPage.$interactive.selectedCloseCaseCancelButton).toBeEnabled();
         await expect(caseDetailsPage.$closeCaseModal.saveButton).toBeEnabled();
       });
 
