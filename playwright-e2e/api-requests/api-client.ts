@@ -127,10 +127,6 @@ export class ApiClient {
       captureSessionDetails.captureSessionId,
     );
 
-    // Delete case which previously had a recording associated with it.
-    // By assigning the recording to a new case, the previous case is no longer needed.
-    await this.deleteCaseApi.request(latestRecordingDetailsFetched.caseIdTheRecordingBelongsTO);
-
     // Set the recording details with the correct format to be used in test assertions
     const sessionDate = new Date(captureSessionDetailsUponCompletion.sessionDateTime);
     const recordingData: RecordingDetails = {
