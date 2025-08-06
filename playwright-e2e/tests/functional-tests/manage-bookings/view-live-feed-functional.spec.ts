@@ -28,8 +28,8 @@ test.describe('Set of tests to verify functionality of view live feed page for L
 
       await test.step('The correct details are displayed on modal', async () => {
         await expect(viewLiveFeedPage.$startRecordingModal.recordingLinkGeneratedText).toBeVisible();
-        await expect(viewLiveFeedPage.$startRecordingModal.recordingLinkGeneratedText).toHaveText(
-          'We are now ready to Record. Please open CVP and copy the link below:',
+        await expect(viewLiveFeedPage.$startRecordingModal.recordingLinkGeneratedText).toHaveValue(
+          'We are now ready to Record. \n\nPlease open CVP and copy the link below:',
         );
 
         const rtmpsLinkValue = await viewLiveFeedPage.$startRecordingModal.generatedRtmpsLink.inputValue();
