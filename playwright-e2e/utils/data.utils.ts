@@ -25,7 +25,8 @@ export class DataUtils {
    * @returns A string representing the case reference number.
    */
   generateRandomCaseReference(): string {
-    return `PR-${Date.now().toString().slice(-10)}`;
+    const randomDigits = faker.number.int({ min: 1000000000, max: 9999999999 });
+    return `PR-${randomDigits}`;
   }
 
   /**

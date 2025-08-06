@@ -17,13 +17,13 @@ export class CaseDetailsPage extends Base {
     modifyButton: this.iFrame.getByRole('button', { name: 'Modify' }),
     saveButton: this.iFrame.getByRole('button', { name: 'Save' }),
     bookingsButton: this.iFrame.getByRole('button', { name: 'Bookings' }),
-    selectedCloseCaseCancelButton: this.iFrame.getByRole('button', { name: 'Cancel' }),
     validationErrorCloseButton: this.iFrame.getByRole('button', { name: 'Close' }),
     existingCaseFoundButtonInSearchList: this.iFrame
       .locator('[data-control-name="bookingScrn_ExistingCasesGallery_Gal"]')
       .locator('[data-control-part="gallery-item"]'),
     selectedCaseCloseButton: this.iFrame.getByRole('button', { name: 'Close Case' }),
     selectedCaseCancelPendingClosureButton: this.iFrame.getByRole('button', { name: 'Cancel' }),
+    selectedCaseAddNewParticipantButton: this.iFrame.getByRole('button', { name: 'Add new Witness/Defendant' }),
   } as const satisfies Record<string, Locator>;
 
   public readonly $static = {
@@ -59,6 +59,29 @@ export class CaseDetailsPage extends Base {
     modalTextArea: this.iFrame.locator('[appmagic-control="CancelCaseClosureBodyInputtextarea"]'),
     yesButton: this.iFrame.getByRole('button', { name: 'Yes' }),
   } as const satisfies Record<string, Locator>;
+
+  public readonly $amendParticipantModal = {
+    amendParticipantModalWindow: this.iFrame.locator('[data-control-name="ParImpWindow"]'),
+    firstNameInput: this.iFrame.getByRole('textbox', { name: 'First Name' }),
+    lastNameInput: this.iFrame.getByRole('textbox', { name: 'Last Name' }),
+    submitButton: this.iFrame.getByRole('button', { name: 'Submit' }),
+  } as const satisfies Record<string, Locator>;
+
+  /**
+   * Selects the option to amend the name of a participant in the case.
+   * @param nameOfParticipantToAmend - The name of the participant whose details need to be amended.
+   * This method locates the participant in the gallery, clicks the edit button, and verifies the amendment modal is visible.
+   */
+  public async $selectOptionToAmendParticipantName(nameOfParticipantToAmend: string): Promise<void> {
+    const modifyParticipantButton = this.iFrame
+      .locator('[data-control-name="bookingScrn_ManageCaseParticipantGallery_Gal"]')
+      .locator('[data-control-part="gallery-item"]')
+      .filter({ hasText: nameOfParticipantToAmend })
+      .locator('[data-control-name="bookingScrn_ManageCaseParticipantGalleryEdit_Icn"]');
+
+    await modifyParticipantButton.click();
+    await expect(this.$amendParticipantModal.amendParticipantModalWindow).toBeVisible();
+  }
 
   public async verifyUserIsOnCaseDetailsPage(): Promise<void> {
     await expect(this.$static.pageHeading).toBeVisible();

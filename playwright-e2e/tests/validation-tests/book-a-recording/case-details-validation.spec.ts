@@ -67,6 +67,75 @@ test.describe('Set of tests to verify validation of case details page is correct
   );
 
   test(
+    'Verify user is unable to create a dupiclate case using an existing case reference of a case in open status',
+    {
+      tag: '@regression',
+    },
+    async ({ caseDetailsPage, apiClient, dataUtils }) => {
+      await test.step('Pre-requisite step in order to create a case via api', async () => {
+        await apiClient.createCase(2, 2);
+      });
+
+      const caseData = await apiClient.getCaseData();
+      const defendantNames = dataUtils.generateRandomNames('fullName', 1);
+      const witnessNames = dataUtils.generateRandomNames('firstName', 1);
+
+      await test.step('Populate case details and click on save button', async () => {
+        await caseDetailsPage.populateCaseDetails({
+          caseReference: caseData.caseReference,
+          defendantNames: defendantNames,
+          witnessNames: witnessNames,
+        });
+
+        await caseDetailsPage.$interactive.saveButton.click();
+      });
+
+      await test.step('Verify error message is displayed to state case reference already exists', async () => {
+        await expect(caseDetailsPage.$static.validationErrorHeading).toBeVisible();
+        await expect(caseDetailsPage.$static.validationErrorText).toBeVisible();
+        await expect(caseDetailsPage.$static.validationErrorText).toHaveText(
+          'The case reference you have entered already exists, please navigate to that case or re-enter a new Case Ref.',
+        );
+      });
+    },
+  );
+
+  test(
+    'Verify user is unable to create a dupiclate case using an existing case reference of a case in deleted status',
+    {
+      tag: '@regression',
+    },
+    async ({ caseDetailsPage, apiClient, dataUtils }) => {
+      await test.step('Pre-requisite step in order to create a new case and set it to deleted status via api', async () => {
+        const caseData = await apiClient.createCase(2, 2);
+        await apiClient.deleteCaseByCaseId(caseData.caseId);
+      });
+
+      const caseData = await apiClient.getCaseData();
+      const defendantNames = dataUtils.generateRandomNames('fullName', 1);
+      const witnessNames = dataUtils.generateRandomNames('firstName', 1);
+
+      await test.step('Populate case details and click on save button', async () => {
+        await caseDetailsPage.populateCaseDetails({
+          caseReference: caseData.caseReference,
+          defendantNames: defendantNames,
+          witnessNames: witnessNames,
+        });
+
+        await caseDetailsPage.$interactive.saveButton.click();
+      });
+
+      await test.step('Verify error message is displayed to state case reference already exists', async () => {
+        await expect(caseDetailsPage.$static.validationErrorHeading).toBeVisible();
+        await expect(caseDetailsPage.$static.validationErrorText).toBeVisible();
+        await expect(caseDetailsPage.$static.validationErrorText).toHaveText(
+          'The case reference you have entered already exists, please navigate to that case or re-enter a new Case Ref.',
+        );
+      });
+    },
+  );
+
+  test(
     'Verify case reference containing special characters is rejected',
     {
       tag: '@regression',
@@ -308,6 +377,69 @@ test.describe('Set of tests to verify validation of case details page is correct
         await expect(validationErrorText).toHaveText('Witness name must be between 1 and 25 characters.');
         await caseDetailsPage.$interactive.validationErrorCloseButton.click();
         await expect(validationErrorHeading).toBeHidden();
+      });
+    },
+  );
+
+  test(
+    'Verify user is unable to modify an existing witness name with blank first name',
+    {
+      tag: '@regression',
+    },
+    async ({ caseDetailsPage, apiClient }) => {
+      await test.step('Pre-requisite step in order to create a case via api and search / select the case that has been created', async () => {
+        const caseData = await apiClient.createCase(1, 1);
+        await caseDetailsPage.searchAndSelectExistingCase(caseData.caseReference);
+      });
+
+      await test.step('Modify case by amending witness first name to be blank', async () => {
+        const caseData = await apiClient.getCaseData();
+        await caseDetailsPage.$interactive.modifyButton.click();
+        await expect(caseDetailsPage.$interactive.selectedCaseAddNewParticipantButton).toBeVisible();
+        await caseDetailsPage.$selectOptionToAmendParticipantName(caseData.witnessNames[0]);
+        await caseDetailsPage.$amendParticipantModal.firstNameInput.clear();
+        await expect(caseDetailsPage.$amendParticipantModal.firstNameInput).toBeEmpty();
+      });
+
+      await test.step('Verify user is unable to select the submit button', async () => {
+        await expect(caseDetailsPage.$amendParticipantModal.submitButton).toBeDisabled();
+      });
+    },
+  );
+
+  test(
+    'Verify user is unable to modify an existing defendant name with blank first name or last name',
+    {
+      tag: '@regression',
+    },
+    async ({ caseDetailsPage, apiClient }) => {
+      await test.step('Pre-requisite step in order to create a case via api and search / select the case that has been created', async () => {
+        const caseData = await apiClient.createCase(1, 1);
+        await caseDetailsPage.searchAndSelectExistingCase(caseData.caseReference);
+      });
+
+      await test.step('Modify case by amending defendant first name to be blank', async () => {
+        const caseData = await apiClient.getCaseData();
+        await caseDetailsPage.$interactive.modifyButton.click();
+        await expect(caseDetailsPage.$interactive.selectedCaseAddNewParticipantButton).toBeVisible();
+        await caseDetailsPage.$selectOptionToAmendParticipantName(caseData.defendantNames[0]);
+        await caseDetailsPage.$amendParticipantModal.firstNameInput.clear();
+        await expect(caseDetailsPage.$amendParticipantModal.firstNameInput).toBeEmpty();
+      });
+
+      await test.step('Verify user is unable to select the submit button', async () => {
+        await expect(caseDetailsPage.$amendParticipantModal.submitButton).toBeDisabled();
+      });
+
+      await test.step('Re-populate first name field and set last name to be blank', async () => {
+        await caseDetailsPage.$amendParticipantModal.firstNameInput.fill('John');
+        await expect(caseDetailsPage.$amendParticipantModal.firstNameInput).toHaveValue('John');
+        await caseDetailsPage.$amendParticipantModal.lastNameInput.clear();
+        await expect(caseDetailsPage.$amendParticipantModal.lastNameInput).toBeEmpty();
+      });
+
+      await test.step('Verify user is unable to select the submit button', async () => {
+        await expect(caseDetailsPage.$amendParticipantModal.submitButton).toBeDisabled();
       });
     },
   );

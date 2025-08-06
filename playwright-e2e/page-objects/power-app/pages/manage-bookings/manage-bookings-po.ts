@@ -36,7 +36,7 @@ export class ManageBookingsPage extends Base {
 
     await expect(async () => {
       await this.refreshResultsIfMoreThenOneCaseReference();
-      await expect(this.$static.caseReferenceLabelInSearchList).toHaveText(caseReference, { timeout: 2000 });
+      await expect(this.$static.caseReferenceLabelInSearchList).toHaveText(caseReference);
     }).toPass({ intervals: [2500], timeout: 10000 });
   }
 

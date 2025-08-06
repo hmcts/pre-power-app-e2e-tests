@@ -19,7 +19,11 @@ export class ProcessingRecordingsPage extends Base {
    * @param caseReference - The case reference to check for processing status.
    */
   public async verifyRecordingIsProcessed(caseReference: string): Promise<void> {
-    const caseProcessingLocator = this.iFrame.locator(`//div[.//div[text()='${caseReference}']]//div[text()='PROCESSING']`);
+    const caseProcessingLocator = this.iFrame
+      .locator('[data-control-name="ProcessingRecordingsListGallery"]')
+      .locator('[data-control-part="gallery-item"]')
+      .filter({ hasText: caseReference })
+      .getByText('PROCESSING');
 
     await expect(this.iFrame.getByText(caseReference, { exact: true })).toBeVisible({ timeout: 30_000 });
     await expect(caseProcessingLocator).toBeVisible();

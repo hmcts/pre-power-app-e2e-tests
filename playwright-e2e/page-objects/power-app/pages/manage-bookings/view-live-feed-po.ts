@@ -18,15 +18,15 @@ export class ViewLiveFeedPage extends Base {
 
   public readonly $startRecordingModal = {
     recordingLinkIsBeingGeneratedText: this.iFrame.getByText('A link will be generated.'),
-    recordingLinkGeneratedText: this.iFrame.getByText('We are now ready to Record.'),
+    recordingLinkGeneratedText: this.iFrame.locator('[data-control-name="CVPPromptGrpRdyToRecordLbl_Input"] textarea'),
     recordingLinkIsBeingGeneratedSpinner: this.iFrame.locator('[data-control-name="RTMPSSpinner"]'),
     generatedRtmpsLink: this.iFrame.locator('[data-control-name*="CVPRTMPUrlTxt"] textarea'),
-    dontForgetToStartRecordingText: this.iFrame.getByText("Don't forget to press Record"),
+    dontForgetToStartRecordingText: this.iFrame.locator('[data-control-name*="DontForgetToPressRecordLbl"] [class="appmagic-label-text"]'),
     okButton: this.iFrame.getByRole('button', { name: 'Ok', exact: true }),
   } as const satisfies Record<string, Locator>;
 
   public readonly $finishRecordingModal = {
-    finishRecordingText: this.iFrame.getByText('Are you sure you want to finish the recording?'),
+    finishRecordingText: this.iFrame.locator('[data-control-name="FinishRecordingTextInputLbl"]'),
     yesButton: this.iFrame.getByRole('button', { name: 'Yes' }),
   } as const satisfies Record<string, Locator>;
 
@@ -61,8 +61,8 @@ export class ViewLiveFeedPage extends Base {
   public async selectStartRecordingButton(): Promise<void> {
     await expect(async () => {
       await this.$interactive.startRecordingButton.click();
-      await expect(this.iFrame.locator('[data-control-name="RTMPSWindow"]')).toBeVisible({ timeout: 1_000 });
-    }).toPass({ intervals: [1500], timeout: 10_000 });
+      await expect(this.iFrame.locator('[data-control-name="RTMPSWindow"]')).toBeVisible();
+    }).toPass({ intervals: [3000], timeout: 12_000 });
   }
 
   /**
@@ -72,8 +72,8 @@ export class ViewLiveFeedPage extends Base {
   public async selectOkButtonToDismissStartRecordingModal(): Promise<void> {
     await expect(async () => {
       await this.$startRecordingModal.okButton.click();
-      await expect(this.iFrame.locator('[data-control-name*="CVPPrompt"]').first()).toBeHidden({ timeout: 1_000 });
-    }).toPass({ intervals: [1500], timeout: 10_000 });
+      await expect(this.iFrame.locator('[data-control-name*="CVPPrompt"]').first()).toBeHidden();
+    }).toPass({ intervals: [3000], timeout: 12_000 });
   }
 
   /**

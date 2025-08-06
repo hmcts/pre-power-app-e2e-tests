@@ -11,6 +11,7 @@ export class ScheduleRecording extends Base {
     witnessDropdown: this.iFrame.getByRole('button', { name: 'Select your Witness' }),
     defendantsDropdown: this.iFrame.getByRole('button', { name: 'Select your Defendants' }),
     saveButton: this.iFrame.getByTitle('Save'),
+    deleteScheduledRecordingButton: this.iFrame.getByRole('button', { name: 'Delete Recording' }),
   } as const satisfies Record<string, Locator>;
 
   public readonly $static = {
@@ -18,6 +19,12 @@ export class ScheduleRecording extends Base {
     ScheduledRecordingHeading: this.iFrame.getByText('Scheduled Recordings', { exact: true }),
     saveCaseSuccessLogo: this.iFrame.locator('[data-control-name*="CaseConfirmationSuccess"]'),
     saveCaseSuccessText: this.iFrame.getByText('Save Successful', { exact: true }),
+  } as const satisfies Record<string, Locator>;
+
+  public readonly $deleteScheduleModal = {
+    modalWindow: this.iFrame.locator('[data-control-name="bookingScrn_DeleteScheduleWindow_Shp"]'),
+    yesButton: this.iFrame.getByRole('button', { name: 'Yes' }),
+    noButton: this.iFrame.getByRole('button', { name: 'No' }),
   } as const satisfies Record<string, Locator>;
 
   public async verifyUserIsOnScheduleRecordingsPage(): Promise<void> {
@@ -106,6 +113,21 @@ export class ScheduleRecording extends Base {
       const defendantToSelect = listOfDefendants[i];
       await defendantToSelect.click();
       await expect(listBox).toBeVisible();
+    }
+  }
+
+  /**
+   * Verifies that the expected number of scheduled recordings are visible on the page.
+   * Checks the count of scheduled recording list items matches the expected count,
+   * and asserts that each scheduled recording is visible.
+   * @param expectedCountOfRecordingsScheduled - The number of scheduled recordings expected to be visible.
+   */
+  public async verifyAllScheduledRecordingsAreVisible(expectedCountOfRecordingsScheduled: number): Promise<void> {
+    const $scheduledRecordingListItem = this.iFrame.locator('[data-control-name="bookingScrn_BookingsGallery_Gal"] [role="listitem"]');
+    await expect($scheduledRecordingListItem).toHaveCount(expectedCountOfRecordingsScheduled);
+
+    for (let i = 0; i < expectedCountOfRecordingsScheduled; i++) {
+      await expect($scheduledRecordingListItem.nth(i)).toBeVisible();
     }
   }
 }
