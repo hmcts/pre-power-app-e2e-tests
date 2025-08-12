@@ -12,7 +12,7 @@ test.describe('Ensure e2e journey is working as expected', () => {
   test(
     'Verify user is able to complete the e2e journey',
     {
-      tag: '@smoke',
+      tag: ['@smoke', '@e2e'],
     },
     async ({
       navBarComponent,

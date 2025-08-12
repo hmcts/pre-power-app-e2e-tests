@@ -11,7 +11,7 @@ test.describe('Set of tests to verify the homepage buttons are in the correct st
   test(
     'Verify all buttons on the homepage are visible and enabled',
     {
-      tag: '@regression',
+      tag: ['@regression', '@state-management'],
     },
     async ({ homePage }) => {
       await test.step('Verify all buttons on homepage are visible', async () => {
