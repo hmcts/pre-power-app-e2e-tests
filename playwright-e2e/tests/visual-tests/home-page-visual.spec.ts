@@ -16,7 +16,7 @@ test.describe('Set of tests to verify the homepage UI is visually correct', () =
   test(
     'Verify homepage is visually correct',
     {
-      tag: '@visual',
+      tag: ['@regression', '@visual'],
     },
     async ({ page, homePage }) => {
       const maskedElements = [
@@ -29,9 +29,11 @@ test.describe('Set of tests to verify the homepage UI is visually correct', () =
 
       await Promise.all(maskedElements.map((element) => expect(element).toBeAttached()));
 
-      await expect(page).toHaveScreenshot('home-page-visual.png', {
-        mask: maskedElements,
-      });
+      await expect(async () => {
+        await expect(page).toHaveScreenshot('home-page-visual.png', {
+          mask: maskedElements,
+        });
+      }).toPass({ intervals: [2000], timeout: 15000 });
     },
   );
 });

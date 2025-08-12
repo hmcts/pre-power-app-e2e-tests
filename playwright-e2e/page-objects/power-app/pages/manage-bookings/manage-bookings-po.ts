@@ -17,6 +17,7 @@ export class ManageBookingsPage extends Base {
 
   public readonly $static = {
     pageHeading: this.iFrame.locator('[data-control-name="manageBookingScrn_BookedSrchRef_Lbl"]').filter({ hasText: 'Case Reference' }),
+    listOfAllCaseReferencesInSearchList: this.iFrame.locator('[data-control-name="manageBookingScrn_Recordings_Gal"]').locator('[role="listitem"]'),
     caseReferenceLabelInSearchList: this.iFrame.locator('[data-control-name="manageBookingScrn_CaseRef_Lbl"]'),
     caseActionsStatusLabelInSearchList: this.iFrame.locator('[data-control-name="manageBookingScrn_Status_Lbl"]'),
   } as const satisfies Record<string, Locator>;
@@ -41,11 +42,9 @@ export class ManageBookingsPage extends Base {
   }
 
   public async refreshResultsIfMoreThenOneCaseReference(): Promise<void> {
-    const caseReferenceList = this.iFrame.locator('[data-control-name="manageBookingScrn_Recordings_Gal"]').locator('[role="listitem"]');
-
-    if ((await caseReferenceList.count()) > 1) {
+    if ((await this.$static.listOfAllCaseReferencesInSearchList.count()) > 1) {
       await this.$interactive.refreshResultsButton.click();
-      await expect(caseReferenceList).toHaveCount(1);
+      await expect(this.$static.listOfAllCaseReferencesInSearchList).toHaveCount(1);
     }
   }
 }

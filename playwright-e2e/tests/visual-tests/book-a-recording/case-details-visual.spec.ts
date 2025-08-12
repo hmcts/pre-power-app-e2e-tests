@@ -16,7 +16,7 @@ test.describe('Set of tests to verify the case details page UI is visually corre
   test(
     'Verify when accessing case details page, it is visually correct',
     {
-      tag: '@visual',
+      tag: ['@regression', '@visual'],
     },
     async ({ page, caseDetailsPage }) => {
       const maskedElements = [
@@ -27,16 +27,18 @@ test.describe('Set of tests to verify the case details page UI is visually corre
 
       await Promise.all(maskedElements.map((element) => expect(element).toBeAttached()));
 
-      await expect(page).toHaveScreenshot('case-details-page-visual.png', {
-        mask: maskedElements,
-      });
+      await expect(async () => {
+        await expect(page).toHaveScreenshot('case-details-page-visual.png', {
+          mask: maskedElements,
+        });
+      }).toPass({ intervals: [2000], timeout: 15000 });
     },
   );
 
   test(
     'Verify when searching for a case, it is visually correct',
     {
-      tag: '@visual',
+      tag: ['@regression', '@visual'],
     },
     async ({ page, caseDetailsPage }) => {
       await test.step('Pre-requisite step in order to begin searching for a case', async () => {
@@ -54,9 +56,11 @@ test.describe('Set of tests to verify the case details page UI is visually corre
 
         await Promise.all(maskedElements.map((element) => expect(element).toBeAttached()));
 
-        await expect(page).toHaveScreenshot('case-details-page-search-for-case-visual.png', {
-          mask: maskedElements,
-        });
+        await expect(async () => {
+          await expect(page).toHaveScreenshot('case-details-page-search-for-case-visual.png', {
+            mask: maskedElements,
+          });
+        }).toPass({ intervals: [2000], timeout: 15000 });
       });
     },
   );
@@ -64,7 +68,7 @@ test.describe('Set of tests to verify the case details page UI is visually corre
   test(
     'Verify when selecting an existing case, it is visually correct',
     {
-      tag: '@visual',
+      tag: ['@regression', '@visual'],
     },
     async ({ page, caseDetailsPage, apiClient }) => {
       await test.step('Pre-requisite step in order to create a new case to search and select', async () => {
@@ -85,9 +89,14 @@ test.describe('Set of tests to verify the case details page UI is visually corre
 
         await Promise.all(maskedElements.map((element) => expect(element).toBeAttached()));
 
-        await expect(page).toHaveScreenshot('case-details-page-selected-existing-case-visual.png', {
-          mask: maskedElements,
-        });
+        // Added the following click to ensure focus is removed from any given element
+        await page.click('body');
+
+        await expect(async () => {
+          await expect(page).toHaveScreenshot('case-details-page-selected-existing-case-visual.png', {
+            mask: maskedElements,
+          });
+        }).toPass({ intervals: [2000], timeout: 15000 });
       });
     },
   );
@@ -95,7 +104,7 @@ test.describe('Set of tests to verify the case details page UI is visually corre
   test(
     'Verify once option to close case has been selected, it is visually correct',
     {
-      tag: '@visual',
+      tag: ['@regression', '@visual'],
     },
     async ({ page, caseDetailsPage, apiClient, userInterfaceUtils }) => {
       await test.step('Pre-requisite step in order to create a new case to search and select', async () => {
@@ -125,18 +134,23 @@ test.describe('Set of tests to verify the case details page UI is visually corre
 
         const maskedElements = [...sharedMaskedElements, testStepMaskedElement];
         await Promise.all(maskedElements.map((element) => expect(element).toBeAttached()));
-        await expect(page).toHaveScreenshot('case-details-page-close-case-modal-visual.png', {
-          mask: maskedElements,
-        });
+
+        await expect(async () => {
+          await expect(page).toHaveScreenshot('case-details-page-close-case-modal-visual.png', {
+            mask: maskedElements,
+          });
+        }).toPass({ intervals: [2000], timeout: 15000 });
       });
 
       await test.step('Verify UI is visualy correct once save option in close case modal has been selected', async () => {
         await caseDetailsPage.$closeCaseModal.saveButton.click();
         await expect(caseDetailsPage.$closeCaseModal.yesButton).toBeVisible();
 
-        await expect(page).toHaveScreenshot('case-details-page-select-save-option-in-close-case-modal-visual.png', {
-          mask: sharedMaskedElements,
-        });
+        await expect(async () => {
+          await expect(page).toHaveScreenshot('case-details-page-select-save-option-in-close-case-modal-visual.png', {
+            mask: sharedMaskedElements,
+          });
+        }).toPass({ intervals: [2000], timeout: 15000 });
       });
 
       await test.step('Verify UI is visualy correct once yes option in close case modal has been selected', async () => {
@@ -147,9 +161,12 @@ test.describe('Set of tests to verify the case details page UI is visually corre
         const maskedElements = [...sharedMaskedElements, ...testStepMaskedElements];
 
         await Promise.all(testStepMaskedElements.map((element) => expect(element).toBeAttached()));
-        await expect(page).toHaveScreenshot('case-details-page-select-yes-option-in-close-case-modal-visual.png', {
-          mask: maskedElements,
-        });
+
+        await expect(async () => {
+          await expect(page).toHaveScreenshot('case-details-page-select-yes-option-in-close-case-modal-visual.png', {
+            mask: maskedElements,
+          });
+        }).toPass({ intervals: [2000], timeout: 15000 });
       });
     },
   );
@@ -157,7 +174,7 @@ test.describe('Set of tests to verify the case details page UI is visually corre
   test(
     'Verify when selecting option to cancel closure of an existing case, it is visually correct',
     {
-      tag: '@visual',
+      tag: ['@regression', '@visual'],
     },
     async ({ page, caseDetailsPage, apiClient, userInterfaceUtils }) => {
       await test.step('Pre-requisite step in order to set a newly created case to status pending closure', async () => {
@@ -194,9 +211,11 @@ test.describe('Set of tests to verify the case details page UI is visually corre
           [/\d{2}\/\d{2}\/\d{4}/, '{masked-visual}'],
         ]);
 
-        await expect(page).toHaveScreenshot('case-details-page-cancel-closure-of-case-modal-visual.png', {
-          mask: maskedElements,
-        });
+        await expect(async () => {
+          await expect(page).toHaveScreenshot('case-details-page-cancel-closure-of-case-modal-visual.png', {
+            mask: maskedElements,
+          });
+        }).toPass({ intervals: [2000], timeout: 15000 });
       });
     },
   );

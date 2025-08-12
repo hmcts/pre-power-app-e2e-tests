@@ -8,7 +8,7 @@ test.describe('Set of tests to verify functionality of schedule a recording page
   test(
     'Verify user is able to book a recording for an existing case',
     {
-      tag: '@regression',
+      tag: ['@regression', '@functional'],
     },
     async ({ scheduleRecordingPage, apiClient, navigateToScheduleRecordingsPage }) => {
       await test.step('Pre-requisite step in order to create a case via api and navigate to schedule recordings page', async () => {
@@ -41,7 +41,7 @@ test.describe('Set of tests to verify functionality of schedule a recording page
   test(
     'Verify user is able to delete a booking that has been scheduled',
     {
-      tag: '@regression',
+      tag: ['@regression', '@functional'],
     },
     async ({ scheduleRecordingPage, apiClient, navBarComponent, homePage, manageBookingsPage, navigateToScheduleRecordingsPage }) => {
       await test.step('Pre-requisite step in order to create a booking via api and navigate to schedule recordings page', async () => {
@@ -76,7 +76,12 @@ test.describe('Set of tests to verify functionality of schedule a recording page
         await expect(manageBookingsPage.$inputs.caseReference).toHaveValue(caseData.caseReference);
 
         await expect(async () => {
-          await manageBookingsPage.refreshResultsIfMoreThenOneCaseReference();
+          if ((await manageBookingsPage.$static.listOfAllCaseReferencesInSearchList.count()) > 0) {
+            await manageBookingsPage.$interactive.refreshResultsButton.click();
+            // eslint-disable-next-line playwright/no-conditional-expect
+            await expect(manageBookingsPage.$static.listOfAllCaseReferencesInSearchList).toHaveCount(0);
+          }
+
           await expect(manageBookingsPage.$static.caseReferenceLabelInSearchList).not.toBeAttached();
         }).toPass({ intervals: [3000], timeout: 12000 });
       });
@@ -86,7 +91,7 @@ test.describe('Set of tests to verify functionality of schedule a recording page
   test(
     'Verify user is unable to delete a scheduled booking that has a recording',
     {
-      tag: '@regression',
+      tag: ['@regression', '@functional'],
     },
     async ({ scheduleRecordingPage, apiClient, navigateToScheduleRecordingsPage }) => {
       await test.step('Pre-requisite step in order to create a case / assign a recording via api and navigate to schedule recordings page', async () => {
