@@ -16,13 +16,17 @@ export class ScheduleRecording extends Base {
 
   public readonly $static = {
     pageHeading: this.iFrame.getByRole('heading', { name: 'Schedule a Recording' }),
-    ScheduledRecordingHeading: this.iFrame.getByText('Scheduled Recordings', { exact: true }),
+    scheduledRecordingHeading: this.iFrame.getByText('Scheduled Recordings', { exact: true }),
     saveCaseSuccessLogo: this.iFrame.locator('[data-control-name*="CaseConfirmationSuccess"]'),
     saveCaseSuccessText: this.iFrame.getByText('Save Successful', { exact: true }),
+    scheduledRecordingStartDateLabel: this.iFrame.locator('[data-control-name="bookingScrn_BookingsGallery_ScheduledFor_Lbl"]'),
+    scheduledRecordingWitnessLabel: this.iFrame.locator('[data-control-name="bookingScrn_BookingsGalleryWitnesses_Lbl"]'),
+    scheduledRecordingDefendantsLabel: this.iFrame.locator('[data-control-name="bookingScrn_BookingsGalleryDefendants_Lbl"]'),
   } as const satisfies Record<string, Locator>;
 
   public readonly $deleteScheduleModal = {
     modalWindow: this.iFrame.locator('[data-control-name="bookingScrn_DeleteScheduleWindow_Shp"]'),
+    modalBody: this.iFrame.locator('[data-control-name="bookingScrn_DeleteScheduleBody_Lbl"]'),
     yesButton: this.iFrame.getByRole('button', { name: 'Yes' }),
     noButton: this.iFrame.getByRole('button', { name: 'No' }),
   } as const satisfies Record<string, Locator>;
