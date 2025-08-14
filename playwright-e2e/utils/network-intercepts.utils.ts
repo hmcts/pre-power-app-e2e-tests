@@ -1,9 +1,11 @@
 import path from 'path';
 import fs from 'fs';
 import { Page, expect } from '@playwright/test';
+import { HomePage } from '../page-objects/power-app/pages';
 
 export class NetworkInterceptUtils {
   constructor(public readonly page: Page) {}
+  private homePage = new HomePage(this.page);
 
   /**
    * Intercepts the network response for the user data and stores it in a specified file.
@@ -21,6 +23,7 @@ export class NetworkInterceptUtils {
     await expect
       .poll(
         async () => {
+          await this.homePage.provideConsentToStreamingManagerIfPrompted();
           const response = await this.page
             .waitForResponse((res) => res.url().includes('custom.uk.azure-apihub.net/invoke') && res.request().method() === 'POST', { timeout: 5000 })
             .catch(() => null);

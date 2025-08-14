@@ -219,4 +219,118 @@ test.describe('Set of tests to verify the case details page UI is visually corre
       });
     },
   );
+
+  test(
+    'Verify when selecting option to modify an existing case, it is visually correct',
+    {
+      tag: ['@regression', '@visual'],
+    },
+    async ({ page, caseDetailsPage, apiClient, userInterfaceUtils }) => {
+      await test.step('Pre-requisite step in order to setup a new case and search/select the new case', async () => {
+        const caseDetails = await apiClient.createCase(1, 1);
+        await caseDetailsPage.searchAndSelectExistingCase(caseDetails.caseReference);
+      });
+
+      const sharedMaskedElements = [
+        caseDetailsPage.$globalMaskedlocatorsForVisualTesting.powerAppsHeaderContainer,
+        caseDetailsPage.$globalMaskedlocatorsForVisualTesting.applicationCourtTitle,
+        caseDetailsPage.$globalMaskedlocatorsForVisualTesting.applicationEnvironment,
+      ];
+
+      await test.step('Verify UI is visually correct once user has selected option to modify case', async () => {
+        await caseDetailsPage.$interactive.modifyButton.click();
+
+        const testStepMaskedElement = [caseDetailsPage.$static.modifyCaseReferenceText, caseDetailsPage.$static.modifyCaseParticipantFullNameText];
+        const maskedElements = [...sharedMaskedElements, ...testStepMaskedElement];
+
+        await Promise.all(maskedElements.map((element) => expect(element.first()).toBeAttached()));
+
+        await expect(async () => {
+          await expect(page).toHaveScreenshot('case-details-page-modify-case-visual.png', {
+            mask: maskedElements,
+          });
+        }).toPass({ intervals: [2000], timeout: 15000 });
+      });
+
+      await test.step('Verify UI is visually correct once user has selected option to modify case reference', async () => {
+        await caseDetailsPage.$interactive.modifyCaseAmendCaseReferenceButton.click();
+        await expect(caseDetailsPage.$interactive.modifyCaseAmendCaseReferenceButton).toBeHidden();
+
+        const testStepMaskedElement = [
+          caseDetailsPage.$static.modifyCaseParticipantFullNameText,
+          caseDetailsPage.$inputs.modifyCaseAmendCaseReferenceInput,
+        ];
+        const maskedElements = [...sharedMaskedElements, ...testStepMaskedElement];
+
+        await expect(async () => {
+          await expect(page).toHaveScreenshot('case-details-page-modify-case-reference-visual.png', {
+            mask: maskedElements,
+          });
+        }).toPass({ intervals: [2000], timeout: 15000 });
+
+        await caseDetailsPage.$interactive.modifyCaseCancelAmendmentOfCaseReferenceButton.click();
+        await expect(caseDetailsPage.$interactive.modifyCaseCancelAmendmentOfCaseReferenceButton).toBeHidden();
+      });
+
+      await test.step('Hide participant full names so that they do not appear in screenshots for the remaining test steps', async () => {
+        // This step has been added because masking the participant full names overlaps with the modal that appears when adding or modifying participants.
+        await userInterfaceUtils.hideElements(caseDetailsPage.$static.modifyCaseParticipantFullNameText);
+      });
+
+      await test.step('Verify UI is visually correct once user has selected option to add new participant', async () => {
+        await caseDetailsPage.$interactive.modifyCaseAddNewParticipantButton.click();
+        await expect(caseDetailsPage.$modifyCaseAmendOrAddNewParticipantModal.ModalWindow).toBeVisible();
+
+        const testStepMaskedElement = caseDetailsPage.$static.modifyCaseReferenceText;
+        const maskedElements = [...sharedMaskedElements, testStepMaskedElement];
+
+        await expect(async () => {
+          await expect(page).toHaveScreenshot('case-details-page-modify-case-add-new-participant-visual.png', {
+            mask: maskedElements,
+          });
+        }).toPass({ intervals: [2000], timeout: 15000 });
+
+        await caseDetailsPage.$modifyCaseAmendOrAddNewParticipantModal.cancelButton.click();
+        await expect(caseDetailsPage.$modifyCaseAmendOrAddNewParticipantModal.ModalWindow).toBeHidden();
+      });
+
+      await test.step('Verify UI is visually correct once user has selected option to amend existing witness', async () => {
+        const caseData = await apiClient.getCaseData();
+        await caseDetailsPage.$modifyCaseSelectOptionToAmendParticipant(caseData.witnessNames[0]);
+
+        const testStepMaskedElement = [
+          caseDetailsPage.$static.modifyCaseReferenceText,
+          caseDetailsPage.$modifyCaseAmendOrAddNewParticipantModal.firstNameInput,
+        ];
+        const maskedElements = [...sharedMaskedElements, ...testStepMaskedElement];
+
+        await expect(async () => {
+          await expect(page).toHaveScreenshot('case-details-page-modify-case-amend-existing-witness-visual.png', {
+            mask: maskedElements,
+          });
+        }).toPass({ intervals: [2000], timeout: 15000 });
+
+        await caseDetailsPage.$modifyCaseAmendOrAddNewParticipantModal.cancelButton.click();
+        await expect(caseDetailsPage.$modifyCaseAmendOrAddNewParticipantModal.ModalWindow).toBeHidden();
+      });
+
+      await test.step('Verify UI is visually correct once user has selected option to amend existing defendant', async () => {
+        const caseData = await apiClient.getCaseData();
+        await caseDetailsPage.$modifyCaseSelectOptionToAmendParticipant(caseData.defendantNames[0]);
+
+        const testStepMaskedElement = [
+          caseDetailsPage.$static.modifyCaseReferenceText,
+          caseDetailsPage.$modifyCaseAmendOrAddNewParticipantModal.firstNameInput,
+          caseDetailsPage.$modifyCaseAmendOrAddNewParticipantModal.lastNameInput,
+        ];
+        const maskedElements = [...sharedMaskedElements, ...testStepMaskedElement];
+
+        await expect(async () => {
+          await expect(page).toHaveScreenshot('case-details-page-modify-case-amend-existing-defendant-visual.png', {
+            mask: maskedElements,
+          });
+        }).toPass({ intervals: [2000], timeout: 15000 });
+      });
+    },
+  );
 });

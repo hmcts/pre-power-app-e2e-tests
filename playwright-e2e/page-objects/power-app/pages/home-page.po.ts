@@ -30,4 +30,21 @@ export class HomePage extends Base {
   public async verifyUserIsOnHomePage(): Promise<void> {
     await expect(this.$static.heading).toBeVisible({ timeout: 60000 });
   }
+
+  public async provideConsentToStreamingManagerIfPrompted(): Promise<void> {
+    const consentIframe = this.page.frameLocator('[name="consentService-iFrame"]');
+    const consentHeader = consentIframe.locator('h1').filter({ hasText: 'Allow Streaming Manager' });
+
+    try {
+      await this.page.locator('iframe[name="consentService-iFrame"]').waitFor({ state: 'attached', timeout: 1_000 });
+    } catch {
+      return;
+    }
+
+    await consentHeader.waitFor({ state: 'visible', timeout: 20_000 });
+    await consentIframe.getByRole('button', { name: 'Allow', exact: true }).click();
+    await expect(consentHeader).toBeHidden();
+    await expect(this.$static.heading).toBeVisible({ timeout: 20_000 });
+    await this.page.reload();
+  }
 }

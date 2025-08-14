@@ -403,14 +403,14 @@ test.describe('Set of tests to verify validation of case details page is correct
       await test.step('Modify case by amending witness first name to be blank', async () => {
         const caseData = await apiClient.getCaseData();
         await caseDetailsPage.$interactive.modifyButton.click();
-        await expect(caseDetailsPage.$interactive.selectedCaseAddNewParticipantButton).toBeVisible();
-        await caseDetailsPage.$selectOptionToAmendParticipantName(caseData.witnessNames[0]);
-        await caseDetailsPage.$amendParticipantModal.firstNameInput.clear();
-        await expect(caseDetailsPage.$amendParticipantModal.firstNameInput).toBeEmpty();
+        await expect(caseDetailsPage.$interactive.modifyCaseAddNewParticipantButton).toBeVisible();
+        await caseDetailsPage.$modifyCaseSelectOptionToAmendParticipant(caseData.witnessNames[0]);
+        await caseDetailsPage.$modifyCaseAmendOrAddNewParticipantModal.firstNameInput.clear();
+        await expect(caseDetailsPage.$modifyCaseAmendOrAddNewParticipantModal.firstNameInput).toBeEmpty();
       });
 
       await test.step('Verify user is unable to select the submit button', async () => {
-        await expect(caseDetailsPage.$amendParticipantModal.submitButton).toBeDisabled();
+        await expect(caseDetailsPage.$modifyCaseAmendOrAddNewParticipantModal.submitButton).toBeDisabled();
       });
     },
   );
@@ -429,25 +429,25 @@ test.describe('Set of tests to verify validation of case details page is correct
       await test.step('Modify case by amending defendant first name to be blank', async () => {
         const caseData = await apiClient.getCaseData();
         await caseDetailsPage.$interactive.modifyButton.click();
-        await expect(caseDetailsPage.$interactive.selectedCaseAddNewParticipantButton).toBeVisible();
-        await caseDetailsPage.$selectOptionToAmendParticipantName(caseData.defendantNames[0]);
-        await caseDetailsPage.$amendParticipantModal.firstNameInput.clear();
-        await expect(caseDetailsPage.$amendParticipantModal.firstNameInput).toBeEmpty();
+        await expect(caseDetailsPage.$interactive.modifyCaseAddNewParticipantButton).toBeVisible();
+        await caseDetailsPage.$modifyCaseSelectOptionToAmendParticipant(caseData.defendantNames[0]);
+        await caseDetailsPage.$modifyCaseAmendOrAddNewParticipantModal.firstNameInput.clear();
+        await expect(caseDetailsPage.$modifyCaseAmendOrAddNewParticipantModal.firstNameInput).toBeEmpty();
       });
 
       await test.step('Verify user is unable to select the submit button', async () => {
-        await expect(caseDetailsPage.$amendParticipantModal.submitButton).toBeDisabled();
+        await expect(caseDetailsPage.$modifyCaseAmendOrAddNewParticipantModal.submitButton).toBeDisabled();
       });
 
       await test.step('Re-populate first name field and set last name to be blank', async () => {
-        await caseDetailsPage.$amendParticipantModal.firstNameInput.fill('John');
-        await expect(caseDetailsPage.$amendParticipantModal.firstNameInput).toHaveValue('John');
-        await caseDetailsPage.$amendParticipantModal.lastNameInput.clear();
-        await expect(caseDetailsPage.$amendParticipantModal.lastNameInput).toBeEmpty();
+        await caseDetailsPage.$modifyCaseAmendOrAddNewParticipantModal.firstNameInput.fill('John');
+        await expect(caseDetailsPage.$modifyCaseAmendOrAddNewParticipantModal.firstNameInput).toHaveValue('John');
+        await caseDetailsPage.$modifyCaseAmendOrAddNewParticipantModal.lastNameInput.clear();
+        await expect(caseDetailsPage.$modifyCaseAmendOrAddNewParticipantModal.lastNameInput).toBeEmpty();
       });
 
       await test.step('Verify user is unable to select the submit button', async () => {
-        await expect(caseDetailsPage.$amendParticipantModal.submitButton).toBeDisabled();
+        await expect(caseDetailsPage.$modifyCaseAmendOrAddNewParticipantModal.submitButton).toBeDisabled();
       });
     },
   );

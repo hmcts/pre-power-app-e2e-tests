@@ -11,6 +11,7 @@ export class CaseDetailsPage extends Base {
     caseReference: this.iFrame.getByRole('textbox', { name: 'Enter Case' }),
     defendants: this.iFrame.getByRole('textbox', { name: 'Enter your Defendants' }),
     witnesses: this.iFrame.getByRole('textbox', { name: 'Enter your Witnesses' }),
+    modifyCaseAmendCaseReferenceInput: this.iFrame.locator('[appmagic-control="bookingScrn_ManageCaseReference_Txttextbox"]'),
   } as const satisfies Record<string, Locator>;
 
   public readonly $interactive = {
@@ -23,7 +24,9 @@ export class CaseDetailsPage extends Base {
       .locator('[data-control-part="gallery-item"]'),
     selectedCaseCloseButton: this.iFrame.getByRole('button', { name: 'Close Case' }),
     selectedCaseCancelPendingClosureButton: this.iFrame.getByRole('button', { name: 'Cancel' }),
-    selectedCaseAddNewParticipantButton: this.iFrame.getByRole('button', { name: 'Add new Witness/Defendant' }),
+    modifyCaseAddNewParticipantButton: this.iFrame.locator('[data-control-name="bookingScrn_ParticipantInputAdd_Icn"]'),
+    modifyCaseAmendCaseReferenceButton: this.iFrame.locator('[data-control-name="bookingScrn_ManageCaseEdit_Icn"]'),
+    modifyCaseCancelAmendmentOfCaseReferenceButton: this.iFrame.locator('[data-control-name="bookingScrn_ManageCaseCancel_Icn"]'),
   } as const satisfies Record<string, Locator>;
 
   public readonly $static = {
@@ -40,6 +43,8 @@ export class CaseDetailsPage extends Base {
     selectedExisitingCaseSourceLabel: this.iFrame.locator('[data-control-name="bookingScrn_ClosureStatusLabel_Lbl_2"]'),
     selectedExisitingCaseStatusLabel: this.iFrame.locator('[data-control-name="bookingScrn_ClosureStatus_Lbl"]'),
     closedCaseStatusInfo: this.iFrame.locator('[data-control-name="bookingScrn_ClosureStatusInfo_Lbl"]'),
+    modifyCaseReferenceText: this.iFrame.locator('[data-control-name="bookingScrn_ManageCaseReference_Txt"]'),
+    modifyCaseParticipantFullNameText: this.iFrame.locator('[data-control-name="bookingScrn_ManageCaseParticipantGalleryName_Txt"]'),
   } as const satisfies Record<string, Locator>;
 
   public readonly $maskedlocatorsForVisualTesting = {
@@ -60,11 +65,12 @@ export class CaseDetailsPage extends Base {
     yesButton: this.iFrame.getByRole('button', { name: 'Yes' }),
   } as const satisfies Record<string, Locator>;
 
-  public readonly $amendParticipantModal = {
-    amendParticipantModalWindow: this.iFrame.locator('[data-control-name="ParImpWindow"]'),
+  public readonly $modifyCaseAmendOrAddNewParticipantModal = {
+    ModalWindow: this.iFrame.locator('[data-control-name="ParImpWindow"]'),
     firstNameInput: this.iFrame.getByRole('textbox', { name: 'First Name' }),
     lastNameInput: this.iFrame.getByRole('textbox', { name: 'Last Name' }),
     submitButton: this.iFrame.getByRole('button', { name: 'Submit' }),
+    cancelButton: this.iFrame.getByRole('button', { name: 'Cancel' }),
   } as const satisfies Record<string, Locator>;
 
   /**
@@ -72,7 +78,7 @@ export class CaseDetailsPage extends Base {
    * @param nameOfParticipantToAmend - The name of the participant whose details need to be amended.
    * This method locates the participant in the gallery, clicks the edit button, and verifies the amendment modal is visible.
    */
-  public async $selectOptionToAmendParticipantName(nameOfParticipantToAmend: string): Promise<void> {
+  public async $modifyCaseSelectOptionToAmendParticipant(nameOfParticipantToAmend: string): Promise<void> {
     const modifyParticipantButton = this.iFrame
       .locator('[data-control-name="bookingScrn_ManageCaseParticipantGallery_Gal"]')
       .locator('[data-control-part="gallery-item"]')
@@ -80,7 +86,7 @@ export class CaseDetailsPage extends Base {
       .locator('[data-control-name="bookingScrn_ManageCaseParticipantGalleryEdit_Icn"]');
 
     await modifyParticipantButton.click();
-    await expect(this.$amendParticipantModal.amendParticipantModalWindow).toBeVisible();
+    await expect(this.$modifyCaseAmendOrAddNewParticipantModal.ModalWindow).toBeVisible();
   }
 
   public async verifyUserIsOnCaseDetailsPage(): Promise<void> {
