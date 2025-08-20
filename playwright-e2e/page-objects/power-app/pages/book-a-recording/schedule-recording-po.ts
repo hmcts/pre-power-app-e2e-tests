@@ -19,6 +19,7 @@ export class ScheduleRecording extends Base {
     scheduledRecordingHeading: this.iFrame.getByText('Scheduled Recordings', { exact: true }),
     saveCaseSuccessLogo: this.iFrame.locator('[data-control-name*="CaseConfirmationSuccess"]'),
     saveCaseSuccessText: this.iFrame.getByText('Save Successful', { exact: true }),
+    listOfScheduledRecordings: this.iFrame.locator('[data-control-name="bookingScrn_BookingsGallery_Gal"] [role="listitem"]'),
     scheduledRecordingStartDateLabel: this.iFrame.locator('[data-control-name="bookingScrn_BookingsGallery_ScheduledFor_Lbl"]'),
     scheduledRecordingWitnessLabel: this.iFrame.locator('[data-control-name="bookingScrn_BookingsGalleryWitnesses_Lbl"]'),
     scheduledRecordingDefendantsLabel: this.iFrame.locator('[data-control-name="bookingScrn_BookingsGalleryDefendants_Lbl"]'),
@@ -127,11 +128,10 @@ export class ScheduleRecording extends Base {
    * @param expectedCountOfRecordingsScheduled - The number of scheduled recordings expected to be visible.
    */
   public async verifyAllScheduledRecordingsAreVisible(expectedCountOfRecordingsScheduled: number): Promise<void> {
-    const $scheduledRecordingListItem = this.iFrame.locator('[data-control-name="bookingScrn_BookingsGallery_Gal"] [role="listitem"]');
-    await expect($scheduledRecordingListItem).toHaveCount(expectedCountOfRecordingsScheduled);
+    await expect(this.$static.listOfScheduledRecordings).toHaveCount(expectedCountOfRecordingsScheduled);
 
     for (let i = 0; i < expectedCountOfRecordingsScheduled; i++) {
-      await expect($scheduledRecordingListItem.nth(i)).toBeVisible();
+      await expect(this.$static.listOfScheduledRecordings.nth(i)).toBeVisible();
     }
   }
 }

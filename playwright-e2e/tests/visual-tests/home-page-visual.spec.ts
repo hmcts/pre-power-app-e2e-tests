@@ -29,11 +29,9 @@ test.describe('Set of tests to verify the homepage UI is visually correct', () =
 
       await Promise.all(maskedElements.map((element) => expect(element).toBeAttached()));
 
-      await expect(async () => {
-        await expect(page).toHaveScreenshot('home-page-visual.png', {
-          mask: maskedElements,
-        });
-      }).toPass({ intervals: [2000], timeout: 15000 });
+      await expect(page).toHaveScreenshot('home-page-visual.png', {
+        mask: maskedElements,
+      });
     },
   );
 });
