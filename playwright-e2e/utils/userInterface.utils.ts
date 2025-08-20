@@ -1,4 +1,4 @@
-import { expect, Locator, Page } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 
 export class UserInterfaceUtils {
   constructor(public readonly page: Page) {}
@@ -35,7 +35,7 @@ export class UserInterfaceUtils {
    * Verifies that the locator is visible and not empty before replacing text.
    * Verifies that the locator's value has been updated with the replaced text after applying the replacements.
    * example usage:
-   * await userInterfaceUtils.replaceTextWithinTextArea(locator, [
+   * await userInterfaceUtils.replaceTextWithinInput(locator, [
    *   [/PR-\d+/, 'PR-XXXXXX'],
    *   ['PR-1234567890', 'XXXXXXXXXXXXX'],
    *   [/\d{2}\/\d{2}\/\d{4}/, 'DD/MM/YYYY'],
@@ -43,30 +43,30 @@ export class UserInterfaceUtils {
    * @param locator - The locator whose text will be replaced.
    * @param replacements - An array of tuples where each tuple contains a pattern (string or RegExp) and its replacement string.
    */
-  public async replaceTextWithinTextArea(locator: Locator, replacements: Array<[string | RegExp, string]>): Promise<void> {
+  public async replaceTextWithinInput(locator: Locator, replacements: Array<[string | RegExp, string]>): Promise<void> {
     await expect(locator).toBeVisible();
     await expect(locator).not.toBeEmpty();
 
-    const redactedText = await locator.evaluate((node, replacements) => {
-      const isTextArea = node.tagName.toLowerCase() === 'textarea';
-      if (!isTextArea) {
-        throw new Error(`The provided locator {${locator}} is not a <textarea> element.`);
+    const updatedValue = await locator.evaluate((node, replacements) => {
+      const tag = node.tagName.toLowerCase();
+
+      if (!('value' in node) || (tag !== 'textarea' && tag !== 'input')) {
+        throw new Error(`The provided locator {${locator}} is not an <input> or <textarea> element.`);
       }
 
-      const textarea = node as HTMLTextAreaElement;
-      let inputValue = textarea.value;
+      let inputValue = (node as HTMLInputElement | HTMLTextAreaElement).value;
 
-      for (const [replacementPattern, replacementText] of replacements) {
-        if (typeof replacementPattern === 'string' || replacementPattern instanceof RegExp) {
-          inputValue = inputValue.replace(replacementPattern, replacementText);
+      for (const [pattern, replacement] of replacements) {
+        if (typeof pattern === 'string' || pattern instanceof RegExp) {
+          inputValue = inputValue.replace(pattern, replacement);
         }
       }
 
-      textarea.value = inputValue;
+      (node as HTMLInputElement | HTMLTextAreaElement).value = inputValue;
       return inputValue;
     }, replacements);
 
-    await expect(locator).toHaveValue(redactedText);
+    await expect(locator).toHaveValue(updatedValue);
   }
 
   /**

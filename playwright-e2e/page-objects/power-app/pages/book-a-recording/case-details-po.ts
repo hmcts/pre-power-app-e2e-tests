@@ -33,8 +33,6 @@ export class CaseDetailsPage extends Base {
     pageHeading: this.iFrame.getByRole('heading', { name: 'Case Details' }),
     saveCaseSuccessLogo: this.iFrame.locator('[data-control-name*="SaveConfirmationCheck"]'),
     saveCaseSuccessText: this.iFrame.getByText('Case Opened', { exact: true }),
-    validationErrorHeading: this.iFrame.locator("div[appmagic-control*='errorLabel']"),
-    validationErrorText: this.iFrame.locator('[data-control-name="ErrorMessage"]'),
     searchResultExistingCasesTitle: this.iFrame.locator('[data-control-name="bookingScrn_ExistingCasesTitle_Txt"]'),
     searchResultExistingCaseReference: this.iFrame.locator('[data-control-name="bookingScrn_ExistingCasesReference_Lbl"]'),
     searchResultExistingCaseStatus: this.iFrame.locator('[data-control-name="bookingScrn_ExistingCasesCourt_Lbl"]'),
@@ -49,6 +47,12 @@ export class CaseDetailsPage extends Base {
 
   public readonly $maskedlocatorsForVisualTesting = {
     searchResultExistingCaseContainer: this.iFrame.locator('[aria-label="Existing Cases"]'),
+  } as const satisfies Record<string, Locator>;
+
+  public readonly $validationErrorModal = {
+    modalWindow: this.iFrame.locator('[data-control-name="ErrorWindow"]'),
+    heading: this.iFrame.locator("div[appmagic-control*='errorLabel']"),
+    text: this.iFrame.locator('[data-control-name="ErrorMessage"]'),
   } as const satisfies Record<string, Locator>;
 
   public readonly $closeCaseModal = {

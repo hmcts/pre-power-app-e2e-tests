@@ -56,21 +56,15 @@ test.describe('Set of tests to verify the schedule recording page UI is visually
       await test.step('Redact dynamic test data', async () => {
         const caseData = await apiClient.getBookingData();
 
-        await userInterfaceUtils.replaceTextWithinStaticElement(
-          scheduleRecordingPage.$static.scheduledRecordingStartDateLabel.locator('[data-control-part="text"]'),
-          [[/(\d{2}\/\d{2}\/\d{4})/, '01/01/0001']],
-        );
-
-        await userInterfaceUtils.replaceTextWithinStaticElement(
-          scheduleRecordingPage.$static.scheduledRecordingWitnessLabel.locator('[data-control-part="text"]'),
-          [[caseData.witnessSelectedForCaseRecording, '{redacted-witness}']],
-        );
+        await userInterfaceUtils.replaceTextWithinStaticElement(scheduleRecordingPage.$static.listOfScheduledRecordings, [
+          [/(\d{2}\/\d{2}\/\d{4})/, '01/01/0001'],
+          [caseData.witnessSelectedForCaseRecording, '{redacted-witness}'],
+        ]);
 
         for (const defendant of caseData.defendantNames) {
-          await userInterfaceUtils.replaceTextWithinStaticElement(
-            scheduleRecordingPage.$static.scheduledRecordingDefendantsLabel.locator('[data-control-part="text"]'),
-            [[defendant, '{redacted-defendant}']],
-          );
+          await userInterfaceUtils.replaceTextWithinStaticElement(scheduleRecordingPage.$static.listOfScheduledRecordings, [
+            [defendant, '{redacted-defendant}'],
+          ]);
         }
       });
 
@@ -110,25 +104,20 @@ test.describe('Set of tests to verify the schedule recording page UI is visually
       await test.step('Redact dynamic test data', async () => {
         const caseData = await apiClient.getBookingData();
 
-        await userInterfaceUtils.replaceTextWithinStaticElement(
-          scheduleRecordingPage.$static.scheduledRecordingStartDateLabel.locator('[data-control-part="text"]'),
-          [[/(\d{2}\/\d{2}\/\d{4})/, '01/01/0001']],
-        );
+        await userInterfaceUtils.replaceTextWithinStaticElement(scheduleRecordingPage.$static.scheduledRecordingStartDateLabel, [
+          [/(\d{2}\/\d{2}\/\d{4})/, '01/01/0001'],
+        ]);
 
-        await userInterfaceUtils.replaceTextWithinStaticElement(
-          scheduleRecordingPage.$deleteScheduleModal.modalBody.locator('[data-control-part="text"]'),
-          [
-            [caseData.caseReference, '{redacted}'],
-            [/\b\d{2}\/\d{2}\/\d{4}\b/, '01/01/0001'],
-            [caseData.witnessSelectedForCaseRecording, '{redacted-witness}'],
-          ],
-        );
+        await userInterfaceUtils.replaceTextWithinStaticElement(scheduleRecordingPage.$deleteScheduleModal.modalBody, [
+          [caseData.caseReference, '{redacted}'],
+          [/\b\d{2}\/\d{2}\/\d{4}\b/, '01/01/0001'],
+          [caseData.witnessSelectedForCaseRecording, '{redacted-witness}'],
+        ]);
 
         for (const defendant of caseData.defendantNames) {
-          await userInterfaceUtils.replaceTextWithinStaticElement(
-            scheduleRecordingPage.$deleteScheduleModal.modalBody.locator('[data-control-part="text"]'),
-            [[defendant, '{redacted-defendant}']],
-          );
+          await userInterfaceUtils.replaceTextWithinStaticElement(scheduleRecordingPage.$deleteScheduleModal.modalBody, [
+            [defendant, '{redacted-defendant}'],
+          ]);
         }
       });
 
@@ -159,21 +148,18 @@ test.describe('Set of tests to verify the schedule recording page UI is visually
       await test.step('Redact dynamic test data', async () => {
         const caseData = await apiClient.getBookingData();
 
-        await userInterfaceUtils.replaceTextWithinStaticElement(
-          scheduleRecordingPage.$static.scheduledRecordingStartDateLabel.locator('[data-control-part="text"]'),
-          [[/(\d{2}\/\d{2}\/\d{4})/, '01/01/0001']],
-        );
+        await userInterfaceUtils.replaceTextWithinStaticElement(scheduleRecordingPage.$static.scheduledRecordingStartDateLabel, [
+          [/(\d{2}\/\d{2}\/\d{4})/, '01/01/0001'],
+        ]);
 
-        await userInterfaceUtils.replaceTextWithinStaticElement(
-          scheduleRecordingPage.$static.scheduledRecordingWitnessLabel.locator('[data-control-part="text"]'),
-          [[caseData.witnessSelectedForCaseRecording, '{redacted-witness}']],
-        );
+        await userInterfaceUtils.replaceTextWithinStaticElement(scheduleRecordingPage.$static.scheduledRecordingWitnessLabel, [
+          [caseData.witnessSelectedForCaseRecording, '{redacted-witness}'],
+        ]);
 
         for (const defendant of caseData.defendantNames) {
-          await userInterfaceUtils.replaceTextWithinStaticElement(
-            scheduleRecordingPage.$static.scheduledRecordingDefendantsLabel.locator('[data-control-part="text"]'),
-            [[defendant, '{redacted-defendant}']],
-          );
+          await userInterfaceUtils.replaceTextWithinStaticElement(scheduleRecordingPage.$static.scheduledRecordingDefendantsLabel, [
+            [defendant, '{redacted-defendant}'],
+          ]);
         }
       });
 

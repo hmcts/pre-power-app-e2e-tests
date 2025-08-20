@@ -76,10 +76,10 @@ test.describe('Set of tests to verify functionality of schedule a recording page
         await expect(manageBookingsPage.$inputs.caseReference).toHaveValue(caseData.caseReference);
 
         await expect(async () => {
-          if ((await manageBookingsPage.$static.listOfAllCaseReferencesInSearchList.count()) > 0) {
+          if ((await manageBookingsPage.$static.listItemsInSearchResultsGallery.count()) > 0) {
             await manageBookingsPage.$interactive.refreshResultsButton.click();
             // eslint-disable-next-line playwright/no-conditional-expect
-            await expect(manageBookingsPage.$static.listOfAllCaseReferencesInSearchList).toHaveCount(0);
+            await expect(manageBookingsPage.$static.listItemsInSearchResultsGallery).toHaveCount(0);
           }
 
           await expect(manageBookingsPage.$static.caseReferenceLabelInSearchList).not.toBeAttached();

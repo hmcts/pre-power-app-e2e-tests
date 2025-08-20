@@ -21,9 +21,9 @@ test.describe('Set of tests to verify validation of case details page is correct
       });
 
       await caseDetailsPage.$interactive.saveButton.click();
-      await expect(caseDetailsPage.$static.validationErrorHeading).toBeVisible();
-      await expect(caseDetailsPage.$static.validationErrorText).toBeVisible();
-      await expect(caseDetailsPage.$static.validationErrorText).toHaveText('Please enter a case reference between 9 and 13 characters.');
+      await expect(caseDetailsPage.$validationErrorModal.heading).toBeVisible();
+      await expect(caseDetailsPage.$validationErrorModal.text).toBeVisible();
+      await expect(caseDetailsPage.$validationErrorModal.text).toHaveText('Please enter a case reference between 9 and 13 characters.');
     },
   );
 
@@ -44,12 +44,12 @@ test.describe('Set of tests to verify validation of case details page is correct
         await caseDetailsPage.$inputs.caseReference.fill(value);
         await caseDetailsPage.$interactive.saveButton.click();
 
-        await expect(caseDetailsPage.$static.validationErrorHeading).toBeVisible();
-        await expect(caseDetailsPage.$static.validationErrorText).toBeVisible();
-        await expect(caseDetailsPage.$static.validationErrorText).toHaveText('Please enter a case reference between 9 and 13 characters.');
+        await expect(caseDetailsPage.$validationErrorModal.heading).toBeVisible();
+        await expect(caseDetailsPage.$validationErrorModal.text).toBeVisible();
+        await expect(caseDetailsPage.$validationErrorModal.text).toHaveText('Please enter a case reference between 9 and 13 characters.');
 
         await caseDetailsPage.$interactive.validationErrorCloseButton.click();
-        await expect(caseDetailsPage.$static.validationErrorHeading).toBeHidden();
+        await expect(caseDetailsPage.$validationErrorModal.heading).toBeHidden();
       }
     },
   );
@@ -91,9 +91,9 @@ test.describe('Set of tests to verify validation of case details page is correct
       });
 
       await test.step('Verify error message is displayed to state case reference already exists', async () => {
-        await expect(caseDetailsPage.$static.validationErrorHeading).toBeVisible();
-        await expect(caseDetailsPage.$static.validationErrorText).toBeVisible();
-        await expect(caseDetailsPage.$static.validationErrorText).toHaveText(
+        await expect(caseDetailsPage.$validationErrorModal.heading).toBeVisible();
+        await expect(caseDetailsPage.$validationErrorModal.text).toBeVisible();
+        await expect(caseDetailsPage.$validationErrorModal.text).toHaveText(
           'The case reference you have entered already exists, please navigate to that case or re-enter a new Case Ref.',
         );
       });
@@ -128,9 +128,9 @@ test.describe('Set of tests to verify validation of case details page is correct
       });
 
       await test.step('Verify error message is displayed to state case reference already exists', async () => {
-        await expect(caseDetailsPage.$static.validationErrorHeading).toBeVisible();
-        await expect(caseDetailsPage.$static.validationErrorText).toBeVisible();
-        await expect(caseDetailsPage.$static.validationErrorText).toHaveText(
+        await expect(caseDetailsPage.$validationErrorModal.heading).toBeVisible();
+        await expect(caseDetailsPage.$validationErrorModal.text).toBeVisible();
+        await expect(caseDetailsPage.$validationErrorModal.text).toHaveText(
           'The case reference you have entered already exists, please navigate to that case or re-enter a new Case Ref.',
         );
       });
@@ -160,8 +160,8 @@ test.describe('Set of tests to verify validation of case details page is correct
           await caseDetailsPage.$inputs.caseReference.fill(invalidValue);
           await caseDetailsPage.$interactive.saveButton.click();
 
-          const errorTextLocator = caseDetailsPage.$static.validationErrorText;
-          const headingLocator = caseDetailsPage.$static.validationErrorHeading;
+          const errorTextLocator = caseDetailsPage.$validationErrorModal.text;
+          const headingLocator = caseDetailsPage.$validationErrorModal.heading;
 
           await expect(headingLocator).toBeVisible();
           await expect(errorTextLocator).toBeVisible();
@@ -186,9 +186,9 @@ test.describe('Set of tests to verify validation of case details page is correct
       });
 
       await caseDetailsPage.$interactive.saveButton.click();
-      await expect(caseDetailsPage.$static.validationErrorHeading).toBeVisible();
-      await expect(caseDetailsPage.$static.validationErrorText).toBeVisible();
-      await expect(caseDetailsPage.$static.validationErrorText).toHaveText('Please enter a defendant name into the defendant field.');
+      await expect(caseDetailsPage.$validationErrorModal.heading).toBeVisible();
+      await expect(caseDetailsPage.$validationErrorModal.text).toBeVisible();
+      await expect(caseDetailsPage.$validationErrorModal.text).toHaveText('Please enter a defendant name into the defendant field.');
     },
   );
 
@@ -202,8 +202,8 @@ test.describe('Set of tests to verify validation of case details page is correct
         await caseDetailsPage.$inputs.caseReference.fill(dataUtils.generateRandomCaseReference());
         await caseDetailsPage.$inputs.witnesses.fill(dataUtils.generateRandomNames('firstName', 1)[0]);
       });
-      const validationErrorHeading = caseDetailsPage.$static.validationErrorHeading;
-      const validationErrorText = caseDetailsPage.$static.validationErrorText;
+      const validationErrorHeading = caseDetailsPage.$validationErrorModal.heading;
+      const validationErrorText = caseDetailsPage.$validationErrorModal.text;
 
       await test.step('Verify defendants first name containing more than 25 is rejected', async () => {
         const firstName = faker.string.alpha(26);
@@ -244,9 +244,9 @@ test.describe('Set of tests to verify validation of case details page is correct
       await caseDetailsPage.$inputs.defendants.fill(firstName);
 
       await caseDetailsPage.$interactive.saveButton.click();
-      await expect(caseDetailsPage.$static.validationErrorHeading).toBeVisible();
-      await expect(caseDetailsPage.$static.validationErrorText).toBeVisible();
-      await expect(caseDetailsPage.$static.validationErrorText).toHaveText('Defendant names should be first and last name only.');
+      await expect(caseDetailsPage.$validationErrorModal.heading).toBeVisible();
+      await expect(caseDetailsPage.$validationErrorModal.text).toBeVisible();
+      await expect(caseDetailsPage.$validationErrorModal.text).toHaveText('Defendant names should be first and last name only.');
     },
   );
 
@@ -272,8 +272,8 @@ test.describe('Set of tests to verify validation of case details page is correct
           await caseDetailsPage.$inputs.defendants.fill(invalidValue);
           await caseDetailsPage.$interactive.saveButton.click();
 
-          const errorTextLocator = caseDetailsPage.$static.validationErrorText;
-          const headingLocator = caseDetailsPage.$static.validationErrorHeading;
+          const errorTextLocator = caseDetailsPage.$validationErrorModal.text;
+          const headingLocator = caseDetailsPage.$validationErrorModal.heading;
 
           await expect(headingLocator).toBeVisible();
           await expect(errorTextLocator).toBeVisible();
@@ -298,9 +298,9 @@ test.describe('Set of tests to verify validation of case details page is correct
       });
 
       await caseDetailsPage.$interactive.saveButton.click();
-      await expect(caseDetailsPage.$static.validationErrorHeading).toBeVisible();
-      await expect(caseDetailsPage.$static.validationErrorText).toBeVisible();
-      await expect(caseDetailsPage.$static.validationErrorText).toHaveText('Please enter a witness name into the witness field.');
+      await expect(caseDetailsPage.$validationErrorModal.heading).toBeVisible();
+      await expect(caseDetailsPage.$validationErrorModal.text).toBeVisible();
+      await expect(caseDetailsPage.$validationErrorModal.text).toHaveText('Please enter a witness name into the witness field.');
     },
   );
 
@@ -319,9 +319,9 @@ test.describe('Set of tests to verify validation of case details page is correct
       await caseDetailsPage.$inputs.witnesses.fill(name);
 
       await caseDetailsPage.$interactive.saveButton.click();
-      await expect(caseDetailsPage.$static.validationErrorHeading).toBeVisible();
-      await expect(caseDetailsPage.$static.validationErrorText).toBeVisible();
-      await expect(caseDetailsPage.$static.validationErrorText).toHaveText('Witness names should be first name only.');
+      await expect(caseDetailsPage.$validationErrorModal.heading).toBeVisible();
+      await expect(caseDetailsPage.$validationErrorModal.text).toBeVisible();
+      await expect(caseDetailsPage.$validationErrorModal.text).toHaveText('Witness names should be first name only.');
     },
   );
 
@@ -347,8 +347,8 @@ test.describe('Set of tests to verify validation of case details page is correct
           await caseDetailsPage.$inputs.witnesses.fill(invalidValue);
           await caseDetailsPage.$interactive.saveButton.click();
 
-          const errorTextLocator = caseDetailsPage.$static.validationErrorText;
-          const headingLocator = caseDetailsPage.$static.validationErrorHeading;
+          const errorTextLocator = caseDetailsPage.$validationErrorModal.text;
+          const headingLocator = caseDetailsPage.$validationErrorModal.heading;
 
           await expect(headingLocator).toBeVisible();
           await expect(errorTextLocator).toBeVisible();
@@ -371,8 +371,8 @@ test.describe('Set of tests to verify validation of case details page is correct
         await caseDetailsPage.$inputs.caseReference.fill(dataUtils.generateRandomCaseReference());
         await caseDetailsPage.$inputs.defendants.fill(dataUtils.generateRandomNames('fullName', 1)[0]);
       });
-      const validationErrorHeading = caseDetailsPage.$static.validationErrorHeading;
-      const validationErrorText = caseDetailsPage.$static.validationErrorText;
+      const validationErrorHeading = caseDetailsPage.$validationErrorModal.heading;
+      const validationErrorText = caseDetailsPage.$validationErrorModal.text;
 
       await test.step('Verify Witnesses first name containing more than 25 is rejected', async () => {
         const firstName = faker.string.alpha(26);

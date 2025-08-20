@@ -36,6 +36,34 @@ test.describe('Set of tests to verify the case details page UI is visually corre
   );
 
   test(
+    'Verify error message is visualy correct when trying to create a case with null values',
+    {
+      tag: ['@regression', '@visual'],
+    },
+    async ({ page, caseDetailsPage }) => {
+      const maskedElements = [
+        caseDetailsPage.$globalMaskedlocatorsForVisualTesting.powerAppsHeaderContainer,
+        caseDetailsPage.$globalMaskedlocatorsForVisualTesting.applicationCourtTitle,
+        caseDetailsPage.$globalMaskedlocatorsForVisualTesting.applicationEnvironment,
+      ];
+
+      await test.step('Attempt to create a case with null values', async () => {
+        await caseDetailsPage.$interactive.saveButton.click();
+        await expect(caseDetailsPage.$validationErrorModal.modalWindow).toBeVisible();
+      });
+
+      await test.step('Verify error message is visually correct', async () => {
+        await Promise.all(maskedElements.map((element) => expect(element).toBeAttached()));
+        await expect(async () => {
+          await expect(page).toHaveScreenshot('case-details-page-error-validation-modal-visual.png', {
+            mask: maskedElements,
+          });
+        }).toPass({ intervals: [2000], timeout: 15000 });
+      });
+    },
+  );
+
+  test(
     'Verify when searching for a case, it is visually correct',
     {
       tag: ['@regression', '@visual'],
@@ -135,22 +163,26 @@ test.describe('Set of tests to verify the case details page UI is visually corre
         const maskedElements = [...sharedMaskedElements, testStepMaskedElement];
         await Promise.all(maskedElements.map((element) => expect(element).toBeAttached()));
 
-        await expect(async () => {
-          await expect(page).toHaveScreenshot('case-details-page-close-case-modal-visual.png', {
-            mask: maskedElements,
-          });
-        }).toPass({ intervals: [2000], timeout: 15000 });
+        await expect
+          .soft(async () => {
+            await expect(page).toHaveScreenshot('case-details-page-close-case-modal-visual.png', {
+              mask: maskedElements,
+            });
+          })
+          .toPass({ intervals: [2000], timeout: 15000 });
       });
 
       await test.step('Verify UI is visualy correct once save option in close case modal has been selected', async () => {
         await caseDetailsPage.$closeCaseModal.saveButton.click();
         await expect(caseDetailsPage.$closeCaseModal.yesButton).toBeVisible();
 
-        await expect(async () => {
-          await expect(page).toHaveScreenshot('case-details-page-select-save-option-in-close-case-modal-visual.png', {
-            mask: sharedMaskedElements,
-          });
-        }).toPass({ intervals: [2000], timeout: 15000 });
+        await expect
+          .soft(async () => {
+            await expect(page).toHaveScreenshot('case-details-page-select-save-option-in-close-case-modal-visual.png', {
+              mask: sharedMaskedElements,
+            });
+          })
+          .toPass({ intervals: [2000], timeout: 15000 });
       });
 
       await test.step('Verify UI is visualy correct once yes option in close case modal has been selected', async () => {
@@ -162,11 +194,13 @@ test.describe('Set of tests to verify the case details page UI is visually corre
 
         await Promise.all(testStepMaskedElements.map((element) => expect(element).toBeAttached()));
 
-        await expect(async () => {
-          await expect(page).toHaveScreenshot('case-details-page-select-yes-option-in-close-case-modal-visual.png', {
-            mask: maskedElements,
-          });
-        }).toPass({ intervals: [2000], timeout: 15000 });
+        await expect
+          .soft(async () => {
+            await expect(page).toHaveScreenshot('case-details-page-select-yes-option-in-close-case-modal-visual.png', {
+              mask: maskedElements,
+            });
+          })
+          .toPass({ intervals: [2000], timeout: 15000 });
       });
     },
   );
@@ -206,7 +240,7 @@ test.describe('Set of tests to verify the case details page UI is visually corre
 
         // Replace dynamic text in the modal with placeholders for visual testing
         const dynamicTextArea = caseDetailsPage.$cancelClosureOfCaseModal.modalTextArea;
-        await userInterfaceUtils.replaceTextWithinTextArea(dynamicTextArea, [
+        await userInterfaceUtils.replaceTextWithinInput(dynamicTextArea, [
           [caseData.caseReference, '{masked-visual}'],
           [/\d{2}\/\d{2}\/\d{4}/, '{masked-visual}'],
         ]);
@@ -245,11 +279,13 @@ test.describe('Set of tests to verify the case details page UI is visually corre
 
         await Promise.all(maskedElements.map((element) => expect(element.first()).toBeAttached()));
 
-        await expect(async () => {
-          await expect(page).toHaveScreenshot('case-details-page-modify-case-visual.png', {
-            mask: maskedElements,
-          });
-        }).toPass({ intervals: [2000], timeout: 15000 });
+        await expect
+          .soft(async () => {
+            await expect(page).toHaveScreenshot('case-details-page-modify-case-visual.png', {
+              mask: maskedElements,
+            });
+          })
+          .toPass({ intervals: [2000], timeout: 15000 });
       });
 
       await test.step('Verify UI is visually correct once user has selected option to modify case reference', async () => {
@@ -262,11 +298,13 @@ test.describe('Set of tests to verify the case details page UI is visually corre
         ];
         const maskedElements = [...sharedMaskedElements, ...testStepMaskedElement];
 
-        await expect(async () => {
-          await expect(page).toHaveScreenshot('case-details-page-modify-case-reference-visual.png', {
-            mask: maskedElements,
-          });
-        }).toPass({ intervals: [2000], timeout: 15000 });
+        await expect
+          .soft(async () => {
+            await expect(page).toHaveScreenshot('case-details-page-modify-case-reference-visual.png', {
+              mask: maskedElements,
+            });
+          })
+          .toPass({ intervals: [2000], timeout: 15000 });
 
         await caseDetailsPage.$interactive.modifyCaseCancelAmendmentOfCaseReferenceButton.click();
         await expect(caseDetailsPage.$interactive.modifyCaseCancelAmendmentOfCaseReferenceButton).toBeHidden();
@@ -284,11 +322,13 @@ test.describe('Set of tests to verify the case details page UI is visually corre
         const testStepMaskedElement = caseDetailsPage.$static.modifyCaseReferenceText;
         const maskedElements = [...sharedMaskedElements, testStepMaskedElement];
 
-        await expect(async () => {
-          await expect(page).toHaveScreenshot('case-details-page-modify-case-add-new-participant-visual.png', {
-            mask: maskedElements,
-          });
-        }).toPass({ intervals: [2000], timeout: 15000 });
+        await expect
+          .soft(async () => {
+            await expect(page).toHaveScreenshot('case-details-page-modify-case-add-new-participant-visual.png', {
+              mask: maskedElements,
+            });
+          })
+          .toPass({ intervals: [2000], timeout: 15000 });
 
         await caseDetailsPage.$modifyCaseAmendOrAddNewParticipantModal.cancelButton.click();
         await expect(caseDetailsPage.$modifyCaseAmendOrAddNewParticipantModal.ModalWindow).toBeHidden();
@@ -304,11 +344,13 @@ test.describe('Set of tests to verify the case details page UI is visually corre
         ];
         const maskedElements = [...sharedMaskedElements, ...testStepMaskedElement];
 
-        await expect(async () => {
-          await expect(page).toHaveScreenshot('case-details-page-modify-case-amend-existing-witness-visual.png', {
-            mask: maskedElements,
-          });
-        }).toPass({ intervals: [2000], timeout: 15000 });
+        await expect
+          .soft(async () => {
+            await expect(page).toHaveScreenshot('case-details-page-modify-case-amend-existing-witness-visual.png', {
+              mask: maskedElements,
+            });
+          })
+          .toPass({ intervals: [2000], timeout: 15000 });
 
         await caseDetailsPage.$modifyCaseAmendOrAddNewParticipantModal.cancelButton.click();
         await expect(caseDetailsPage.$modifyCaseAmendOrAddNewParticipantModal.ModalWindow).toBeHidden();
@@ -325,11 +367,13 @@ test.describe('Set of tests to verify the case details page UI is visually corre
         ];
         const maskedElements = [...sharedMaskedElements, ...testStepMaskedElement];
 
-        await expect(async () => {
-          await expect(page).toHaveScreenshot('case-details-page-modify-case-amend-existing-defendant-visual.png', {
-            mask: maskedElements,
-          });
-        }).toPass({ intervals: [2000], timeout: 15000 });
+        await expect
+          .soft(async () => {
+            await expect(page).toHaveScreenshot('case-details-page-modify-case-amend-existing-defendant-visual.png', {
+              mask: maskedElements,
+            });
+          })
+          .toPass({ intervals: [2000], timeout: 15000 });
       });
     },
   );
