@@ -38,7 +38,7 @@
     "test:update-snapshots": "yarn playwright test tests/ --grep @visual --project=chromium --update-snapshots",
     "format": "prettier --write ."
   },
-  "packageManager": "yarn@4.9.2",
+  "packageManager": "yarn@4.9.3",
   "dependencies": {
     "uuid": "^11.1.0"
   }
