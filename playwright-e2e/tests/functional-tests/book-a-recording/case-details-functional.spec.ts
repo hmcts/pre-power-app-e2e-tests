@@ -63,7 +63,7 @@ test.describe('Set of tests to verify functionality of case details page as a Le
         await expect(caseDetailsPage.$interactive.existingCaseFoundButtonInSearchList).toBeVisible();
       });
 
-      await test.step('Verfiy case details are correct when exisiting case is selected from search list', async () => {
+      await test.step('Verify case details are correct when exisiting case is selected from search list', async () => {
         await caseDetailsPage.$interactive.existingCaseFoundButtonInSearchList.click();
         await expect(caseDetailsPage.$static.selectedExistingCaseReferenceLabel).toContainText(caseData.caseReference);
         await expect(caseDetailsPage.$static.selectedExistingCaseReferenceLabel).toBeVisible();

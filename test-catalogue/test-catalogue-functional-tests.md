@@ -12,7 +12,7 @@
 - Pre-requisite step in order to create a case via api
 - Verify case appears in search list when searched for
 - Verify correct details of case are displayed in search list
-- Verfiy case details are correct when exisiting case is selected from search list
+- Verify case details are correct when exisiting case is selected from search list
 
 
 ----------------------------------------------------------------------------------------------------

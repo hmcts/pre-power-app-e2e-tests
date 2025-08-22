@@ -38,7 +38,7 @@
     "test:visual": "yarn playwright test tests/ --grep @visual --project=chromium",
     "test:update-snapshots": "yarn playwright test tests/ --grep @visual --project=chromium --update-snapshots",
     "format": "prettier --write .",
-    "generate:test-catalogue": "yarn node scripts/test-catalogue-generator.js"
+    "generate:test-catalogue": "node scripts/test-catalogue-generator.js"
   },
   "packageManager": "yarn@4.9.3",
   "dependencies": {
