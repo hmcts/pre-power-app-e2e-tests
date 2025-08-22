@@ -20,6 +20,7 @@
     "eslint-plugin-prettier": "^5.5.0",
     "get-port": "^7.1.0",
     "globals": "^16.0.0",
+    "husky": "^9.1.7",
     "lighthouse": "^12.2.1",
     "playwright": "^1.48.2",
     "playwright-core": "^1.48.2",
@@ -36,7 +37,8 @@
     "start-container": "docker run --rm -it --network host --ipc=host -v \"$(pwd)\":/playwright -w /playwright playwright-container /bin/bash",
     "test:visual": "yarn playwright test tests/ --grep @visual --project=chromium",
     "test:update-snapshots": "yarn playwright test tests/ --grep @visual --project=chromium --update-snapshots",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "generate:test-catalogue": "node scripts/test-catalogue-generator.js"
   },
   "packageManager": "yarn@4.9.3",
   "dependencies": {

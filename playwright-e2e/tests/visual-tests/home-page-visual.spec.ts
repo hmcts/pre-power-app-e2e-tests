@@ -27,10 +27,12 @@ test.describe('Set of tests to verify the homepage UI is visually correct', () =
         homePage.$maskedlocatorsForVisualTesting.welcomeTextForUser,
       ];
 
-      await Promise.all(maskedElements.map((element) => expect(element).toBeAttached()));
+      await test.step('Verify upon accessing homepage, it is visually correct', async () => {
+        await Promise.all(maskedElements.map((element) => expect(element).toBeAttached()));
 
-      await expect(page).toHaveScreenshot('home-page-visual.png', {
-        mask: maskedElements,
+        await expect(page).toHaveScreenshot('home-page-visual.png', {
+          mask: maskedElements,
+        });
       });
     },
   );

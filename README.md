@@ -1,3 +1,17 @@
+## Test Catalogues
+
+The following Markdown files contain an up-to-date list of all test scenarios and their steps, grouped by test type:
+
+- [E2E Tests](./test-catalogue/test-catalogue-e2e.md)
+- [Functional Tests](./test-catalogue/test-catalogue-functional-tests.md)
+- [State Management Tests](./test-catalogue/test-catalogue-state-management-tests.md)
+- [Validation Tests](./test-catalogue/test-catalogue-validation-tests.md)
+- [Visual Tests](./test-catalogue/test-catalogue-visual-tests.md)
+
+> These catalogues are automatically generated whenever new tests are added or existing tests are modified.
+> Note: These files are automatically updated on every commit via a pre-commit hook.
+> Run `yarn generate:test-catalogue` to update them manually if needed.
+
 ## Features
 
 - **Cross-browser testing**: Supports Chromium.

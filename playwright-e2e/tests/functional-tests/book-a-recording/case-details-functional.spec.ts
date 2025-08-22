@@ -15,18 +15,26 @@ test.describe('Set of tests to verify functionality of case details page as a Le
       tag: ['@regression', '@functional'],
     },
     async ({ caseDetailsPage, dataUtils, scheduleRecordingPage }) => {
-      const caseDetails: BaseCaseDetails = dataUtils.generateRandomCaseDetails(2, 2);
+      await test.step('Enter details for a new case and select save button', async () => {
+        const caseDetails: BaseCaseDetails = dataUtils.generateRandomCaseDetails(2, 2);
 
-      await caseDetailsPage.populateCaseDetails({
-        caseReference: caseDetails.caseReference,
-        defendantNames: caseDetails.defendantNames,
-        witnessNames: caseDetails.witnessNames,
+        await caseDetailsPage.populateCaseDetails({
+          caseReference: caseDetails.caseReference,
+          defendantNames: caseDetails.defendantNames,
+          witnessNames: caseDetails.witnessNames,
+        });
+
+        await caseDetailsPage.$interactive.saveButton.click();
       });
 
-      await caseDetailsPage.$interactive.saveButton.click();
-      await expect(caseDetailsPage.$static.saveCaseSuccessLogo).toBeVisible();
-      await expect(caseDetailsPage.$static.saveCaseSuccessText).toBeVisible();
-      await scheduleRecordingPage.verifyUserIsOnScheduleRecordingsPage();
+      await test.step('Verify logo and text is displayed to indicate details have been saved', async () => {
+        await expect(caseDetailsPage.$static.saveCaseSuccessLogo).toBeVisible();
+        await expect(caseDetailsPage.$static.saveCaseSuccessText).toBeVisible();
+      });
+
+      await test.step('Verify user is redirected to the schedule recordings page', async () => {
+        await scheduleRecordingPage.verifyUserIsOnScheduleRecordingsPage();
+      });
     },
   );
 
@@ -41,11 +49,13 @@ test.describe('Set of tests to verify functionality of case details page as a Le
       });
       const caseData = await apiClient.getCaseData();
 
-      await test.step('Verify case appears in searchlist when searched for', async () => {
+      await test.step('Verify case appears in search list when searched for', async () => {
         await caseDetailsPage.$inputs.caseReference.fill(caseData.caseReference);
         await expect(caseDetailsPage.$inputs.caseReference).toHaveValue(caseData.caseReference);
-
         await expect(caseDetailsPage.$static.searchResultExistingCasesTitle).toBeVisible();
+      });
+
+      await test.step('Verify correct details of case are displayed in search list', async () => {
         await expect(caseDetailsPage.$interactive.existingCaseFoundButtonInSearchList).toHaveCount(1);
         await expect(caseDetailsPage.$interactive.existingCaseFoundButtonInSearchList).toContainText(caseData.caseReference);
         await expect(caseDetailsPage.$interactive.existingCaseFoundButtonInSearchList).toContainText('Open');
@@ -53,7 +63,7 @@ test.describe('Set of tests to verify functionality of case details page as a Le
         await expect(caseDetailsPage.$interactive.existingCaseFoundButtonInSearchList).toBeVisible();
       });
 
-      await test.step('Verfiy test deatils are correct when exisiting case is selected from search list', async () => {
+      await test.step('Verify case details are correct when exisiting case is selected from search list', async () => {
         await caseDetailsPage.$interactive.existingCaseFoundButtonInSearchList.click();
         await expect(caseDetailsPage.$static.selectedExistingCaseReferenceLabel).toContainText(caseData.caseReference);
         await expect(caseDetailsPage.$static.selectedExistingCaseReferenceLabel).toBeVisible();
