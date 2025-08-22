@@ -18,34 +18,28 @@ test.describe('Set of tests to verify functionality of view recordings page for 
     async ({ apiClient, viewRecordingsPage }) => {
       const bookingData = await apiClient.getBookingData();
       const recordingData = await apiClient.getRecordingData();
-      await viewRecordingsPage.searchForCaseReference(bookingData.caseReference);
 
-      // Verify case reference label contains the correct case reference
-      await expect(viewRecordingsPage.$static.caseReferenceLabelInSearchList).toHaveText(`Case Reference: ${bookingData.caseReference}`);
-      // Verify version label is correct
-      await expect(viewRecordingsPage.$static.recordingVersionLabelInSearchList).toHaveText('V.1');
-      // Veirfy court label contains text 'Court:'
-      await expect(viewRecordingsPage.$static.courtLabelInSearchList).toContainText('Court:');
-      // Verify recording ID label contains the correct recording ID
-      await expect(viewRecordingsPage.$static.recordingIdLabelInSearchList).toHaveText(`Recording UID: ${recordingData.recordingId}`);
-      // Verify witness label contains the correct witness names
-      await expect(viewRecordingsPage.$static.WitnessLabelInSearchList).toHaveText(`Witness: ${bookingData.witnessSelectedForCaseRecording}`);
-      // Verify defendant label contains the correct defendant name
-      for (const defendantName of bookingData.defendantNames) {
-        await expect(viewRecordingsPage.$static.defendantLabelInSearchList.filter({ hasText: 'Defendants:' })).toContainText(defendantName);
-      }
-      // Verify recording date label contains the correct recording date and time
-      await expect(viewRecordingsPage.$static.recordingDateLabelInSearchList).toHaveText(
-        `Recording Date: ${recordingData.recordingDate} ${recordingData.recordingTime}`,
-      );
-      // Verify recording source label has the correct recording source
-      await expect(viewRecordingsPage.$static.recordingSourceLabelInSearchList).toHaveText('Source: PRE');
-      // Verify recording duration label has the correct recording duration
-      await expect(viewRecordingsPage.$static.recordingDurationLabelInSearchList).toHaveText(`Duration: ${recordingData.recordingDuration}`);
-      // Verify status label contains the correct text
-      await expect(viewRecordingsPage.$static.StatusLabelInSearchList).toHaveText('Status: ');
-      // Verify case status label contains the correct case status
-      await expect(viewRecordingsPage.$static.caseStatusLabelInSearchList).toHaveText('Active');
+      await test.step('Verify recording can be found in view recordings page', async () => {
+        await viewRecordingsPage.searchForCaseReference(bookingData.caseReference);
+      });
+
+      await test.step('Verify case and recording details are correct in search list', async () => {
+        await expect(viewRecordingsPage.$static.caseReferenceLabelInSearchList).toHaveText(`Case Reference: ${bookingData.caseReference}`);
+        await expect(viewRecordingsPage.$static.recordingVersionLabelInSearchList).toHaveText('V.1');
+        await expect(viewRecordingsPage.$static.courtLabelInSearchList).toContainText('Court:');
+        await expect(viewRecordingsPage.$static.recordingIdLabelInSearchList).toHaveText(`Recording UID: ${recordingData.recordingId}`);
+        await expect(viewRecordingsPage.$static.WitnessLabelInSearchList).toHaveText(`Witness: ${bookingData.witnessSelectedForCaseRecording}`);
+        for (const defendantName of bookingData.defendantNames) {
+          await expect(viewRecordingsPage.$static.defendantLabelInSearchList.filter({ hasText: 'Defendants:' })).toContainText(defendantName);
+        }
+        await expect(viewRecordingsPage.$static.recordingDateLabelInSearchList).toHaveText(
+          `Recording Date: ${recordingData.recordingDate} ${recordingData.recordingTime}`,
+        );
+        await expect(viewRecordingsPage.$static.recordingSourceLabelInSearchList).toHaveText('Source: PRE');
+        await expect(viewRecordingsPage.$static.recordingDurationLabelInSearchList).toHaveText(`Duration: ${recordingData.recordingDuration}`);
+        await expect(viewRecordingsPage.$static.StatusLabelInSearchList).toHaveText('Status: ');
+        await expect(viewRecordingsPage.$static.caseStatusLabelInSearchList).toHaveText('Active');
+      });
     },
   );
 });

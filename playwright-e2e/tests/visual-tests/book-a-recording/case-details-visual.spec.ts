@@ -25,13 +25,15 @@ test.describe('Set of tests to verify the case details page UI is visually corre
         caseDetailsPage.$globalMaskedlocatorsForVisualTesting.applicationEnvironment,
       ];
 
-      await Promise.all(maskedElements.map((element) => expect(element).toBeAttached()));
+      await test.step('Verify upon accessing case details page, it is visually correct', async () => {
+        await Promise.all(maskedElements.map((element) => expect(element).toBeAttached()));
 
-      await expect(async () => {
-        await expect(page).toHaveScreenshot('case-details-page-visual.png', {
-          mask: maskedElements,
-        });
-      }).toPass({ intervals: [2000], timeout: 15000 });
+        await expect(async () => {
+          await expect(page).toHaveScreenshot('case-details-page-visual.png', {
+            mask: maskedElements,
+          });
+        }).toPass({ intervals: [2000], timeout: 15000 });
+      });
     },
   );
 
