@@ -40,7 +40,7 @@
     "format": "prettier --write .",
     "generate:test-catalogue": "node scripts/test-catalogue-generator.js"
   },
-  "packageManager": "yarn@4.9.3",
+  "packageManager": "yarn@4.9.4",
   "dependencies": {
     "uuid": "^11.1.0"
   }
