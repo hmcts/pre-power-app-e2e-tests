@@ -34,7 +34,7 @@
     "setup": "yarn playwright install --with-deps",
     "load-secrets": "yarn node scripts/get-secrets.js",
     "build-container": "docker build -t playwright-container .",
-    "start-container": "docker run --rm -it --network host --ipc=host -v \"$(pwd)\":/playwright -w /playwright playwright-container /bin/bash",
+    "start-container": "docker run --rm -it --network host --ipc=host -v \"$(pwd)\":/playwright -w /playwright -e CI=true -e FUNCTIONAL_TESTS_WORKERS=4 playwright-container /bin/bash",
     "test:visual": "yarn playwright test tests/ --grep @visual --project=chromium",
     "test:update-snapshots": "yarn playwright test tests/ --grep @visual --project=chromium --update-snapshots",
     "format": "prettier --write .",
