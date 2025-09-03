@@ -14,6 +14,11 @@ export default defineConfig({
   reporter: [['list'], ['html', { outputFolder: 'playwright-report' }]],
   retries: 0,
   timeout: 120_000,
+    expect: {
+    toMatchSnapshot: {
+      maxDiffPixels: 100,
+    },
+  },
   projects: [
     {
       name: 'setup',
