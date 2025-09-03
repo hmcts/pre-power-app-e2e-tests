@@ -15,7 +15,7 @@ export default defineConfig({
   retries: 0,
   timeout: 120_000,
     expect: {
-    toMatchSnapshot: {
+    toHaveScreenshot: {
       maxDiffPixels: 100,
     },
   },
