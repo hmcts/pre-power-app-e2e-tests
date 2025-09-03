@@ -16,7 +16,7 @@ test.describe('Set of tests to verify the case details page UI is visually corre
   test(
     'Verify when accessing case details page, it is visually correct',
     {
-      tag: ['@regression', '@visual'],
+      tag: ['@visual'],
     },
     async ({ page, caseDetailsPage }) => {
       const maskedElements = [
@@ -40,7 +40,7 @@ test.describe('Set of tests to verify the case details page UI is visually corre
   test(
     'Verify error message is visualy correct when trying to create a case with null values',
     {
-      tag: ['@regression', '@visual'],
+      tag: ['@visual'],
     },
     async ({ page, caseDetailsPage }) => {
       const maskedElements = [
@@ -68,7 +68,7 @@ test.describe('Set of tests to verify the case details page UI is visually corre
   test(
     'Verify when searching for a case, it is visually correct',
     {
-      tag: ['@regression', '@visual'],
+      tag: ['@visual'],
     },
     async ({ page, caseDetailsPage }) => {
       await test.step('Pre-requisite step in order to begin searching for a case', async () => {
@@ -98,7 +98,7 @@ test.describe('Set of tests to verify the case details page UI is visually corre
   test(
     'Verify when selecting an existing case, it is visually correct',
     {
-      tag: ['@regression', '@visual'],
+      tag: ['@visual'],
     },
     async ({ page, caseDetailsPage, apiClient }) => {
       await test.step('Pre-requisite step in order to create a new case to search and select', async () => {
@@ -134,7 +134,7 @@ test.describe('Set of tests to verify the case details page UI is visually corre
   test(
     'Verify once option to close case has been selected, it is visually correct',
     {
-      tag: ['@regression', '@visual'],
+      tag: ['@visual'],
     },
     async ({ page, caseDetailsPage, apiClient, userInterfaceUtils }) => {
       await test.step('Pre-requisite step in order to create a new case to search and select', async () => {
@@ -210,7 +210,7 @@ test.describe('Set of tests to verify the case details page UI is visually corre
   test(
     'Verify when selecting option to cancel closure of an existing case, it is visually correct',
     {
-      tag: ['@regression', '@visual'],
+      tag: ['@visual'],
     },
     async ({ page, caseDetailsPage, apiClient, userInterfaceUtils }) => {
       await test.step('Pre-requisite step in order to set a newly created case to status pending closure', async () => {
@@ -259,7 +259,7 @@ test.describe('Set of tests to verify the case details page UI is visually corre
   test(
     'Verify when selecting option to modify an existing case, it is visually correct',
     {
-      tag: ['@regression', '@visual'],
+      tag: ['@visual'],
     },
     async ({ page, caseDetailsPage, apiClient, userInterfaceUtils }) => {
       await test.step('Pre-requisite step in order to setup a new case and search/select the new case', async () => {

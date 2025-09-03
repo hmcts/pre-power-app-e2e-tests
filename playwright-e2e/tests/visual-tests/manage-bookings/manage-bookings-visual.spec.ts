@@ -16,7 +16,7 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
   test(
     'Verify manage bookings page is visually correct',
     {
-      tag: ['@regression', '@visual'],
+      tag: ['@visual'],
     },
     async ({ page, manageBookingsPage }) => {
       const maskedElements = [
@@ -41,7 +41,7 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
   test(
     'Verify whilst searching for an existing case, the manage bookings page is visually correct',
     {
-      tag: ['@regression', '@visual'],
+      tag: ['@visual'],
     },
     async ({ page, manageBookingsPage, apiClient, userInterfaceUtils }) => {
       await test.step('Pre-requisite step in order to create a case and assign a booking via api', async () => {
@@ -63,6 +63,9 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
             [defendant, '{Redacted}'],
           ]);
         }
+
+        // Added the following click to ensure focus is removed from any given element
+        await page.click('body');
       });
 
       await test.step('Verify manage bookings page is visually correct', async () => {
@@ -87,7 +90,7 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
   test(
     'Verify booking page is visually correct when user selects option to manage an existing booking',
     {
-      tag: ['@regression', '@visual'],
+      tag: ['@visual'],
     },
     async ({ page, manageBookingsPage, apiClient, userInterfaceUtils }) => {
       await test.step('Pre-requisite step in order to create a case and assign a booking via api', async () => {
@@ -182,7 +185,7 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
   test(
     'Verify booking page is visually correct when user selects option to amend an existing booking',
     {
-      tag: ['@regression', '@visual'],
+      tag: ['@visual'],
     },
     async ({ page, manageBookingsPage, apiClient, userInterfaceUtils }) => {
       await test.step('Pre-requisite step in order to create a case and assign a booking via api', async () => {
