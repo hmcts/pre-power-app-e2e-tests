@@ -16,7 +16,7 @@ test.describe('Set of tests to verify the homepage UI is visually correct', () =
   test(
     'Verify homepage is visually correct',
     {
-      tag: ['@regression', '@visual'],
+      tag: ['@visual'],
     },
     async ({ page, homePage }) => {
       const maskedElements = [

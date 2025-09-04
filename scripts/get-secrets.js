@@ -1,3 +1,6 @@
 import { populateSecrets } from '@hmcts/playwright-common';
-const vaultName = 'pre-hmctskv-stg';
-populateSecrets(vaultName);
+// pre-hmctskv-test used for common secrets across all environments
+// pre-hmctskv-dev used for dev specific secrets, Update as needed
+const vaultNames = ['pre-hmctskv-test', 'pre-hmctskv-dev'];
+populateSecrets(vaultNames);
+

@@ -12,7 +12,7 @@ test.describe('Set of tests to verify the schedule recording page UI is visually
   test(
     'Verify when accessing schedule recording page for an existing case that has no booking, it is visually correct',
     {
-      tag: ['@regression', '@visual'],
+      tag: ['@visual'],
     },
     async ({ page, scheduleRecordingPage, apiClient, navigateToScheduleRecordingsPage }) => {
       await test.step('Pre-requisite step in order to create a case and navigate to schedule recording page', async () => {
@@ -40,7 +40,7 @@ test.describe('Set of tests to verify the schedule recording page UI is visually
   test(
     'Verify when accessing schedule recording page for an existing case that has a booking, it is visually correct',
     {
-      tag: ['@regression', '@visual'],
+      tag: ['@visual'],
     },
     async ({ page, scheduleRecordingPage, apiClient, navigateToScheduleRecordingsPage, userInterfaceUtils }) => {
       await test.step('Pre-requisite step in order to create a case and navigate to schedule recording page', async () => {
@@ -83,7 +83,7 @@ test.describe('Set of tests to verify the schedule recording page UI is visually
   test(
     'Verify when attempting to delete a scheduled recording on scheduled recording page, it is visually correct',
     {
-      tag: ['@regression', '@visual'],
+      tag: ['@visual'],
     },
     async ({ page, scheduleRecordingPage, apiClient, navigateToScheduleRecordingsPage, userInterfaceUtils }) => {
       await test.step('Pre-requisite step in order to create a case, navigate to schedule recording page', async () => {
@@ -136,7 +136,7 @@ test.describe('Set of tests to verify the schedule recording page UI is visually
   test(
     'Verify when viewing a booking that has a recording on scheduled recording page, it is visually correct',
     {
-      tag: ['@regression', '@visual'],
+      tag: ['@visual'],
     },
     async ({ page, scheduleRecordingPage, apiClient, navigateToScheduleRecordingsPage, userInterfaceUtils }) => {
       await test.step('Pre-requisite step in order to create a case and navigate to schedule recording page', async () => {
