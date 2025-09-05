@@ -5,7 +5,7 @@ import {
   CreateBookingApi,
   GetCaseDetailsByCaseReferenceApi,
   CreateOrUpdateCaptureSessionApi,
-  GetLatestRecordingApi,
+  GetRecordingDetailsApi,
   CreateOrUpdateRecordingApi,
   GetBookingDetailsByCaseReferenceApi,
   DeleteCaseApi,
@@ -21,7 +21,7 @@ export class ApiClient {
   private createOrUpdateCaptureSessionApi: CreateOrUpdateCaptureSessionApi;
   private createOrUpdateRecordingApi: CreateOrUpdateRecordingApi;
   private getCaseDetailsByCaseReferenceApi: GetCaseDetailsByCaseReferenceApi;
-  private getLatestRecordingApi: GetLatestRecordingApi;
+  private getLatestRecordingApi: GetRecordingDetailsApi;
   private getBookingDetailsByCaseReferenceApi: GetBookingDetailsByCaseReferenceApi;
   private deleteCaseApi: DeleteCaseApi;
 
@@ -31,7 +31,7 @@ export class ApiClient {
     this.createOrUpdateCaptureSessionApi = new CreateOrUpdateCaptureSessionApi(apiContext, userId);
     this.createOrUpdateRecordingApi = new CreateOrUpdateRecordingApi(apiContext);
     this.getCaseDetailsByCaseReferenceApi = new GetCaseDetailsByCaseReferenceApi(apiContext, courtId);
-    this.getLatestRecordingApi = new GetLatestRecordingApi(apiContext);
+    this.getLatestRecordingApi = new GetRecordingDetailsApi(apiContext);
     this.getBookingDetailsByCaseReferenceApi = new GetBookingDetailsByCaseReferenceApi(apiContext, courtId);
     this.deleteCaseApi = new DeleteCaseApi(apiContext);
   }
