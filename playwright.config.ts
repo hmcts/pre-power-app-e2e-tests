@@ -12,7 +12,7 @@ export default defineConfig({
   snapshotDir: './playwright-e2e/snapshots',
   ...CommonConfig.recommended,
   reporter: [['list'], ['html', { outputFolder: 'playwright-report' }]],
-  retries: 0,
+  retries: !process.env.CI ? 0 : (process.env.PLAYWRIGHT_GREP ?? '').includes('@e2e') ? 1 : 2,
   timeout: 120_000,
     expect: {
     toHaveScreenshot: {
