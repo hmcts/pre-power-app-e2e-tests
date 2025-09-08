@@ -5,7 +5,7 @@ import {
   CreateBookingApi,
   GetCaseDetailsByCaseReferenceApi,
   CreateOrUpdateCaptureSessionApi,
-  GetLatestRecordingApi,
+  GetRecordingDetailsApi,
   CreateOrUpdateRecordingApi,
   GetBookingDetailsByCaseReferenceApi,
   DeleteCaseApi,
@@ -21,7 +21,7 @@ export class ApiClient {
   private createOrUpdateCaptureSessionApi: CreateOrUpdateCaptureSessionApi;
   private createOrUpdateRecordingApi: CreateOrUpdateRecordingApi;
   private getCaseDetailsByCaseReferenceApi: GetCaseDetailsByCaseReferenceApi;
-  private getLatestRecordingApi: GetLatestRecordingApi;
+  private geRecordingDetailsApi: GetRecordingDetailsApi;
   private getBookingDetailsByCaseReferenceApi: GetBookingDetailsByCaseReferenceApi;
   private deleteCaseApi: DeleteCaseApi;
 
@@ -31,7 +31,7 @@ export class ApiClient {
     this.createOrUpdateCaptureSessionApi = new CreateOrUpdateCaptureSessionApi(apiContext, userId);
     this.createOrUpdateRecordingApi = new CreateOrUpdateRecordingApi(apiContext);
     this.getCaseDetailsByCaseReferenceApi = new GetCaseDetailsByCaseReferenceApi(apiContext, courtId);
-    this.getLatestRecordingApi = new GetLatestRecordingApi(apiContext);
+    this.geRecordingDetailsApi = new GetRecordingDetailsApi(apiContext);
     this.getBookingDetailsByCaseReferenceApi = new GetBookingDetailsByCaseReferenceApi(apiContext, courtId);
     this.deleteCaseApi = new DeleteCaseApi(apiContext);
   }
@@ -113,12 +113,12 @@ export class ApiClient {
     // Create a capture session for the booking with status 'STANDBY'
     const captureSessionDetails = await this.createOrUpdateCaptureSessionApi.request(bookingDetails.bookingId, 'STANDBY');
     // Retrieve the latest recording created by the test suite
-    const latestRecordingDetailsFetched = await this.getLatestRecordingApi.request();
+    const recordingDetailsFetched = await this.geRecordingDetailsApi.request();
     // Update the capture session with the recording details obtained from the latest recording
     await this.createOrUpdateRecordingApi.request(captureSessionDetails.captureSessionId, {
-      recordingDuration: latestRecordingDetailsFetched.recordingDuration,
-      recordingFileName: latestRecordingDetailsFetched.recordingFilename,
-      recordingId: latestRecordingDetailsFetched.recordingId,
+      recordingDuration: recordingDetailsFetched.recordingDuration,
+      recordingFileName: recordingDetailsFetched.recordingFilename,
+      recordingId: recordingDetailsFetched.recordingId,
     });
     // Complete the capture session with the recording details by setting the status to 'RECORDING_AVAILABLE'
     const captureSessionDetailsUponCompletion = await this.createOrUpdateCaptureSessionApi.request(
@@ -130,14 +130,14 @@ export class ApiClient {
     // Set the recording details with the correct format to be used in test assertions
     const sessionDate = new Date(captureSessionDetailsUponCompletion.sessionDateTime);
     const recordingData: RecordingDetails = {
-      recordingId: latestRecordingDetailsFetched.recordingId,
+      recordingId: recordingDetailsFetched.recordingId,
       recordingDate: sessionDate.toLocaleDateString('en-GB'),
       recordingTime: sessionDate.toLocaleTimeString('en-GB', {
         hour: '2-digit',
         minute: '2-digit',
         hour12: false,
       }),
-      recordingDuration: await this.formatDuration(latestRecordingDetailsFetched.recordingDuration),
+      recordingDuration: await this.formatDuration(recordingDetailsFetched.recordingDuration),
     };
     this.recordingData = recordingData;
     return recordingData;

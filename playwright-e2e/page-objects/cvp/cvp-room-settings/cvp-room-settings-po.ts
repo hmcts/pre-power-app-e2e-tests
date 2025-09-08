@@ -73,7 +73,7 @@ export class CvpRoomSettingsPage {
     await expect(async () => {
       await this.$inputs.rtmpsLinkInput.clear();
       await this.$inputs.rtmpsLinkInput.fill(rtmpsLink);
-      await expect(this.$inputs.rtmpsLinkInput).toHaveValue(rtmpsLink, { timeout: 2000 });
+      await expect(this.$inputs.rtmpsLinkInput).toHaveValue(rtmpsLink);
     }).toPass({ intervals: [2500], timeout: 10000 });
 
     const hostPin = await this.captureHostPin();
@@ -126,6 +126,6 @@ export class CvpRoomSettingsPage {
     await this.$recordingModal.cancel_close_Button.click();
 
     await expect(this.$recordingModal.recordingModalHeading).toBeHidden();
-    await expect(this.page.getByRole('button', { name: 'Recording' })).toBeVisible({ timeout: 10000 });
+    await expect(this.page.getByRole('button', { name: 'Recording' })).toBeVisible({ timeout: 20000 });
   }
 }

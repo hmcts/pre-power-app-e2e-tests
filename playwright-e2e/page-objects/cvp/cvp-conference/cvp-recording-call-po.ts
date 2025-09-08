@@ -16,7 +16,7 @@ export class CvpRecordingCallPage {
    * "You have been disconnected" heading and clicking the "OK" button to dismiss the dialog.
    */
   public async verifyUserHasBeenDisconnectedFromCall(): Promise<void> {
-    await expect(this.page.getByRole('heading', { name: 'You have been disconnected' })).toBeVisible();
+    await expect(this.page.getByRole('heading', { name: 'You have been disconnected' })).toBeVisible({ timeout: 15_000 });
     await this.page.getByRole('button', { name: 'OK' }).click();
   }
 }
