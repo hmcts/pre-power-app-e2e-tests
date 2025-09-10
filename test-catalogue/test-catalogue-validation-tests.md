@@ -76,7 +76,7 @@
 
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/validation-tests/manage-bookings/manager Bookings-state.spec.ts`
+** File:** `playwright-e2e/tests/validation-tests/manage-bookings/manage bookings-state.spec.ts`
 
 ## Verify when accessing the manage bookings Page and selecting an exisiting case all the buttons are in correct state
 - Pre-requisite step in order to create and select a exising case via api
