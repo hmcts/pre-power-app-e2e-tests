@@ -75,6 +75,25 @@ run the following command after running yarn install in order to install playwri
 yarn setup
 ```
 
+### Env Config
+
+Run one of the following scripts found in package.json to fetch secrets for a given environment, Ensure you have azure cli installed and logged in.
+
+Dev
+```bash
+yarn load-secrets:dev
+```
+
+Staging
+```bash
+yarn load-secrets:stg
+```
+
+Demo
+```bash
+yarn load-secrets:demo
+```
+
 ### Running Tests
 
 Run all tests using the Playwright test runner:
