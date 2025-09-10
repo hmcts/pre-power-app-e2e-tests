@@ -75,6 +75,25 @@ run the following command after running yarn install in order to install playwri
 yarn setup
 ```
 
+### Env Config
+
+Run one of the following scripts found in package.json to fetch secerets for a given environment
+
+Dev
+```bash
+yarn load-secrets:dev
+```
+
+Staging
+```bash
+yarn load-secrets:stg
+```
+
+Demo
+```bash
+yarn load-secrets:demo
+```
+
 ### Running Tests
 
 Run all tests using the Playwright test runner:
