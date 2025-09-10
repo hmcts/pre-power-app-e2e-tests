@@ -77,7 +77,7 @@ yarn setup
 
 ### Env Config
 
-Run one of the following scripts found in package.json to fetch secerets for a given environment
+Run one of the following scripts found in package.json to fetch secrets for a given environment, Ensure you have azure cli installed and logged in.
 
 Dev
 ```bash
