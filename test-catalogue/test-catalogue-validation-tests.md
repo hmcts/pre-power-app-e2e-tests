@@ -73,3 +73,48 @@
 - Verify user is unable to select the submit button
 - Re-populate first name field and set last name to be blank
 - Verify user is unable to select the submit button
+
+
+----------------------------------------------------------------------------------------------------
+** File:** `playwright-e2e/tests/validation-tests/manage-bookings/manager Bookings-state.spec.ts`
+
+## Verify when accessing the manage Bookings Page and selecting an exisiting case all the buttons are in correct state
+- Pre-requisite step in order to create and select a exising case via api
+- Verify following manage,amend and record buttons are visible
+- Verify following manage,amend and record buttons are enabled
+
+## Verify when selecting option to manage a case all buttons are in the correct state
+- Pre-requisite step in order to select the option to manage an exisitng case
+- Verify following cancel, share and audit buttons are visible
+- Verify following cancel, share and audit buttons are enabled
+- Verify following manage,amend and record buttons are disabled
+
+## Verify when selecting an option to share a case all buttons are in the correct state
+- Pre-requisite step in order to select the option to share an exisitng case
+- Verify following cancel and grant access buttons are visible and enabled
+- Verify following manage,amend and record buttons are disabled
+
+## Verify when selecting option to audit a case all buttons are in the correct state
+- Pre-requisite step in order to select the option to audit an exisitng case
+- Verify close button is enabled and visible
+- Verify following manage,amend and record buttons are disabled
+
+## Verify when selecting a option to amend a case all three buttons are in the correct state
+- Pre-requisite step in order to select the option to amend an exisiitng case
+- Verify following cancel, save and delete buttons are visible
+- Verify cancel and delete buttons are enabled 
+- Verify save button is disabled 
+- Verify following manage,amend and record buttons are disabled
+
+## Verify when canceling amendments to an exisitng case, all buttons are in the correct state
+- Pre-requisite step in order to cancel amendment of an exisitng case
+- Verify yes and no buttons are visible and enabled
+
+## Verify when selecting option to delete an exisiting case ,all buttons are in the correct state
+- Pre-requisite step in order to delete an exisitng case
+- Verify yes and no buttons are visible and enabled 
+- Verify following manage,amend and record buttons are disabled
+
+## Verify when selecting option to record for an existing case, two buttons are in the correct state
+- Pre-requisite step in order to select the option to record an exisiting case
+- Verify following back and start recording buttons are visible and enabled

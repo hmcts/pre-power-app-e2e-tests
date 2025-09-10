@@ -30,7 +30,7 @@
     "typescript-eslint": "^8.8.0"
   },
   "scripts": {
-    "prepare": "husky install",
+    "postinstall": "husky install",
     "lint": "yarn tsc -p tsconfig.json && yarn eslint .",
     "setup": "yarn playwright install --with-deps",
     "load-secrets:dev": "yarn get-secrets pre-hmctskv-test,pre-hmctskv-dev",
