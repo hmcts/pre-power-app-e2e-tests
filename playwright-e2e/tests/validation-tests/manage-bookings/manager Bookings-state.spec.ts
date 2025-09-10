@@ -9,7 +9,7 @@ test.describe('Set of tests to verify buttons on the manage booking page are in 
   });
 
   test(
-    'Verify when accessing the manage Bookings Page and selecting an exisiting case all the buttons are in correct state',
+    'Verify when accessing the manage bookings Page and selecting an exisiting case all the buttons are in correct state',
     {
       tag: ['@regression', '@state-management'],
     },
@@ -19,13 +19,13 @@ test.describe('Set of tests to verify buttons on the manage booking page are in 
         await manageBookingsPage.searchForABooking(caseData.caseReference);
       });
 
-      await test.step('Verify following manage,amend and record buttons are visible', async () => {
+      await test.step('Verify following manage, amend and record buttons are visible', async () => {
         await expect(manageBookingsPage.$interactive.manageButton).toBeVisible();
         await expect(manageBookingsPage.$interactive.amendButton).toBeVisible();
         await expect(manageBookingsPage.$interactive.recordButton).toBeVisible();
       });
 
-      await test.step('Verify following manage,amend and record buttons are enabled', async () => {
+      await test.step('Verify following manage, amend and record buttons are enabled', async () => {
         await expect(manageBookingsPage.$interactive.manageButton).toBeEnabled();
         await expect(manageBookingsPage.$interactive.amendButton).toBeEnabled();
         await expect(manageBookingsPage.$interactive.recordButton).toBeEnabled();
@@ -55,7 +55,7 @@ test.describe('Set of tests to verify buttons on the manage booking page are in 
         await expect(manageBookingsPage.$manageCaseModal.shareButton).toBeEnabled();
         await expect(manageBookingsPage.$manageCaseModal.auditButton).toBeEnabled();
       });
-      await test.step('Verify following manage,amend and record buttons are disabled', async () => {
+      await test.step('Verify following manage, amend and record buttons are disabled', async () => {
         await expect(manageBookingsPage.$interactive.manageButton).toBeDisabled();
         await expect(manageBookingsPage.$interactive.amendButton).toBeDisabled();
         await expect(manageBookingsPage.$interactive.recordButton).toBeDisabled();
@@ -82,7 +82,7 @@ test.describe('Set of tests to verify buttons on the manage booking page are in 
         await expect(manageBookingsPage.$manageCaseModal.grantAccessButton).toBeEnabled();
       });
 
-      await test.step('Verify following manage,amend and record buttons are disabled', async () => {
+      await test.step('Verify following manage, amend and record buttons are disabled', async () => {
         await expect(manageBookingsPage.$interactive.manageButton).toBeDisabled();
         await expect(manageBookingsPage.$interactive.amendButton).toBeDisabled();
         await expect(manageBookingsPage.$interactive.recordButton).toBeDisabled();
@@ -106,7 +106,7 @@ test.describe('Set of tests to verify buttons on the manage booking page are in 
         await expect(manageBookingsPage.$manageCaseModal.closeAuditButton).toBeEnabled();
         await expect(manageBookingsPage.$manageCaseModal.closeAuditButton).toBeVisible();
       });
-      await test.step('Verify following manage,amend and record buttons are disabled', async () => {
+      await test.step('Verify following manage, amend and record buttons are disabled', async () => {
         await expect(manageBookingsPage.$interactive.manageButton).toBeDisabled();
         await expect(manageBookingsPage.$interactive.amendButton).toBeDisabled();
         await expect(manageBookingsPage.$interactive.recordButton).toBeDisabled();
@@ -138,7 +138,7 @@ test.describe('Set of tests to verify buttons on the manage booking page are in 
       await test.step('Verify save button is disabled ', async () => {
         await expect(manageBookingsPage.$amendCaseModal.saveButton).toBeDisabled();
       });
-      await test.step('Verify following manage,amend and record buttons are disabled', async () => {
+      await test.step('Verify following manage, amend and record buttons are disabled', async () => {
         await expect(manageBookingsPage.$interactive.manageButton).toBeDisabled();
         await expect(manageBookingsPage.$interactive.amendButton).toBeDisabled();
         await expect(manageBookingsPage.$interactive.recordButton).toBeDisabled();
@@ -146,7 +146,7 @@ test.describe('Set of tests to verify buttons on the manage booking page are in 
     },
   );
   test(
-    'Verify when canceling amendments to an exisitng case, all buttons are in the correct state',
+    'Verify when cancelling amendments to an exisitng case, all buttons are in the correct state',
     {
       tag: ['@regression', '@state-management'],
     },
@@ -169,7 +169,7 @@ test.describe('Set of tests to verify buttons on the manage booking page are in 
   );
 
   test(
-    'Verify when selecting option to delete an exisiting case ,all buttons are in the correct state',
+    'Verify when selecting option to delete an exisiting case, all buttons are in the correct state',
     {
       tag: ['@regression', '@state-management'],
     },
