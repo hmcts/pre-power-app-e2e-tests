@@ -10,6 +10,7 @@ export class ViewLiveFeedPage extends Base {
     startRecordingButton: this.iFrame.getByRole('button', { name: 'Start Recording' }),
     finishRecordingButton: this.iFrame.getByRole('button', { name: 'Finish' }),
     showLinkButton: this.iFrame.getByRole('button', { name: 'Show Link' }),
+    backButton: this.iFrame.locator('[data-control-name="recordedFeedScrn_Back_Btn_1"] button'),
   } as const satisfies Record<string, Locator>;
 
   public readonly $static = {

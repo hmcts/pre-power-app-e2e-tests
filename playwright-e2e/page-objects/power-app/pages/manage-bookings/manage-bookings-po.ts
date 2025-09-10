@@ -12,9 +12,9 @@ export class ManageBookingsPage extends Base {
 
   public readonly $interactive = {
     refreshResultsButton: this.iFrame.getByRole('button', { name: 'Refresh Data' }),
-    recordButton: this.iFrame.getByRole('button', { name: 'Record' }),
-    manageButton: this.iFrame.locator('[data-control-name="manageBookingScrn_Manage_Btn"]'),
-    amendButton: this.iFrame.locator('[data-control-name="manageBookingScrn_Amend_Btn"]'),
+    manageButton: this.iFrame.locator('[data-control-name="manageBookingScrn_Manage_Btn"] button'),
+    amendButton: this.iFrame.locator('[data-control-name="manageBookingScrn_Amend_Btn"] button'),
+    recordButton: this.iFrame.locator('[data-control-name="manageBookingScrn_Record_Btn"] button'),
   } as const satisfies Record<string, Locator>;
 
   public readonly $static = {
@@ -30,12 +30,13 @@ export class ManageBookingsPage extends Base {
 
   public readonly $manageCaseModal = {
     modalWindow: this.iFrame.locator('[data-control-name="AdmMngCasesBackgroundIcn_6"]'),
-    cancelButton: this.iFrame.locator('[data-control-name="EditReqDetailsBtn_3"]'),
-    shareButton: this.iFrame.locator('[data-control-name="MngRecShareAccessBtn_3"]'),
-    auditButton: this.iFrame.locator('[data-control-name="MngRecShareAccessBtn_5"]'),
+    cancelButton: this.iFrame.locator('[data-control-name="EditReqDetailsBtn_3"] button'),
+    shareButton: this.iFrame.locator('[data-control-name="MngRecShareAccessBtn_3"] button'),
+    auditButton: this.iFrame.locator('[data-control-name="MngRecShareAccessBtn_5"] button'),
     auditCaseInformationText: this.iFrame.locator('[data-control-name="RepInfo-Manage_2"]'),
     auditReportDateLabel: this.iFrame.locator('[data-control-name="RepDte-Manage_2"]'),
-    closeAuditButton: this.iFrame.locator('[data-control-name="AudClose-Manage_2"]'),
+    closeAuditButton: this.iFrame.locator('[data-control-name="AudClose-Manage_2"] button'),
+    grantAccessButton: this.iFrame.locator('[data-control-name="MngRecShareAccessBtn_3"] button'),
   } as const satisfies Record<string, Locator>;
 
   public readonly $amendCaseModal = {
@@ -44,13 +45,14 @@ export class ManageBookingsPage extends Base {
     witnessDropdown: this.iFrame.locator('[data-control-name="manageBookingsScrn_AmendBookingWitness_Cmb_1"]'),
     defendantsDropdown: this.iFrame.locator('[data-control-name="manageBookingsScrn_AmendBookingDefendant_Cmb_1"]'),
     dateDropdown: this.iFrame.locator('[data-control-name="manageBookingsScrn_AmendBookingDate_Dte_1"]'),
-    cancelButton: this.iFrame.locator('[data-control-name="manageBookingsScrn_AmendBookingCancel_Btn_1"]'),
-    yesToCancelButton: this.iFrame.locator('[data-control-name="manageBookingsScrn_AmendCancelConfirm_Btn_1"]'),
-    noToCancelButton: this.iFrame.locator('[data-control-name="manageBookingsScrn_AmendCancelCancel_Btn_1"]'),
-    deleteButton: this.iFrame.locator('[data-control-name="manageBookingsScrn_AmendBookingDelete_Btn_1"]'),
+    cancelButton: this.iFrame.locator('[data-control-name="manageBookingsScrn_AmendBookingCancel_Btn_1"] button'),
+    yesToCancelButton: this.iFrame.locator('[data-control-name="manageBookingsScrn_AmendCancelConfirm_Btn_1"] button'),
+    noToCancelButton: this.iFrame.locator('[data-control-name="manageBookingsScrn_AmendCancelCancel_Btn_1"] button'),
+    deleteButton: this.iFrame.locator('[data-control-name="manageBookingsScrn_AmendBookingDelete_Btn_1"] button'),
     deleteCaseText: this.iFrame.locator('[data-control-name="manageBookingsScrn_DeleteScheduleBody_Lbl_2"]'),
-    yesToDeleteButton: this.iFrame.locator('[data-control-name="manageBookingsScrn_DeleteScheduleDelete_Btn_2"]'),
-    noToDeleteButton: this.iFrame.locator('[data-control-name="manageBookingsScrn_DeleteScheduleCancel_Btn_2"]'),
+    yesToDeleteButton: this.iFrame.locator('[data-control-name="manageBookingsScrn_DeleteScheduleDelete_Btn_2"] button'),
+    noToDeleteButton: this.iFrame.locator('[data-control-name="manageBookingsScrn_DeleteScheduleCancel_Btn_2"] button'),
+    saveButton: this.iFrame.locator('[data-control-name="manageBookingsScrn_AmendBookingSave_Btn_1"] button'),
   } as const satisfies Record<string, Locator>;
 
   public async verifyUserIsOnManageBookingsPage(): Promise<void> {
