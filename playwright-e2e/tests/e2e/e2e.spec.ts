@@ -89,7 +89,7 @@ test.describe('Ensure e2e journey is working as expected', () => {
         await cvp_SignInPage.signIn(config.cvpUser.username, config.cvpUser.password);
 
         await cvp_RoomSettingsPage.verifyUserIsOnCvpRoomSettingsPage();
-        await cvp_RoomSettingsPage.selectRoomFromDropdown('PRE009');
+        await cvp_RoomSettingsPage.selectRoomFromDropdown('PRE008');
         hostPin = await cvp_RoomSettingsPage.editRoomSettings(rtmpsLink);
       });
 
