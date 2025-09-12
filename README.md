@@ -10,6 +10,7 @@ The following Markdown files contain an up-to-date list of all test scenarios an
 
 > These catalogues are automatically generated whenever new tests are added or existing tests are modified.
 > Note: These files are automatically updated on every commit via a pre-commit hook.
+> Once files have been updated / generated, verify contents and stage the changes to be added to PR. 
 > Run `yarn generate:test-catalogue` to update them manually if needed.
 
 ## Features
@@ -83,12 +84,10 @@ Dev
 ```bash
 yarn load-secrets:dev
 ```
-
 Staging
 ```bash
 yarn load-secrets:stg
 ```
-
 Demo
 ```bash
 yarn load-secrets:demo

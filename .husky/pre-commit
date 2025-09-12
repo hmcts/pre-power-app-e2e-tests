@@ -1,3 +1,2 @@
 yarn format
 yarn generate:test-catalogue
-git add test-catalogue/*.md
