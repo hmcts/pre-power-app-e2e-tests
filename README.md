@@ -7,6 +7,7 @@ The following Markdown files contain an up-to-date list of all test scenarios an
 - [State Management Tests](./test-catalogue/test-catalogue-state-management-tests.md)
 - [Validation Tests](./test-catalogue/test-catalogue-validation-tests.md)
 - [Visual Tests](./test-catalogue/test-catalogue-visual-tests.md)
+- [Accessibility Tests](./test-catalogue/test-catalogue-accessibility.md)
 
 > These catalogues are automatically generated whenever new tests are added or existing tests are modified.
 > Note: These files are automatically updated on every commit via a pre-commit hook.
