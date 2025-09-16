@@ -79,9 +79,13 @@ export const powerAppPageFixtures = {
     const viewRecordingsPage = new ViewRecordingsPage(determinePage);
     await use(viewRecordingsPage);
   },
-  navigateToHomePage: async ({ homePage }, use) => {
+  navigateToHomePage: async ({ homePage, determinePage, navBarComponent }: PowerAppPageFixtures, use) => {
     await use(async () => {
-      await homePage.goTo();
+      if (determinePage.url().includes('apps.powerapps.com')) {
+        await navBarComponent.$interactive.HomeButton.click();
+      } else {
+        await homePage.goTo();
+      }
       await homePage.verifyUserIsOnHomePage();
     });
   },

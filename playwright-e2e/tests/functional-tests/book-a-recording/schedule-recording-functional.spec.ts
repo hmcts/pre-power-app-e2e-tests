@@ -43,7 +43,7 @@ test.describe('Set of tests to verify functionality of schedule a recording page
     {
       tag: ['@regression', '@functional'],
     },
-    async ({ scheduleRecordingPage, apiClient, navBarComponent, homePage, manageBookingsPage, navigateToScheduleRecordingsPage }) => {
+    async ({ scheduleRecordingPage, apiClient, navigateToManageBookingsPage, manageBookingsPage, navigateToScheduleRecordingsPage }) => {
       await test.step('Pre-requisite step in order to create a booking via api and navigate to schedule recordings page', async () => {
         const caseData = await apiClient.createBooking(2, 2, 'today');
         await navigateToScheduleRecordingsPage(caseData.caseReference);
@@ -64,10 +64,7 @@ test.describe('Set of tests to verify functionality of schedule a recording page
       });
 
       await test.step('Navigate to manage bookings page', async () => {
-        await navBarComponent.$interactive.HomeButton.click();
-        await homePage.verifyUserIsOnHomePage();
-        await homePage.$interactive.manageBookingsButton.click();
-        await manageBookingsPage.verifyUserIsOnManageBookingsPage();
+        await navigateToManageBookingsPage();
       });
 
       await test.step('Verify user is unable to find deleted scheduled recording within manage bookings page', async () => {
