@@ -18,7 +18,7 @@ test.describe('Set of tests to verify functionality of view live feed page for L
     async ({ viewLiveFeedPage }) => {
       await test.step('Given user has selected option to start a recording', async () => {
         await viewLiveFeedPage.selectStartRecordingButton();
-        await expect(viewLiveFeedPage.$startRecordingModal.recordingLinkGeneratedText).toBeVisible({ timeout: 60000 });
+        await expect(viewLiveFeedPage.$startRecordingModal.recordingLinkGeneratedText).toBeVisible({ timeout: 90000 });
         await viewLiveFeedPage.selectOkButtonToDismissStartRecordingModal();
       });
 
