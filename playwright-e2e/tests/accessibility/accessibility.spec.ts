@@ -186,10 +186,13 @@ test.describe('Set of tests to verify accessibility of pages within pre power ap
       await test.step('Select option to share within manage bookings modal', async () => {
         await manageBookingsPage.$manageCaseModal.closeAuditButton.click();
         await manageBookingsPage.$manageCaseModal.shareButton.click();
+        await expect(manageBookingsPage.$manageCaseModal.shareWithUsersTitle).toBeVisible();
+        await expect(manageBookingsPage.$manageCaseModal.shareDropdown).toBeVisible();
         await expect(manageBookingsPage.$manageCaseModal.grantAccessButton).toBeVisible();
       });
 
       await test.step('Check accessibility of share option within manage bookings modal', async () => {
+        test.fail(true, 'Bug raised on PRE team board - S28-4337');
         await axeUtils.audit();
       });
     },

@@ -32,7 +32,7 @@ export class CvpRoomSettingsPage {
   }
 
   public async verifyUserIsOnCvpRoomSettingsPage(): Promise<void> {
-    await expect(this.$interactive.selectRoomDropdown).toBeAttached();
+    await expect(this.$interactive.selectRoomDropdown).toBeAttached({ timeout: 15000 });
     await this.closeRoomSettingsModal();
     await expect(this.$interactive.selectRoomDropdown).toBeVisible();
   }

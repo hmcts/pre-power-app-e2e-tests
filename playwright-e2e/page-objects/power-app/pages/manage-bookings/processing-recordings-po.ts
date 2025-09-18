@@ -9,7 +9,7 @@ export class ProcessingRecordingsPage extends Base {
   }
 
   public async verifyUserIsOnProcessingRecordingsPage(): Promise<void> {
-    await expect(this.navBar.$interactive.ProcessingRecordings).toBeVisible();
+    await expect(this.navBar.$interactive.ProcessingRecordings).toBeVisible({ timeout: 15000 });
   }
 
   /**

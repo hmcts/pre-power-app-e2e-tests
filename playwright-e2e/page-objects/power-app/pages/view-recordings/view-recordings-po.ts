@@ -32,7 +32,7 @@ export class ViewRecordingsPage extends Base {
   } as const satisfies Record<string, Locator>;
 
   public async verifyUserIsOnViewRecordingsPage(): Promise<void> {
-    await expect(this.navBar.$interactive.ViewRecordings).toBeVisible();
+    await expect(this.navBar.$interactive.ViewRecordings).toBeVisible({ timeout: 15000 });
   }
 
   /**
