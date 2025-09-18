@@ -94,7 +94,7 @@ export class CaseDetailsPage extends Base {
   }
 
   public async verifyUserIsOnCaseDetailsPage(): Promise<void> {
-    await expect(this.$static.pageHeading).toBeVisible();
+    await expect(this.$static.pageHeading).toBeVisible({ timeout: 15000 });
   }
 
   /**

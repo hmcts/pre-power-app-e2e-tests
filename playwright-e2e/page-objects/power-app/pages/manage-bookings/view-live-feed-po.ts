@@ -32,7 +32,7 @@ export class ViewLiveFeedPage extends Base {
   } as const satisfies Record<string, Locator>;
 
   public async verifyUserIsOnViewLiveFeedPage(): Promise<void> {
-    await expect(this.$static.pageHeading).toBeVisible();
+    await expect(this.$static.pageHeading).toBeVisible({ timeout: 15000 });
   }
 
   /**

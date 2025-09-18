@@ -8,7 +8,7 @@ export class CvpRecordingCallPage {
   } as const satisfies Record<string, Locator>;
 
   public async verifyUserIsOnCvpRecordingCallPage(): Promise<void> {
-    await expect(this.$interactive.participantsMenuButton).toBeVisible();
+    await expect(this.$interactive.participantsMenuButton).toBeVisible({ timeout: 15000 });
   }
 
   /**

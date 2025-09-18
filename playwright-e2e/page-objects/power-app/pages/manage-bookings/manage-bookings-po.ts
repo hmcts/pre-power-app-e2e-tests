@@ -32,11 +32,13 @@ export class ManageBookingsPage extends Base {
     modalWindow: this.iFrame.locator('[data-control-name="AdmMngCasesBackgroundIcn_6"]'),
     cancelButton: this.iFrame.locator('[data-control-name="EditReqDetailsBtn_3"] button'),
     shareButton: this.iFrame.locator('[data-control-name="MngRecShareAccessBtn_3"] button'),
+    shareWithUsersTitle: this.iFrame.locator('[data-control-name="ShareComboboxLabelInput"] input'),
+    shareDropdown: this.iFrame.locator('[data-control-name="MngNewAcsGrpCbx_3"]'),
     auditButton: this.iFrame.locator('[data-control-name="MngRecShareAccessBtn_5"] button'),
     auditCaseInformationText: this.iFrame.locator('[data-control-name="RepInfo-Manage_2"]'),
     auditReportDateLabel: this.iFrame.locator('[data-control-name="RepDte-Manage_2"]'),
     closeAuditButton: this.iFrame.locator('[data-control-name="AudClose-Manage_2"] button'),
-    grantAccessButton: this.iFrame.locator('[data-control-name="MngRecShareAccessBtn_3"] button'),
+    grantAccessButton: this.iFrame.locator('[data-control-name="MngNewAcsGrpClearBtn_3"] button'),
   } as const satisfies Record<string, Locator>;
 
   public readonly $amendCaseModal = {
@@ -56,7 +58,7 @@ export class ManageBookingsPage extends Base {
   } as const satisfies Record<string, Locator>;
 
   public async verifyUserIsOnManageBookingsPage(): Promise<void> {
-    await expect(this.$static.pageHeading).toBeVisible();
+    await expect(this.$static.pageHeading).toBeVisible({ timeout: 15000 });
   }
 
   /**

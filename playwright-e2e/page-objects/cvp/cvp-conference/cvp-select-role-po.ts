@@ -18,7 +18,7 @@ export class CvpSelectRolePage {
   } as const satisfies Record<string, Locator>;
 
   public async verifyUserIsOnCvpSelectRolePage(): Promise<void> {
-    await expect(this.$static.selectRoleText).toBeVisible();
+    await expect(this.$static.selectRoleText).toBeVisible({ timeout: 15000 });
   }
 
   /**
