@@ -11,6 +11,7 @@
     "@faker-js/faker": "^9.8.0",
     "@hmcts/playwright-common": "^1.0.36",
     "@playwright/test": "^1.48.2",
+    "@types/luxon": "^3",
     "@types/node": "^22.15.32",
     "@typescript-eslint/eslint-plugin": "^8.8.0",
     "dotenv": "^17.0.0",
@@ -45,6 +46,7 @@
   },
   "packageManager": "yarn@4.9.4",
   "dependencies": {
+    "luxon": "^3.7.2",
     "uuid": "^11.1.0"
   }
 }

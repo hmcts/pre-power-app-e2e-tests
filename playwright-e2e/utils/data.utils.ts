@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { BaseCaseDetails } from '../types';
+import { DateTime } from 'luxon';
 
 export class DataUtils {
   /**
@@ -17,6 +18,7 @@ export class DataUtils {
       caseReference: this.generateRandomCaseReference(),
       defendantNames: this.generateRandomNames('fullName', numberOfDefendants),
       witnessNames: this.generateRandomNames('firstName', numberOfWitnesses),
+      scheduledDate: this.getShortDateWithAbbreviatedDayMonth(),
     };
   }
 
@@ -47,5 +49,10 @@ export class DataUtils {
       }
       return name;
     });
+  }
+
+  getShortDateWithAbbreviatedDayMonth(): string {
+    const today = DateTime.now();
+    return today.toFormat('ccc LLL dd yyyy');
   }
 }
