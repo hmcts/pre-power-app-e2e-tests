@@ -227,7 +227,6 @@ test.describe('Set of tests to verify buttons on the manage booking page are in 
     async ({ manageBookingsPage, apiClient }) => {
       await test.step('Pre-requisite step in order to create and select the todays date case via api', async () => {
         const caseData = await apiClient.createBooking(2, 2, 'today');
-        //  ManageBookingsPage.searchForABookingByDate(caseData.scheduledDate);
         console.log('caseData:', caseData); // Debug: check what is returned
         const date = caseData.scheduledDate || new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
         await manageBookingsPage.searchForABookingByDate(date);
