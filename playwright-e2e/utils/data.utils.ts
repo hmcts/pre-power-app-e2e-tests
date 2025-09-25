@@ -17,6 +17,7 @@ export class DataUtils {
       caseReference: this.generateRandomCaseReference(),
       defendantNames: this.generateRandomNames('fullName', numberOfDefendants),
       witnessNames: this.generateRandomNames('firstName', numberOfWitnesses),
+      scheduledDate: faker.date.future().toISOString().split('T')[0], // Format as YYYY-MM-DD
     };
   }
 

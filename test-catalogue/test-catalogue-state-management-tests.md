@@ -73,3 +73,7 @@
 ## Verify when selecting option to record for an existing case, two buttons are in the correct state
 - Pre-requisite step in order to select the option to record an exisiting case
 - Verify following back and start recording buttons are visible and enabled
+
+## Verify when accessing the manage bookings page and select the recording by the todays date
+- Pre-requisite step in order to create and select the todays date case via api
+- Search for the recording schedule by today

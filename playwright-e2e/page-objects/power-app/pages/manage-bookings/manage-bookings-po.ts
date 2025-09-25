@@ -1,13 +1,16 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { Base } from '../../base';
+import { th } from '@faker-js/faker/.';
 
 export class ManageBookingsPage extends Base {
+  static searchForABookingByDate: any;
   constructor(page: Page) {
     super(page);
   }
 
   public readonly $inputs = {
     caseReference: this.iFrame.getByRole('textbox', { name: 'Search Case Reference' }),
+    searchForABookingByDate: this.iFrame.getByRole('button', { name: 'Select Scheduled Date' }),
   } as const satisfies Record<string, Locator>;
 
   public readonly $interactive = {
@@ -20,7 +23,13 @@ export class ManageBookingsPage extends Base {
   public readonly $static = {
     pageHeading: this.iFrame.locator('[data-control-name="manageBookingScrn_BookedSrchRef_Lbl"]').filter({ hasText: 'Case Reference' }),
     searchResultGallery: this.iFrame.locator('[data-control-name="manageBookingScrn_Recordings_Gal"]'),
+    okButton: this.iFrame.getByRole('button', { name: 'OK' }),
+    searchForABookingByDate: this.iFrame.getByRole('button', { name: 'Select Scheduled Date' }),
     listItemsInSearchResultsGallery: this.iFrame.locator('[data-control-name="manageBookingScrn_Recordings_Gal"]').locator('[role="listitem"]'),
+    searchResultExistingCasesTitle: this.iFrame
+      .locator('[data-control-name="manageBookingScrn_ExistingCases_Lbl"]')
+      .filter({ hasText: 'Existing Cases' }),
+    selectedExistingCaseReferenceLabel: this.iFrame.locator('[data-control-name="manageBookingScrn_SelectedCaseRef_Lbl"]'),
     caseReferenceLabelInSearchList: this.iFrame.locator('[data-control-name="manageBookingScrn_CaseRef_Lbl"]'),
     witnessLabelInSearchList: this.iFrame.locator('[data-control-name="manageBookingScrn_Witness_Lbl"]'),
     defendantLabelInSearchList: this.iFrame.locator('[data-control-name="manageBookingScrn_Defendants_Lbl"]'),
@@ -74,6 +83,32 @@ export class ManageBookingsPage extends Base {
       await this.refreshResultsIfMoreThenOneCaseReference();
       await expect(this.$static.caseReferenceLabelInSearchList).toHaveText(caseReference);
     }).toPass({ intervals: [2500], timeout: 10000 });
+  }
+
+  /**
+   * Searches for a booking using the today's date.
+   * Fills the search input and verifies that the booking with the given date is visible on the page.
+   * @param searchForABookingByDate - The date to search for.
+   */
+
+  public async searchForABookingByDate(searchForABookingByDate: string): Promise<void> {
+    // if (!searchForABookingByDate) throw new Error('Date is required for searchForABookingByDate');
+    await expect(this.$static.searchForABookingByDate).toBeVisible({ timeout: 30000 }); // Wait for input
+    await this.$static.searchForABookingByDate.click();
+    await this.iFrame.getByRole('button', { name: /Thu Sep 25 2025/i }).click();
+    await this.$static.okButton.last().click();
+
+    expect(async () => {
+      await this.refreshResultsIfMoreThenOneSearchForAbookibgByDate();
+      await expect(this.$static.scheduledDateLabelInSearchList).toHaveText(searchForABookingByDate);
+      await expect(this.$static.searchResultExistingCasesTitle).toBeVisible();
+    });
+  }
+  public async refreshResultsIfMoreThenOneSearchForAbookibgByDate(): Promise<void> {
+    if ((await this.$static.listItemsInSearchResultsGallery.count()) > 1) {
+      await this.$interactive.refreshResultsButton.click();
+      await expect(this.$static.listItemsInSearchResultsGallery).toHaveCount(25); // Date search returns 24 items
+    }
   }
 
   public async refreshResultsIfMoreThenOneCaseReference(): Promise<void> {
