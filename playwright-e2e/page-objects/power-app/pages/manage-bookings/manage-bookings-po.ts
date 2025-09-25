@@ -1,8 +1,7 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { Base } from '../../base';
 import { th } from '@faker-js/faker/.';
-import { getShortDateWithAbbreviatedDayMonth } from '../../../utils/data.utils';
-
+import { DataUtils } from '../../../../utils/data.utils';
 
 export class ManageBookingsPage extends Base {
   static searchForABookingByDate: any;
@@ -98,10 +97,9 @@ export class ManageBookingsPage extends Base {
     await expect(this.$static.searchForABookingByDate).toBeVisible({ timeout: 30000 }); // Wait for input
     await this.$static.searchForABookingByDate.click();
 
-    const scheduledDate = getShortDateWithAbbreviatedDayMonth();
+    const dataUtils = new DataUtils();
+    const scheduledDate = dataUtils.getShortDateWithAbbreviatedDayMonth();
     await this.iFrame.getByRole('button', { name: scheduledDate }).click();
-    
-    await this.iFrame.getByRole('button', { name: /Thu Sep 25 2025/i }).click();
     await this.$static.okButton.last().click();
 
     expect(async () => {
