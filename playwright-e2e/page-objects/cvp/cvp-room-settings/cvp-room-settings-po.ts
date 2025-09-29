@@ -23,7 +23,8 @@ export class CvpRoomSettingsPage {
     caseIdInput: this.page.getByPlaceholder('Case ID'),
     cancel_close_Button: this.page.getByRole('button', { name: 'Cancel' }),
     okButton: this.page.getByRole('button', { name: 'Ok' }),
-    saveButton: this.page.getByLabel('Save'),
+    saveButton: this.page.getByLabel('Save', { exact: true }),
+
     fileNameSavedText: this.page.getByText('Your file has been saved'),
   } as const satisfies Record<string, Locator>;
 
@@ -69,6 +70,7 @@ export class CvpRoomSettingsPage {
     await this.$interactive.editRoomSettingsButton.click();
 
     await expect(this.$inputs.rtmpsLinkInput).toBeVisible();
+    await expect(this.$inputs.rtmpsLinkInput).toBeEditable();
 
     await expect(async () => {
       await this.$inputs.rtmpsLinkInput.clear();
@@ -120,6 +122,7 @@ export class CvpRoomSettingsPage {
 
     await this.$recordingModal.okButton.click();
     await expect(this.$recordingModal.saveButton).toBeVisible();
+
     await this.$recordingModal.saveButton.click();
 
     await expect(this.$recordingModal.fileNameSavedText).toBeVisible();
@@ -128,4 +131,7 @@ export class CvpRoomSettingsPage {
     await expect(this.$recordingModal.recordingModalHeading).toBeHidden();
     await expect(this.page.getByRole('button', { name: 'Recording' })).toBeVisible({ timeout: 20000 });
   }
+}
+function getByLabelText(arg0: string, arg1: { exact: boolean }): any {
+  throw new Error('Function not implemented.');
 }
