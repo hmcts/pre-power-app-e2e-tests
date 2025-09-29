@@ -56,6 +56,7 @@ test.describe('Ensure e2e journey is working as expected', () => {
           caseReference: caseDetails.caseReference,
           defendantNames: caseDetails.defendantNames,
           witnessNames: caseDetails.witnessNames,
+          scheduledDate: caseDetails.scheduledDate,
         });
         await caseDetailsPage.$interactive.saveButton.click();
         await scheduleRecordingPage.verifyUserIsOnScheduleRecordingsPage();
