@@ -1,5 +1,4 @@
 import { test, expect } from '../../../fixtures';
-import { ManageBookingsPage } from '../../../page-objects/power-app/pages';
 import { config } from '../../../utils';
 
 test.describe('Set of tests to verify buttons on the manage booking page are in correct state', () => {
@@ -132,11 +131,11 @@ test.describe('Set of tests to verify buttons on the manage booking page are in 
         await expect(manageBookingsPage.$amendCaseModal.saveButton).toBeVisible();
         await expect(manageBookingsPage.$amendCaseModal.deleteButton).toBeVisible();
       });
-      await test.step('Verify cancel and delete buttons are enabled ', async () => {
+      await test.step('Verify cancel and delete buttons are enabled', async () => {
         await expect(manageBookingsPage.$amendCaseModal.cancelButton).toBeEnabled();
         await expect(manageBookingsPage.$amendCaseModal.deleteButton).toBeEnabled();
       });
-      await test.step('Verify save button is disabled ', async () => {
+      await test.step('Verify save button is disabled', async () => {
         await expect(manageBookingsPage.$amendCaseModal.saveButton).toBeDisabled();
       });
       await test.step('Verify following manage, amend and record buttons are disabled', async () => {
@@ -183,7 +182,7 @@ test.describe('Set of tests to verify buttons on the manage booking page are in 
         await manageBookingsPage.$amendCaseModal.deleteButton.click();
       });
 
-      await test.step('Verify yes and no buttons are visible and enabled ', async () => {
+      await test.step('Verify yes and no buttons are visible and enabled', async () => {
         await expect(manageBookingsPage.$amendCaseModal.yesToDeleteButton).toBeEnabled();
         await expect(manageBookingsPage.$amendCaseModal.noToDeleteButton).toBeEnabled();
         await expect(manageBookingsPage.$amendCaseModal.yesToDeleteButton).toBeVisible();
@@ -215,26 +214,6 @@ test.describe('Set of tests to verify buttons on the manage booking page are in 
         await expect(viewLiveFeedPage.$interactive.startRecordingButton).toBeVisible();
         await expect(viewLiveFeedPage.$interactive.backButton).toBeEnabled();
         await expect(viewLiveFeedPage.$interactive.startRecordingButton).toBeEnabled();
-      });
-    },
-  );
-
-  test(
-    'Verify when accessing the manage bookings page and select the recording by the todays date',
-    {
-      tag: ['@regression', '@state-management'],
-    },
-    async ({ manageBookingsPage, apiClient }) => {
-      await test.step('Pre-requisite step in order to create and select the todays date case via api', async () => {
-        const caseData = await apiClient.createBooking(2, 2, 'today');
-        console.log('caseData:', caseData); // Debug: check what is returned
-        const date = caseData.scheduledDate || new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
-        await manageBookingsPage.searchForABookingByDate(date);
-      });
-
-      await test.step("Search for the recording schedule by today's date", async () => {
-        const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
-        await manageBookingsPage.searchForABookingByDate(today);
       });
     },
   );

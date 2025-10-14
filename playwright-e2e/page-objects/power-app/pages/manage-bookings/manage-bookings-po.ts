@@ -1,17 +1,14 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { Base } from '../../base';
-import { th } from '@faker-js/faker/.';
-import { DataUtils } from '../../../../utils/data.utils';
+import { DateTime } from 'luxon';
 
 export class ManageBookingsPage extends Base {
-  static searchForABookingByDate: any;
   constructor(page: Page) {
     super(page);
   }
 
   public readonly $inputs = {
     caseReference: this.iFrame.getByRole('textbox', { name: 'Search Case Reference' }),
-    searchForABookingByDate: this.iFrame.getByRole('button', { name: 'Select Scheduled Date' }),
   } as const satisfies Record<string, Locator>;
 
   public readonly $interactive = {
@@ -19,23 +16,26 @@ export class ManageBookingsPage extends Base {
     manageButton: this.iFrame.locator('[data-control-name="manageBookingScrn_Manage_Btn"] button'),
     amendButton: this.iFrame.locator('[data-control-name="manageBookingScrn_Amend_Btn"] button'),
     recordButton: this.iFrame.locator('[data-control-name="manageBookingScrn_Record_Btn"] button'),
+    datePicker: this.iFrame.locator('[data-control-name="manageBookingScrn_BookingDate_Dte"]'),
   } as const satisfies Record<string, Locator>;
 
   public readonly $static = {
     pageHeading: this.iFrame.locator('[data-control-name="manageBookingScrn_BookedSrchRef_Lbl"]').filter({ hasText: 'Case Reference' }),
     searchResultGallery: this.iFrame.locator('[data-control-name="manageBookingScrn_Recordings_Gal"]'),
-    okButton: this.iFrame.getByRole('button', { name: 'OK' }),
-    searchForABookingByDate: this.iFrame.getByRole('button', { name: 'Select Scheduled Date' }),
     listItemsInSearchResultsGallery: this.iFrame.locator('[data-control-name="manageBookingScrn_Recordings_Gal"]').locator('[role="listitem"]'),
-    searchResultExistingCasesTitle: this.iFrame
-      .locator('[data-control-name="manageBookingScrn_ExistingCases_Lbl"]')
-      .filter({ hasText: 'Existing Cases' }),
-    selectedExistingCaseReferenceLabel: this.iFrame.locator('[data-control-name="manageBookingScrn_SelectedCaseRef_Lbl"]'),
     caseReferenceLabelInSearchList: this.iFrame.locator('[data-control-name="manageBookingScrn_CaseRef_Lbl"]'),
     witnessLabelInSearchList: this.iFrame.locator('[data-control-name="manageBookingScrn_Witness_Lbl"]'),
     defendantLabelInSearchList: this.iFrame.locator('[data-control-name="manageBookingScrn_Defendants_Lbl"]'),
     scheduledDateLabelInSearchList: this.iFrame.locator('[data-control-name="manageBookingScrn_RecDate_Lbl"]'),
     caseActionsStatusLabelInSearchList: this.iFrame.locator('[data-control-name="manageBookingScrn_Status_Lbl"]'),
+  } as const satisfies Record<string, Locator>;
+
+  public readonly $datePickerModal = {
+    modalWindow: this.iFrame.locator("[id*='datepicker'][id*='popup']"),
+    monthOption: this.iFrame.locator("[aria-label='Month']"),
+    yearOption: this.iFrame.locator("[aria-label='Year']"),
+    okButton: this.iFrame.locator("[class*='datepicker-ok-button']"),
+    cancelButton: this.iFrame.locator("[class*='datepicker-cancel-button']"),
   } as const satisfies Record<string, Locator>;
 
   public readonly $manageCaseModal = {
@@ -86,39 +86,46 @@ export class ManageBookingsPage extends Base {
     }).toPass({ intervals: [2500], timeout: 10000 });
   }
 
-  /**
-   * Searches for a booking using the today's date.
-   * Fills the search input and verifies that the booking with the given date is visible on the page.
-   * @param searchForABookingByDate - The date to search for.
-   */
-
-  public async searchForABookingByDate(searchForABookingByDate: string): Promise<void> {
-    // if (!searchForABookingByDate) throw new Error('Date is required for searchForABookingByDate');
-    await expect(this.$static.searchForABookingByDate).toBeVisible({ timeout: 30000 }); // Wait for input
-    await this.$static.searchForABookingByDate.click();
-
-    const dataUtils = new DataUtils();
-    const scheduledDate = dataUtils.getShortDateWithAbbreviatedDayMonth();
-    await this.iFrame.getByRole('button', { name: scheduledDate }).click();
-    await this.$static.okButton.last().click();
-
-    expect(async () => {
-      await this.refreshResultsIfMoreThenOneSearchForAbookibgByDate();
-      await expect(this.$static.scheduledDateLabelInSearchList).toHaveText(searchForABookingByDate);
-      await expect(this.$static.searchResultExistingCasesTitle).toBeVisible();
-    });
-  }
-  public async refreshResultsIfMoreThenOneSearchForAbookibgByDate(): Promise<void> {
-    if ((await this.$static.listItemsInSearchResultsGallery.count()) > 1) {
-      await this.$interactive.refreshResultsButton.click();
-      await expect(this.$static.listItemsInSearchResultsGallery).toHaveCount(25); // Date search returns 24 items
-    }
-  }
-
   public async refreshResultsIfMoreThenOneCaseReference(): Promise<void> {
     if ((await this.$static.listItemsInSearchResultsGallery.count()) > 1) {
       await this.$interactive.refreshResultsButton.click();
       await expect(this.$static.listItemsInSearchResultsGallery).toHaveCount(1);
     }
+  }
+
+  /**
+   * Selects a date from the date picker with an optional offset.
+   * The offset can be specified in days, months, and years.
+   * Positive values move the date forward, while negative values move it backward.
+   * If no offset is provided, today's date is selected by default.
+   * @param offset - An object containing optional days, months, and years to offset from today.
+   */
+  public async selectDateFromDatePicker(offset: { days?: number; months?: number; years?: number } = {}): Promise<void> {
+    const isDatePickerHidden = await this.$datePickerModal.modalWindow.getAttribute('aria-hidden');
+    if (isDatePickerHidden === 'true') {
+      await this.$interactive.datePicker.click();
+      await expect(this.$datePickerModal.modalWindow).toHaveAttribute('aria-hidden', 'false');
+    }
+
+    let date = DateTime.now();
+
+    if (offset.days) {
+      date = date.plus({ days: offset.days });
+    }
+    if (offset.months) {
+      date = date.plus({ months: offset.months });
+    }
+    if (offset.years) {
+      date = date.plus({ years: offset.years });
+    }
+
+    await this.$datePickerModal.monthOption.selectOption({ index: date.month - 1 });
+    await this.$datePickerModal.yearOption.selectOption({ label: date.year.toString() });
+    await this.iFrame.locator(`[data-day='${date.day}'] button`).click();
+    await this.$datePickerModal.okButton.click();
+
+    await expect(this.$interactive.datePicker.locator('[type="text"]')).toHaveValue(
+      `${date.day.toString().padStart(2, '0')}/${date.month.toString().padStart(2, '0')}/${date.year}`,
+    );
   }
 }
