@@ -18,7 +18,6 @@ export class DataUtils {
       caseReference: this.generateRandomCaseReference(),
       defendantNames: this.generateRandomNames('fullName', numberOfDefendants),
       witnessNames: this.generateRandomNames('firstName', numberOfWitnesses),
-      scheduledDate: this.getShortDateWithAbbreviatedDayMonth(),
     };
   }
 
@@ -51,8 +50,25 @@ export class DataUtils {
     });
   }
 
-  getShortDateWithAbbreviatedDayMonth(): string {
-    const today = DateTime.now();
-    return today.toFormat('ccc LLL dd yyyy');
+  /**
+   * Get formatted date with abbreviated day and month.
+   * @param offset - An object specifying the number of days, months, or years to offset from the current date.
+   * (positive = future, negative = past)
+   * @returns A string representing the formatted date (e.g., "Mon Jan 01 2024").
+   */
+  getShortDateWithAbbreviatedDayMonth(offset: { days?: number; months?: number; years?: number } = {}): string {
+    let date = DateTime.now();
+
+    if (offset.days) {
+      date = date.plus({ days: offset.days });
+    }
+    if (offset.months) {
+      date = date.plus({ months: offset.months });
+    }
+    if (offset.years) {
+      date = date.plus({ years: offset.years });
+    }
+
+    return date.toFormat('ccc LLL dd yyyy');
   }
 }

@@ -37,6 +37,16 @@
 
 
 ----------------------------------------------------------------------------------------------------
+** File:** `playwright-e2e/tests/functional-tests/manage-bookings/manage-bookings-validation.spec.ts`
+
+## Verify user is able to find a booking by selecting a date from the date picker
+- Pre-requisite step in order to create a booking for tomorrow via api
+- Verify todays date is default within date picker
+- Select date for tomorrow via date picker
+- Verify booking case reference is returned within list of results for tomorrows date
+
+
+----------------------------------------------------------------------------------------------------
 ** File:** `playwright-e2e/tests/functional-tests/manage-bookings/view-live-feed-functional.spec.ts`
 
 ## Verify correct recording details are displayed when user selects show link button

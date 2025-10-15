@@ -3,7 +3,6 @@ export interface BaseCaseDetails {
   caseReference: string;
   defendantNames: string[];
   witnessNames: string[];
-  scheduledDate: string;
 }
 
 // Booking details returned from API
