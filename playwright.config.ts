@@ -34,6 +34,7 @@ export default defineConfig({
     {
       ...ProjectsConfig.chromium,
       dependencies: ['setup'],
+      testMatch: ['**/*visual*.spec.ts'],
       use: {
         ...ProjectsConfig.chromium.use,
         viewport: { width: 1280, height: 720 },
@@ -43,6 +44,7 @@ export default defineConfig({
     {
       ...ProjectsConfig.edge,
       dependencies: ['setup'],
+      testIgnore: ['**/*visual*.spec.ts'],
       use: {
         ...ProjectsConfig.edge.use,
         viewport: { width: 1280, height: 720 },
