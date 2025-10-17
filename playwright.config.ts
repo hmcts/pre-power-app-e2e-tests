@@ -8,16 +8,19 @@ dotenv.config();
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
+  ...CommonConfig.recommended,
   testDir: './playwright-e2e',
   snapshotDir: './playwright-e2e/snapshots',
-  ...CommonConfig.recommended,
   reporter: [['list'], ['html', { outputFolder: 'playwright-report' }]],
-  retries: !process.env.CI ? 0 : (process.env.PLAYWRIGHT_GREP ?? '').includes('@e2e') ? 1 : 2,
   timeout: 120_000,
     expect: {
     toHaveScreenshot: {
       maxDiffPixels: 100,
     },
+  },
+  use: { 
+    ...CommonConfig.recommended.use,
+    actionTimeout: 10_000 
   },
   projects: [
     {
@@ -35,14 +38,22 @@ export default defineConfig({
         ...ProjectsConfig.chromium.use,
         viewport: { width: 1280, height: 720 },
         deviceScaleFactor: 1,
-        actionTimeout: 10_000,
+      },
+    },
+    {
+      ...ProjectsConfig.edge,
+      dependencies: ['setup'],
+      use: {
+        ...ProjectsConfig.edge.use,
+        viewport: { width: 1280, height: 720 },
+        deviceScaleFactor: 1,
         launchOptions: {
           args: [
             '--use-fake-ui-for-media-stream',
             '--use-fake-device-for-media-stream',
           ],
-        }, 
+        },         
       },
-    },
+    },    
   ],
 });
