@@ -37,7 +37,7 @@
 
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/functional-tests/manage-bookings/manage-bookings-validation.spec.ts`
+** File:** `playwright-e2e/tests/functional-tests/manage-bookings/manage-bookings-functional.spec.ts`
 
 ## Verify user is able to find a booking by selecting a date from the date picker
 - Pre-requisite step in order to create a booking for tomorrow via api
