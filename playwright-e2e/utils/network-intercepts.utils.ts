@@ -100,4 +100,88 @@ export class NetworkInterceptUtils {
       )
       .toBeTruthy();
   }
+
+  /**
+   * Intercepts a network request to verify that a video stream is being received from MediaKind.
+   * It waits for a GET request to a URL containing 'streaming.mediakind' and 'video'.
+   * If the expected request is not received within the specified timeout, an error is thrown.
+   * @param timeoutMs - The maximum time to wait for the expected request.
+   */
+  public async interceptNetworkRequestToVerifyVideoStreamIsReceivedFromMediaKind(timeoutMs: number): Promise<void> {
+    await expect
+      .poll(
+        async () => {
+          const response = await this.page
+            .waitForResponse((res) => res.request().method() === 'GET' && res.url().includes('streaming.mediakind') && res.url().includes('video'), {
+              timeout: 5000,
+            })
+            .catch(() => null);
+
+          if (!response) return false;
+
+          return true;
+        },
+        {
+          timeout: timeoutMs,
+          message: `Timeout: Expected GET request to URL containing 'streaming.mediakind' and 'video' within ${timeoutMs / 1000} seconds.`,
+        },
+      )
+      .toBeTruthy();
+  }
+
+  /**
+   * Intercepts a network request to verify that an audio stream is being received from MediaKind.
+   * It waits for a GET request to a URL containing 'streaming.mediakind' and 'audio'.
+   * If the expected request is not received within the specified timeout, an error is thrown.
+   * @param timeoutMs - The maximum time to wait for the expected request.
+   */
+  public async interceptNetworkRequestToVerifyAudioStreamIsReceivedFromMediaKind(timeoutMs: number): Promise<void> {
+    await expect
+      .poll(
+        async () => {
+          const response = await this.page
+            .waitForResponse((res) => res.request().method() === 'GET' && res.url().includes('streaming.mediakind') && res.url().includes('audio'), {
+              timeout: 5000,
+            })
+            .catch(() => null);
+
+          if (!response) return false;
+
+          return true;
+        },
+        {
+          timeout: timeoutMs,
+          message: `Timeout: Expected GET request to URL containing 'streaming.mediakind' and 'audio' within ${timeoutMs / 1000} seconds.`,
+        },
+      )
+      .toBeTruthy();
+  }
+
+  /**
+   * Intercepts a network request to verify that a Clear Key request is successful.
+   * It waits for a GET request to a URL containing 'clear-key'.
+   * If the expected request is not received within the specified timeout, an error is thrown.
+   * @param timeoutMs - The maximum time to wait for the expected request.
+   */
+  public async interceptNetworkRequestToVerifyClearKeyRequestIsSuccessful(timeoutMs: number): Promise<void> {
+    await expect
+      .poll(
+        async () => {
+          const response = await this.page
+            .waitForResponse((res) => res.request().method() === 'GET' && res.url().includes('clear-key'), {
+              timeout: 5000,
+            })
+            .catch(() => null);
+
+          if (!response) return false;
+
+          return true;
+        },
+        {
+          timeout: timeoutMs,
+          message: `Timeout: Expected GET request to URL containing 'clear-key' within ${timeoutMs / 1000} seconds.`,
+        },
+      )
+      .toBeTruthy();
+  }
 }
