@@ -61,3 +61,9 @@
 ## Verify user is able to search for a case and confirm the list search details are correct
 - Verify recording can be found in view recordings page
 - Verify case and recording details are correct in search list
+
+## Verify user is able to view a recording for an existing case
+- Search and select an existing recording
+- Select option to confirm playback of recordings is actively monitored
+- Verify video and audio stream is received from media kind via network requests
+- Verify user is able to play back the recording

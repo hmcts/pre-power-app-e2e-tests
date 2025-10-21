@@ -42,4 +42,38 @@ test.describe('Set of tests to verify functionality of view recordings page for 
       });
     },
   );
+
+  test(
+    'Verify user is able to view a recording for an existing case',
+    {
+      tag: ['@regression', '@functional'],
+    },
+    async ({ apiClient, viewRecordingsPage, networkInterceptUtils }) => {
+      const caseData = await apiClient.getCaseData();
+
+      await test.step('Search and select an existing recording', async () => {
+        await viewRecordingsPage.searchForCaseReference(caseData.caseReference);
+        await viewRecordingsPage.$interactive.viewRecordingButton.click();
+      });
+
+      await test.step('Select option to confirm playback of recordings is actively monitored', async () => {
+        await expect(viewRecordingsPage.$recordingsMonitoredAndAuditedModal.modalWindow).toBeVisible();
+        await viewRecordingsPage.$recordingsMonitoredAndAuditedModal.confirmButton.click();
+        await expect(viewRecordingsPage.$static.videoPlaybackText).toHaveText('Media selection loading,Please wait.');
+      });
+
+      await test.step('Verify video and audio stream is received from media kind via network requests', async () => {
+        await networkInterceptUtils.interceptNetworkRequestToVerifyVideoStreamIsReceivedFromMediaKind(60_000);
+        await networkInterceptUtils.interceptNetworkRequestToVerifyAudioStreamIsReceivedFromMediaKind(15_000);
+        await networkInterceptUtils.interceptNetworkRequestToVerifyClearKeyRequestIsSuccessful(15_000);
+      });
+
+      await test.step('Verify user is able to play back the recording', async () => {
+        await expect(viewRecordingsPage.$interactive.playVideoButton).toBeVisible({ timeout: 15_000 });
+        await viewRecordingsPage.$interactive.playVideoButton.click();
+        await expect(viewRecordingsPage.$interactive.playVideoButton).toBeHidden();
+        await expect(viewRecordingsPage.$interactive.pauseVideoButton).toBeVisible();
+      });
+    },
+  );
 });

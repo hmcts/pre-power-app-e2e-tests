@@ -15,6 +15,10 @@ export class ViewRecordingsPage extends Base {
 
   public readonly $interactive = {
     refreshResultsButton: this.iFrame.getByRole('button', { name: 'Refresh Data' }),
+    viewRecordingButton: this.iFrame.locator('[data-control-name="viewRecordingsScrn_RecordingsGalleryRecord_Icn"]'),
+    playVideoButton: this.iFrame.getByTitle('Play Video'),
+    resumeVideoButton: this.iFrame.getByTitle('Play'),
+    pauseVideoButton: this.iFrame.getByTitle('Pause'),
   } as const satisfies Record<string, Locator>;
 
   public readonly $static = {
@@ -29,6 +33,13 @@ export class ViewRecordingsPage extends Base {
     recordingDurationLabelInSearchList: this.iFrame.locator('[data-control-name*="RecordingsGalleryDuration_Lbl"]'),
     StatusLabelInSearchList: this.iFrame.locator('[data-control-name*="RecordingsGalleryDate_Lbl_1"]'),
     caseStatusLabelInSearchList: this.iFrame.locator('[data-control-name="Label1"]'),
+    videoPlaybackText: this.iFrame.locator('[data-control-name="VidMessageText"] [data-control-part="text"]'),
+  } as const satisfies Record<string, Locator>;
+
+  public readonly $recordingsMonitoredAndAuditedModal = {
+    modalWindow: this.iFrame.locator('[data-control-name="BusJustWindow"]'),
+    confirmButton: this.iFrame.locator('[data-control-name="BusJustSubmitButton"] button'),
+    cancelButton: this.iFrame.locator('[data-control-name="BusJustCancelButton"] button'),
   } as const satisfies Record<string, Locator>;
 
   public async verifyUserIsOnViewRecordingsPage(): Promise<void> {
