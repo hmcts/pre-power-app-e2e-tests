@@ -37,6 +37,16 @@
 
 
 ----------------------------------------------------------------------------------------------------
+** File:** `playwright-e2e/tests/functional-tests/manage-bookings/manage-bookings-functional.spec.ts`
+
+## Verify user is able to find a booking by selecting a date from the date picker
+- Pre-requisite step in order to create a booking for tomorrow via api
+- Verify todays date is default within date picker
+- Select date for tomorrow via date picker
+- Verify booking case reference is returned within list of results for tomorrows date
+
+
+----------------------------------------------------------------------------------------------------
 ** File:** `playwright-e2e/tests/functional-tests/manage-bookings/view-live-feed-functional.spec.ts`
 
 ## Verify correct recording details are displayed when user selects show link button
@@ -51,3 +61,9 @@
 ## Verify user is able to search for a case and confirm the list search details are correct
 - Verify recording can be found in view recordings page
 - Verify case and recording details are correct in search list
+
+## Verify user is able to view a recording for an existing case
+- Search and select an existing recording
+- Select option to confirm playback of recordings is actively monitored
+- Verify video and audio stream is received from media kind via network requests
+- Verify user is able to play back the recording

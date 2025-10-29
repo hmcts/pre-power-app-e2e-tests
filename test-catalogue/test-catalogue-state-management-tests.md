@@ -57,8 +57,8 @@
 ## Verify when selecting a option to amend a case all three buttons are in the correct state
 - Pre-requisite step in order to select the option to amend an exisiitng case
 - Verify following cancel, save and delete buttons are visible
-- Verify cancel and delete buttons are enabled 
-- Verify save button is disabled 
+- Verify cancel and delete buttons are enabled
+- Verify save button is disabled
 - Verify following manage, amend and record buttons are disabled
 
 ## Verify when cancelling amendments to an exisitng case, all buttons are in the correct state
@@ -67,13 +67,9 @@
 
 ## Verify when selecting option to delete an exisiting case, all buttons are in the correct state
 - Pre-requisite step in order to delete an exisitng case
-- Verify yes and no buttons are visible and enabled 
+- Verify yes and no buttons are visible and enabled
 - Verify following manage,amend and record buttons are disabled
 
 ## Verify when selecting option to record for an existing case, two buttons are in the correct state
 - Pre-requisite step in order to select the option to record an exisiting case
 - Verify following back and start recording buttons are visible and enabled
-
-## Verify when accessing the manage bookings page and select the recording by the todays date
-- Pre-requisite step in order to create and select the todays date case via api
-- Search for the recording schedule by today

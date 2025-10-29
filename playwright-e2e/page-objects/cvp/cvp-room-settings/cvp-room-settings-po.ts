@@ -129,6 +129,3 @@ export class CvpRoomSettingsPage {
     await expect(this.page.getByRole('button', { name: 'Recording' })).toBeVisible({ timeout: 20000 });
   }
 }
-function getByLabelText(arg0: string, arg1: { exact: boolean }): any {
-  throw new Error('Function not implemented.');
-}
