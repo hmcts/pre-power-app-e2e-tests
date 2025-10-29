@@ -34,8 +34,7 @@ export class CvpRoomSettingsPage {
 
   public async verifyUserIsOnCvpRoomSettingsPage(): Promise<void> {
     await expect(this.$interactive.selectRoomDropdown).toBeAttached({ timeout: 15000 });
-    await this.closeRoomSettingsModal();
-    await expect(this.$interactive.selectRoomDropdown).toBeVisible();
+    await expect(this.$interactive.selectRoomDropdown).toBeVisible({ timeout: 15000 });
   }
 
   /**
@@ -50,14 +49,12 @@ export class CvpRoomSettingsPage {
   }
 
   /**
-   * Selects a room from the dropdown by clicking the dropdown, expanding it,
-   * and choosing the specified room name.
+   * Selects a room by its name,
    * @param roomName - The room name to select ('PRE008' or 'PRE009').
    */
-  public async selectRoomFromDropdown(roomName: 'PRE008' | 'PRE009' = 'PRE009'): Promise<void> {
-    await this.$interactive.selectRoomDropdown.click();
-    await expect(this.$interactive.selectRoomDropdown).toHaveAttribute('aria-expanded', 'true');
-    await this.page.getByRole('link', { name: roomName }).click();
+  public async selectRoomByName(roomName: 'PRE008' | 'PRE009' = 'PRE009'): Promise<void> {
+    await this.page.locator('h2').filter({ hasText: roomName }).click();
+    await this.closeRoomSettingsModal();
   }
 
   /**
