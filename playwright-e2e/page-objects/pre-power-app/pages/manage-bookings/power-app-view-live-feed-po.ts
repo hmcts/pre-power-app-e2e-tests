@@ -15,6 +15,7 @@ export class PowerAppViewLiveFeedPage extends Base {
 
   public readonly $static = {
     pageHeading: this.iFrame.locator('[data-control-name*="HeaderText"]').filter({ hasText: 'Livestream Viewer' }),
+    notRecordingText: this.iFrame.locator('[data-control-name="App_LiveStreamOverlay_Cmp_1"] [data-control-part="text"]'),
   } as const satisfies Record<string, Locator>;
 
   public readonly $startRecordingModal = {

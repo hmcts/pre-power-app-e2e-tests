@@ -79,6 +79,7 @@ test.describe('Ensure e2e journey is working as expected', () => {
         await powerApp_ManageBookingsPage.searchForABooking(caseDetails.caseReference);
         await powerApp_ManageBookingsPage.$interactive.recordButton.click();
         await powerApp_ViewLiveFeedPage.verifyUserIsOnViewLiveFeedPage();
+        await expect(powerApp_ViewLiveFeedPage.$static.notRecordingText).toBeVisible();
         rtmpsLink = await powerApp_ViewLiveFeedPage.startRecordingAndCaptureRtmpsLink();
       });
 
@@ -89,7 +90,7 @@ test.describe('Ensure e2e journey is working as expected', () => {
         await cvp_SignInPage.signIn(config.cvpUser.username, config.cvpUser.password);
 
         await cvp_RoomSettingsPage.verifyUserIsOnCvpRoomSettingsPage();
-        await cvp_RoomSettingsPage.selectRoomFromDropdown('PRE008');
+        await cvp_RoomSettingsPage.selectRoomByName('PRE008');
         hostPin = await cvp_RoomSettingsPage.editRoomSettings(rtmpsLink);
       });
 
@@ -111,6 +112,7 @@ test.describe('Ensure e2e journey is working as expected', () => {
 
         try {
           await networkInterceptUtils.interceptNetworkRequestToVerifyRecordingIsTakingPlace(caseDetails.caseReference, 90000);
+          await expect(powerApp_ViewLiveFeedPage.$static.notRecordingText).toBeHidden({ timeout: 90000 });
         } catch (error) {
           await cvp_RoomSettingsPage.page.bringToFront();
           await cvp_RoomSettingsPage.$interactive.endCallButton.click();
