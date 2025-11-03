@@ -4,8 +4,8 @@ import path from "path";
 // ----------------------
 // CONFIGURATION
 // ----------------------
-const ROOT = path.resolve();   
-const TESTS_DIR = path.join(ROOT, "./playwright-e2e/tests/"); 
+const ROOT = path.resolve();
+const TESTS_DIR = path.join(ROOT, "./playwright-e2e/tests/");
 const OUT_DIR = path.join(ROOT, "test-catalogue");
 
 if (!fs.existsSync(OUT_DIR)) fs.mkdirSync(OUT_DIR);
@@ -50,37 +50,51 @@ const parseTestFile = (filePath) => {
     });
 };
 
-// Step 1: Identify test types (subdirectories inside playwright-e2e/tests/)
-const testTypes = fs
+// ----------------------
+// PROCESS TOP-LEVEL TEST GROUPS (e.g. pre-portal, pre-power-app)
+// ----------------------
+const topLevelGroups = fs
   .readdirSync(TESTS_DIR, { withFileTypes: true })
   .filter((d) => d.isDirectory())
   .map((d) => d.name);
 
-// Step 2: Process each test type
-for (const type of testTypes) {
-  const files = getTestFiles(path.join(TESTS_DIR, type));
+for (const group of topLevelGroups) {
+  const groupPath = path.join(TESTS_DIR, group);
+  const groupOutDir = path.join(OUT_DIR, group);
+
+  if (!fs.existsSync(groupOutDir)) fs.mkdirSync(groupOutDir);
+
+  // Identify test types inside this group
+  const testTypes = fs
+    .readdirSync(groupPath, { withFileTypes: true })
+    .filter((d) => d.isDirectory())
+    .map((d) => d.name);
+
+  // Process each test type
+  for (const type of testTypes) {
+    const files = getTestFiles(path.join(groupPath, type));
 
   // Build catalogue content for all files of this type
-  const specFileContents = files
-    .map((file) => {
-      const relativeFile = path.relative(ROOT, file);
-      const tests = parseTestFile(file);
+    const specFileContents = files
+      .map((file) => {
+        const relativeFile = path.relative(ROOT, file);
+        const tests = parseTestFile(file);
 
-      const formattedTestSteps = tests
-        .map(
-          (t) =>
-            `## ${t.testName}\n${t.steps.map((s) => `- ${s}`).join("\n")}\n` // Test title + list of steps
-        )
-        .join("\n");
+        const formattedTestSteps = tests
+          .map(
+            (t) =>
+              `## ${t.testName}\n${t.steps.map((s) => `- ${s}`).join("\n")}\n`
+          )
+          .join("\n");
 
       // Add a file header + the formatted tests
-      return `${"-".repeat(100)}\n** File:** \`${relativeFile}\`\n\n${formattedTestSteps}`;
-    })
-    .join("\n\n");
+        return `${"-".repeat(100)}\n** File:** \`${relativeFile}\`\n\n${formattedTestSteps}`;
+      })
+      .join("\n\n");
 
-  // Step 3: Write out to catalogue file (one per test type)
-  const outFile = path.join(OUT_DIR, `test-catalogue-${type}.md`);
-  fs.writeFileSync(outFile, `# ${type} catalogue\n\n${specFileContents}`);
+    const outFile = path.join(groupOutDir, `test-catalogue-${type}.md`);
+    fs.writeFileSync(outFile, `# ${type} catalogue\n\n${specFileContents}`);
 
-  console.log(`Test catalogue written to ${outFile}`);
+    console.log(`Test catalogue written to ${outFile}`);
+  }
 }

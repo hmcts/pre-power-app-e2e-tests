@@ -9,7 +9,6 @@ dotenv.config();
  */
 export default defineConfig({
   ...CommonConfig.recommended,
-  testDir: './playwright-e2e',
   snapshotDir: './playwright-e2e/snapshots',
   reporter: [['list'], ['html', { outputFolder: 'playwright-report' }]],
   timeout: 120_000,
@@ -24,16 +23,27 @@ export default defineConfig({
   },
   projects: [
     {
-      name: 'setup',
-      testMatch: /global\.setup\.ts/,
+      name: 'pre-power-app-setup',
+      testMatch: 'global-pre-power-app-setup.ts',
     },
     {
-      name: 'teardown',
-      testMatch: /global\.teardown\.ts/,
+      name: 'pre-power-app-teardown',
+      testMatch: 'global-pre-power-app-teardown.ts',
+    },
+        {
+      name: 'pre-portal-setup',
+      testMatch: 'global-pre-portal-setup.ts',
+    },
+    {
+      name: 'pre-portal-teardown',
+      testMatch: 'global-pre-portal-teardown.ts',
     },
     {
       ...ProjectsConfig.chromium,
-      dependencies: ['setup'],
+      name: 'Pre-Power-App-Chromium',
+      dependencies: ['pre-power-app-setup'],
+      teardown: 'pre-power-app-teardown',
+      testDir: 'playwright-e2e/tests/pre-power-app',
       testMatch: ['**/*visual*.spec.ts'],
       use: {
         ...ProjectsConfig.chromium.use,
@@ -43,7 +53,10 @@ export default defineConfig({
     },
     {
       ...ProjectsConfig.edge,
-      dependencies: ['setup'],
+      name: 'Pre-Power-App-Edge',
+      dependencies: ['pre-power-app-setup'],
+      teardown: 'pre-power-app-teardown',
+      testDir: 'playwright-e2e/tests/pre-power-app',
       testIgnore: ['**/*visual*.spec.ts'],
       use: {
         ...ProjectsConfig.edge.use,
@@ -56,6 +69,17 @@ export default defineConfig({
           ],
         },         
       },
-    },    
+    },  
+    {
+      ...ProjectsConfig.edge,
+      name: 'Pre-Portal-Edge',
+      dependencies: ['pre-portal-setup'],
+      teardown: 'pre-portal-teardown',
+      testDir: 'playwright-e2e/tests/pre-portal',
+      testIgnore: ['**/*visual*.spec.ts'],
+      use: {
+        ...ProjectsConfig.edge.use,        
+      },
+    },       
   ],
 });
