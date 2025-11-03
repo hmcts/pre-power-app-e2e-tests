@@ -2,7 +2,7 @@ import { Page, Locator, expect } from '@playwright/test';
 import { Base } from '../base';
 import { config } from '../../../utils';
 
-export class HomePage extends Base {
+export class PowerAppHomePage extends Base {
   constructor(page: Page) {
     super(page);
   }
@@ -24,7 +24,7 @@ export class HomePage extends Base {
   } as const satisfies Record<string, Locator>;
 
   public async goTo(): Promise<void> {
-    await this.page.goto(config.urls.powerAppUrl);
+    await this.page.goto(config.urls.prePowerAppUrl);
   }
 
   public async verifyUserIsOnHomePage(): Promise<void> {

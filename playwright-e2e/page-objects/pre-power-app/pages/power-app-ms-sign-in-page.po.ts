@@ -2,7 +2,7 @@ import { Page, Locator, expect } from '@playwright/test';
 import { Base } from '../base';
 import { config } from '../../../utils';
 
-export class MsSignInPage extends Base {
+export class PowerAppMsSignInPage extends Base {
   public readonly $inputs = {
     email: this.page.getByRole('textbox', { name: 'Enter your email' }),
     password: this.page.getByRole('textbox', { name: 'Enter the password' }),
@@ -32,7 +32,7 @@ export class MsSignInPage extends Base {
    * @param password - The password for the account.
    */
   public async signIn(email: string, password: string): Promise<void> {
-    await this.page.goto(config.urls.powerAppUrl);
+    await this.page.goto(config.urls.prePowerAppUrl);
 
     await expect(this.$static.microsoftLogo).toBeVisible();
     await expect(this.$static.signInHeading).toBeVisible();

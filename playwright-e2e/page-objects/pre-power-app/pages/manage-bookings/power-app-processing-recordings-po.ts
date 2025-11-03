@@ -2,7 +2,7 @@ import { Page, expect } from '@playwright/test';
 import { Base } from '../../base';
 import { NavBarComponent } from '../../components';
 
-export class ProcessingRecordingsPage extends Base {
+export class PowerAppProcessingRecordingsPage extends Base {
   private navBar = new NavBarComponent(this.page);
   constructor(page: Page) {
     super(page);

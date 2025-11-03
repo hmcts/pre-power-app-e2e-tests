@@ -2,7 +2,7 @@ import { Page, Locator, expect } from '@playwright/test';
 import { Base } from '../../base';
 import { DateTime } from 'luxon';
 
-export class ManageBookingsPage extends Base {
+export class PowerAppManageBookingsPage extends Base {
   constructor(page: Page) {
     super(page);
   }

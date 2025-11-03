@@ -2,7 +2,7 @@ import { Page, Locator, expect } from '@playwright/test';
 import { Base } from '../../base';
 import { BaseCaseDetails } from '../../../../types';
 
-export class CaseDetailsPage extends Base {
+export class PowerAppCaseDetailsPage extends Base {
   constructor(page: Page) {
     super(page);
   }

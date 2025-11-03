@@ -1,7 +1,7 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { Base } from '../../base';
 
-export class ScheduleRecording extends Base {
+export class PowerAppScheduleRecordingPage extends Base {
   constructor(page: Page) {
     super(page);
   }

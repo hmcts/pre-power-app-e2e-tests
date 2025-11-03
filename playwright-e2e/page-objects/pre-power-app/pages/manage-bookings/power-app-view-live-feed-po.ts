@@ -1,7 +1,7 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { Base } from '../../base';
 
-export class ViewLiveFeedPage extends Base {
+export class PowerAppViewLiveFeedPage extends Base {
   constructor(page: Page) {
     super(page);
   }

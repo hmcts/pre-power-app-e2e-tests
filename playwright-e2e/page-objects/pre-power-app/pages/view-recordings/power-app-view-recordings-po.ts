@@ -2,7 +2,7 @@ import { Page, Locator, expect } from '@playwright/test';
 import { Base } from '../../base';
 import { NavBarComponent } from '../../components';
 
-export class ViewRecordingsPage extends Base {
+export class PowerAppViewRecordingsPage extends Base {
   constructor(page: Page) {
     super(page);
   }
@@ -16,6 +16,7 @@ export class ViewRecordingsPage extends Base {
   public readonly $interactive = {
     refreshResultsButton: this.iFrame.getByRole('button', { name: 'Refresh Data' }),
     viewRecordingButton: this.iFrame.locator('[data-control-name="viewRecordingsScrn_RecordingsGalleryRecord_Icn"]'),
+    shareRecordingButton: this.iFrame.locator('[data-control-name="viewRecordingsScrn_RecordingsGalleryShare_Icn"]'),
     playVideoButton: this.iFrame.getByTitle('Play Video'),
     resumeVideoButton: this.iFrame.getByTitle('Play'),
     pauseVideoButton: this.iFrame.getByTitle('Pause'),
@@ -40,6 +41,14 @@ export class ViewRecordingsPage extends Base {
     modalWindow: this.iFrame.locator('[data-control-name="BusJustWindow"]'),
     confirmButton: this.iFrame.locator('[data-control-name="BusJustSubmitButton"] button'),
     cancelButton: this.iFrame.locator('[data-control-name="BusJustCancelButton"] button'),
+  } as const satisfies Record<string, Locator>;
+
+  public readonly $shareRecordingModal = {
+    modalWindow: this.iFrame.locator('[data-control-name="AdmMngCasesBackgroundIcn_6"]'),
+    shareButton: this.iFrame.locator('[data-control-name="MngRecShareAccessBtn_3"] button'),
+    grantAccessButton: this.iFrame.locator('[data-control-name="MngNewAcsGrpClearBtn_3"] button'),
+    listOfUsersRecordingIsSharedWith: this.iFrame.locator('[data-control-name="VidPermsGal_3"]'),
+    removeAccessButton: this.iFrame.locator('[data-control-name="MngRecRemoveShareAccessBtn_1"] button'),
   } as const satisfies Record<string, Locator>;
 
   public async verifyUserIsOnViewRecordingsPage(): Promise<void> {
@@ -69,5 +78,37 @@ export class ViewRecordingsPage extends Base {
       await this.$interactive.refreshResultsButton.click();
       await expect(caseReferenceList).toHaveCount(1);
     }
+  }
+
+  /**
+   * Searches and selects a user to share the recording with by filling in the user email,
+   * clicking on the user from the search results, and verifying that the user has been added to the list.
+   * @param userEmail - The email of the user to share the recording with.
+   */
+  public async searchAndSelectUserToShareRecordingWith(userEmail: string): Promise<void> {
+    await expect(async () => {
+      await this.iFrame.locator('[data-control-name="MngNewAcsGrpCbx_3"]').click();
+      await expect(this.iFrame.locator('[class="powerapps-flyout-portal"] input')).toBeVisible();
+    }).toPass({ intervals: [2_000], timeout: 10_000 });
+
+    await this.iFrame.locator('[class="powerapps-flyout-portal"] input').fill(userEmail);
+    await this.iFrame.locator('li', { hasText: userEmail }).click();
+    await expect(this.iFrame.locator('button[aria-label*="Remove"]')).toBeVisible();
+  }
+
+  /**
+   * Removes access to the recording from a specified user by clicking the remove access button
+   * next to the user's email in the list of users the recording is shared with.
+   * Verifies that the user is no longer present in the list after removal.
+   * @param userEmail - The email of the user to remove access from.
+   */
+  public async removeAccessToRecordingFromUser(userEmail: string): Promise<void> {
+    await this.$shareRecordingModal.listOfUsersRecordingIsSharedWith
+      .locator('[role="listitem"]', { hasText: userEmail })
+      .locator('[data-control-name="VidPermsTrashIcon_3"] [role="button"]')
+      .click();
+
+    await this.$shareRecordingModal.removeAccessButton.click();
+    await expect(this.$shareRecordingModal.listOfUsersRecordingIsSharedWith).not.toContainText(userEmail);
   }
 }
