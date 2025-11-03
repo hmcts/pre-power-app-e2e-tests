@@ -12,7 +12,7 @@ interface cvpUserCredentials extends UserCredentials {
   cvpConferenceUser: string;
 }
 
-interface UserData {
+interface powerAppUserData {
   sessionFile: string;
   cookieName?: string;
   userId: string;
@@ -21,16 +21,25 @@ interface UserData {
   userDataFile: string;
 }
 
+interface portalUserData {
+  sessionFile: string;
+  cookieName?: string;
+}
+
 interface Urls {
-  powerAppUrl: string;
-  powerAppApiUrl: string;
+  prePowerAppUrl: string;
+  prePowerAppApiUrl: string;
   cvpSettingsUrl: string;
   cvpConferenceUrl: string;
+  prePortalUrl: string;
 }
 
 export interface Config {
   powerAppUsers: {
-    preLevel1User: UserCredentials & UserData;
+    preLevel1User: UserCredentials & powerAppUserData;
+  };
+  portalUsers: {
+    preLevel3User: UserCredentials & portalUserData;
   };
   cvpUser: cvpUserCredentials;
   urls: Urls;
@@ -41,11 +50,18 @@ export const config: Config = {
     preLevel1User: {
       username: getEnvVar('PRE_LEVEL_1_USER_EMAIL'),
       password: getEnvVar('PRE_LEVEL_1_USER_PASSWORD'),
-      sessionFile: pathToFile('.sessions/', `${getEnvVar('PRE_LEVEL_1_USER_EMAIL')}.json`),
-      userDataFile: pathToFile('.dynamic/', `${getEnvVar('PRE_LEVEL_1_USER_EMAIL')}.json`),
-      userId: getDynamicUserData(pathToFile('.dynamic/', `${getEnvVar('PRE_LEVEL_1_USER_EMAIL')}.json`)).userId,
-      x_userId: getDynamicUserData(pathToFile('.dynamic/', `${getEnvVar('PRE_LEVEL_1_USER_EMAIL')}.json`)).x_userId,
-      defaultCourtId: getDynamicUserData(pathToFile('.dynamic/', `${getEnvVar('PRE_LEVEL_1_USER_EMAIL')}.json`)).defaultCourtId,
+      sessionFile: pathToFile('.sessions/powerApp/', `${getEnvVar('PRE_LEVEL_1_USER_EMAIL')}.json`),
+      userDataFile: pathToFile('.dynamic/powerApp/', `${getEnvVar('PRE_LEVEL_1_USER_EMAIL')}.json`),
+      userId: getDynamicUserData(pathToFile('.dynamic/powerApp/', `${getEnvVar('PRE_LEVEL_1_USER_EMAIL')}.json`)).userId,
+      x_userId: getDynamicUserData(pathToFile('.dynamic/powerApp/', `${getEnvVar('PRE_LEVEL_1_USER_EMAIL')}.json`)).x_userId,
+      defaultCourtId: getDynamicUserData(pathToFile('.dynamic/powerApp/', `${getEnvVar('PRE_LEVEL_1_USER_EMAIL')}.json`)).defaultCourtId,
+    },
+  },
+  portalUsers: {
+    preLevel3User: {
+      username: getEnvVar('PRE_LEVEL_3_USER_EMAIL'),
+      password: getEnvVar('PRE_LEVEL_3_USER_PASSWORD'),
+      sessionFile: pathToFile('.sessions/portal/', `${getEnvVar('PRE_LEVEL_3_USER_EMAIL')}.json`),
     },
   },
   cvpUser: {
@@ -56,10 +72,11 @@ export const config: Config = {
     locationCode: getEnvVar('CVP_LOCATION_CODE'),
   },
   urls: {
-    powerAppUrl: getEnvVar('BASE_URL'),
-    powerAppApiUrl: getEnvVar('API_URL'),
+    prePowerAppUrl: getEnvVar('PRE_POWER_APP_URL'),
+    prePowerAppApiUrl: getEnvVar('PRE_POWER_APP_API_URL'),
     cvpSettingsUrl: getEnvVar('CVP_SETTINGS_BASE_URL'),
     cvpConferenceUrl: getEnvVar('CVP_CONFERENCE_BASE_URL'),
+    prePortalUrl: getEnvVar('PRE_PORTAL_URL'),
   },
 };
 
