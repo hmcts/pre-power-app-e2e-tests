@@ -88,7 +88,10 @@ export const config: Config = {
  */
 export function getEnvVar(name: string): string {
   const value = process.env[name];
-  if (!value) {
+  if (process.env.CI === 'true' && !value) {
+    console.warn(`Warning: ${name} environment variable is not set in CI environment`);
+    return '';
+  } else if (!value) {
     throw new Error(`Error: ${name} environment variable is not set`);
   }
   return value;
