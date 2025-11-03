@@ -1,6 +1,6 @@
 /* eslint-disable playwright/no-skipped-test */
-import { test, expect } from '../../fixtures';
-import { config } from '../../utils';
+import { test, expect } from '../../../fixtures';
+import { config } from '../../../utils';
 
 test.describe('Set of tests to verify the homepage UI is visually correct', () => {
   test.use({ storageState: config.powerAppUsers.preLevel1User.sessionFile });
@@ -9,8 +9,8 @@ test.describe('Set of tests to verify the homepage UI is visually correct', () =
     test.skip(!headless, 'Skipping visual tests in headed mode');
   });
 
-  test.beforeEach(async ({ navigateToHomePage }) => {
-    await navigateToHomePage();
+  test.beforeEach(async ({ navigateToPowerAppHomePage }) => {
+    await navigateToPowerAppHomePage();
   });
 
   test(
@@ -18,13 +18,13 @@ test.describe('Set of tests to verify the homepage UI is visually correct', () =
     {
       tag: ['@visual'],
     },
-    async ({ page, homePage }) => {
+    async ({ page, powerApp_HomePage }) => {
       const maskedElements = [
-        homePage.$globalMaskedlocatorsForVisualTesting.powerAppsHeaderContainer,
-        homePage.$globalMaskedlocatorsForVisualTesting.applicationCourtTitle,
-        homePage.$globalMaskedlocatorsForVisualTesting.applicationEnvironment,
-        homePage.$maskedlocatorsForVisualTesting.applicationVersion,
-        homePage.$maskedlocatorsForVisualTesting.welcomeTextForUser,
+        powerApp_HomePage.$globalMaskedlocatorsForVisualTesting.powerAppsHeaderContainer,
+        powerApp_HomePage.$globalMaskedlocatorsForVisualTesting.applicationCourtTitle,
+        powerApp_HomePage.$globalMaskedlocatorsForVisualTesting.applicationEnvironment,
+        powerApp_HomePage.$maskedlocatorsForVisualTesting.applicationVersion,
+        powerApp_HomePage.$maskedlocatorsForVisualTesting.welcomeTextForUser,
       ];
 
       await test.step('Verify upon accessing homepage, it is visually correct', async () => {

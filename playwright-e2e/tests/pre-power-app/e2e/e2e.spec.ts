@@ -1,12 +1,12 @@
-import { test, expect } from '../../fixtures';
-import { BaseCaseDetails } from '../../types';
-import { config } from '../../utils';
+import { test, expect } from '../../../fixtures';
+import { BaseCaseDetails } from '../../../types';
+import { config } from '../../../utils';
 
 test.describe('Ensure e2e journey is working as expected', () => {
   test.use({ storageState: config.powerAppUsers.preLevel1User.sessionFile });
 
-  test.beforeEach(async ({ navigateToHomePage }) => {
-    await navigateToHomePage();
+  test.beforeEach(async ({ navigateToPowerAppHomePage }) => {
+    await navigateToPowerAppHomePage();
   });
 
   test(
@@ -15,21 +15,21 @@ test.describe('Ensure e2e journey is working as expected', () => {
       tag: ['@smoke', '@e2e'],
     },
     async ({
-      navBarComponent,
-      homePage,
-      caseDetailsPage,
+      powerApp_NavBarComponent,
+      powerApp_HomePage,
+      powerApp_CaseDetailsPage,
       dataUtils,
-      scheduleRecordingPage,
-      manageBookingsPage,
-      viewLiveFeedPage,
+      powerApp_ScheduleRecordingPage,
+      powerApp_ManageBookingsPage,
+      powerApp_ViewLiveFeedPage,
       cvp_SignInPage,
       cvp_RoomSettingsPage,
       cvp_ConferencePage,
       cvp_SelectRolePage,
       cvp_RecordingCallPage,
       networkInterceptUtils,
-      processingRecordingsPage,
-      viewRecordingsPage,
+      powerApp_ProcessingRecordingsPage,
+      powerApp_ViewRecordingsPage,
       apiClient,
     }) => {
       /**
@@ -49,37 +49,37 @@ test.describe('Ensure e2e journey is working as expected', () => {
       let hostPin: string;
 
       await test.step('Verify user is able to open a new case', async () => {
-        await homePage.page.bringToFront();
-        await homePage.$interactive.bookARecordingButton.click();
-        await caseDetailsPage.verifyUserIsOnCaseDetailsPage();
-        await caseDetailsPage.populateCaseDetails({
+        await powerApp_HomePage.page.bringToFront();
+        await powerApp_HomePage.$interactive.bookARecordingButton.click();
+        await powerApp_CaseDetailsPage.verifyUserIsOnCaseDetailsPage();
+        await powerApp_CaseDetailsPage.populateCaseDetails({
           caseReference: caseDetails.caseReference,
           defendantNames: caseDetails.defendantNames,
           witnessNames: caseDetails.witnessNames,
         });
-        await caseDetailsPage.$interactive.saveButton.click();
-        await scheduleRecordingPage.verifyUserIsOnScheduleRecordingsPage();
+        await powerApp_CaseDetailsPage.$interactive.saveButton.click();
+        await powerApp_ScheduleRecordingPage.verifyUserIsOnScheduleRecordingsPage();
       });
 
       await test.step('Verify user is able to book a recording for the new case', async () => {
-        await scheduleRecordingPage.selectDateFromToday();
-        await scheduleRecordingPage.selectWitnessFromDropDown(caseDetails.witnessNames[0]);
-        await scheduleRecordingPage.selectAllDefendantsFromDropDown();
-        await scheduleRecordingPage.$interactive.saveButton.click();
+        await powerApp_ScheduleRecordingPage.selectDateFromToday();
+        await powerApp_ScheduleRecordingPage.selectWitnessFromDropDown(caseDetails.witnessNames[0]);
+        await powerApp_ScheduleRecordingPage.selectAllDefendantsFromDropDown();
+        await powerApp_ScheduleRecordingPage.$interactive.saveButton.click();
         await expect(
-          scheduleRecordingPage.iFrame.locator('[data-control-name="bookingScrn_BookingsGallery_Gal"] [data-control-part="gallery-item"]'),
+          powerApp_ScheduleRecordingPage.iFrame.locator('[data-control-name="bookingScrn_BookingsGallery_Gal"] [data-control-part="gallery-item"]'),
         ).toBeVisible();
       });
 
       await test.step('Verify user is able to begin recording by obtaining rtmps link', async () => {
-        await navBarComponent.$interactive.HomeButton.click();
-        await homePage.verifyUserIsOnHomePage();
-        await homePage.$interactive.manageBookingsButton.click();
-        await manageBookingsPage.verifyUserIsOnManageBookingsPage();
-        await manageBookingsPage.searchForABooking(caseDetails.caseReference);
-        await manageBookingsPage.$interactive.recordButton.click();
-        await viewLiveFeedPage.verifyUserIsOnViewLiveFeedPage();
-        rtmpsLink = await viewLiveFeedPage.startRecordingAndCaptureRtmpsLink();
+        await powerApp_NavBarComponent.$interactive.HomeButton.click();
+        await powerApp_HomePage.verifyUserIsOnHomePage();
+        await powerApp_HomePage.$interactive.manageBookingsButton.click();
+        await powerApp_ManageBookingsPage.verifyUserIsOnManageBookingsPage();
+        await powerApp_ManageBookingsPage.searchForABooking(caseDetails.caseReference);
+        await powerApp_ManageBookingsPage.$interactive.recordButton.click();
+        await powerApp_ViewLiveFeedPage.verifyUserIsOnViewLiveFeedPage();
+        rtmpsLink = await powerApp_ViewLiveFeedPage.startRecordingAndCaptureRtmpsLink();
       });
 
       await test.step('Verify user is able to configure a cvp room with rtmps link', async () => {
@@ -107,7 +107,7 @@ test.describe('Ensure e2e journey is working as expected', () => {
       await test.step('Verify user begins recording in cvp and live feed received in power app', async () => {
         await cvp_RoomSettingsPage.page.bringToFront();
         await cvp_RoomSettingsPage.beginRecording(config.cvpUser.serviceId, config.cvpUser.locationCode, caseDetails.caseReference);
-        await viewLiveFeedPage.page.bringToFront();
+        await powerApp_ViewLiveFeedPage.page.bringToFront();
 
         try {
           await networkInterceptUtils.interceptNetworkRequestToVerifyRecordingIsTakingPlace(caseDetails.caseReference, 90000);
@@ -129,19 +129,19 @@ test.describe('Ensure e2e journey is working as expected', () => {
       });
 
       await test.step('Verify recording is processed in power app once user has clicked finish', async () => {
-        await viewLiveFeedPage.page.bringToFront();
-        await viewLiveFeedPage.finishRecording();
-        await processingRecordingsPage.verifyUserIsOnProcessingRecordingsPage();
-        await processingRecordingsPage.verifyRecordingIsProcessed(caseDetails.caseReference);
+        await powerApp_ViewLiveFeedPage.page.bringToFront();
+        await powerApp_ViewLiveFeedPage.finishRecording();
+        await powerApp_ProcessingRecordingsPage.verifyUserIsOnProcessingRecordingsPage();
+        await powerApp_ProcessingRecordingsPage.verifyRecordingIsProcessed(caseDetails.caseReference);
         await apiClient.verifyRecordingHasBeenSuccessfullyProcessedForCase(caseDetails.caseReference);
       });
 
       await test.step('Verify recording is now available in view recordings page', async () => {
-        await navBarComponent.$interactive.HomeButton.click();
-        await homePage.verifyUserIsOnHomePage();
-        await homePage.$interactive.viewRecordingsButton.click();
-        await viewRecordingsPage.verifyUserIsOnViewRecordingsPage();
-        await viewRecordingsPage.searchForCaseReference(caseDetails.caseReference);
+        await powerApp_NavBarComponent.$interactive.HomeButton.click();
+        await powerApp_HomePage.verifyUserIsOnHomePage();
+        await powerApp_HomePage.$interactive.viewRecordingsButton.click();
+        await powerApp_ViewRecordingsPage.verifyUserIsOnViewRecordingsPage();
+        await powerApp_ViewRecordingsPage.searchForCaseReference(caseDetails.caseReference);
       });
     },
   );
