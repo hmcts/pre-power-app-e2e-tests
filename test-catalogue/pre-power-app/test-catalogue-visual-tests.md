@@ -1,7 +1,7 @@
 # visual-tests catalogue
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/visual-tests/book-a-recording/case-details-visual.spec.ts`
+** File:** `playwright-e2e/tests/pre-power-app/visual-tests/book-a-recording/case-details-visual.spec.ts`
 
 ## Verify when accessing case details page, it is visually correct
 - Verify upon accessing case details page, it is visually correct
@@ -39,7 +39,7 @@
 
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/visual-tests/book-a-recording/schedule-recording-visual.spec.ts`
+** File:** `playwright-e2e/tests/pre-power-app/visual-tests/book-a-recording/schedule-recording-visual.spec.ts`
 
 ## Verify when accessing schedule recording page for an existing case that has no booking, it is visually correct
 - Pre-requisite step in order to create a case and navigate to schedule recording page
@@ -63,14 +63,14 @@
 
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/visual-tests/home-page-visual.spec.ts`
+** File:** `playwright-e2e/tests/pre-power-app/visual-tests/home-page-visual.spec.ts`
 
 ## Verify homepage is visually correct
 - Verify upon accessing homepage, it is visually correct
 
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/visual-tests/manage-bookings/manage-bookings-visual.spec.ts`
+** File:** `playwright-e2e/tests/pre-power-app/visual-tests/manage-bookings/manage-bookings-visual.spec.ts`
 
 ## Verify manage bookings page is visually correct
 - Verify manage bookings page is visually correct

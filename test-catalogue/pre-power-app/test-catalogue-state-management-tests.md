@@ -1,9 +1,9 @@
 # state-management-tests catalogue
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/state-management-tests/book-a-recording/case-details-state.spec.ts`
+** File:** `playwright-e2e/tests/pre-power-app/state-management-tests/book-a-recording/case-details-state.spec.ts`
 
-## Verify when accessing the caseDetailsPage all the three buttons are in the correct state
+## Verify when accessing the CaseDetailsPage all the three buttons are in the correct state
 - Verify all the buttons on case details page are visible
 - Verify modify and bookings buttons are disabled when accessing case details page
 - Verify save button is enabled when accessing case details page
@@ -23,7 +23,7 @@
 
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/state-management-tests/home-page-state.spec.ts`
+** File:** `playwright-e2e/tests/pre-power-app/state-management-tests/home-page-state.spec.ts`
 
 ## Verify all buttons on the homepage are visible and enabled
 - Verify all buttons on homepage are visible
@@ -31,7 +31,7 @@
 
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/state-management-tests/manage-bookings/manage-bookings-state.spec.ts`
+** File:** `playwright-e2e/tests/pre-power-app/state-management-tests/manage-bookings/manage-bookings-state.spec.ts`
 
 ## Verify when accessing the manage bookings Page and selecting an exisiting case all the buttons are in correct state
 - Pre-requisite step in order to create and select a exising case via api

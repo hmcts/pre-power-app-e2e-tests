@@ -1,7 +1,7 @@
 # validation-tests catalogue
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/validation-tests/book-a-recording/case-details-validation.spec.ts`
+** File:** `playwright-e2e/tests/pre-power-app/validation-tests/book-a-recording/case-details-validation.spec.ts`
 
 ## Verify case reference field when left empty shows validation error
 - Pre-requisite step in order to fill out defendants and wintness fields with valid values

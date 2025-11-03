@@ -1,7 +1,7 @@
 # e2e catalogue
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/e2e/e2e.spec.ts`
+** File:** `playwright-e2e/tests/pre-power-app/e2e/e2e.spec.ts`
 
 ## Verify user is able to complete the e2e journey
 - Verify user is able to open a new case

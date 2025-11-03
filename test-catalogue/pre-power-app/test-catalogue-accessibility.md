@@ -1,7 +1,7 @@
 # accessibility catalogue
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/accessibility/accessibility.spec.ts`
+** File:** `playwright-e2e/tests/pre-power-app/accessibility/accessibility.spec.ts`
 
 ## Verify accessibility on home page
 - Navigate to home page

@@ -1,7 +1,7 @@
 # functional-tests catalogue
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/functional-tests/book-a-recording/case-details-functional.spec.ts`
+** File:** `playwright-e2e/tests/pre-power-app/functional-tests/book-a-recording/case-details-functional.spec.ts`
 
 ## Verify user is able to open a new case and is redirected to the schedule recordings page
 - Enter details for a new case and select save button
@@ -16,7 +16,7 @@
 
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/functional-tests/book-a-recording/schedule-recording-functional.spec.ts`
+** File:** `playwright-e2e/tests/pre-power-app/functional-tests/book-a-recording/schedule-recording-functional.spec.ts`
 
 ## Verify user is able to book a recording for an existing case
 - Pre-requisite step in order to create a case via api and navigate to schedule recordings page
@@ -37,7 +37,7 @@
 
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/functional-tests/manage-bookings/manage-bookings-functional.spec.ts`
+** File:** `playwright-e2e/tests/pre-power-app/functional-tests/manage-bookings/manage-bookings-functional.spec.ts`
 
 ## Verify user is able to find a booking by selecting a date from the date picker
 - Pre-requisite step in order to create a booking for tomorrow via api
@@ -47,7 +47,7 @@
 
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/functional-tests/manage-bookings/view-live-feed-functional.spec.ts`
+** File:** `playwright-e2e/tests/pre-power-app/functional-tests/manage-bookings/view-live-feed-functional.spec.ts`
 
 ## Verify correct recording details are displayed when user selects show link button
 - Given user has selected option to start a recording
@@ -56,7 +56,7 @@
 
 
 ----------------------------------------------------------------------------------------------------
-** File:** `playwright-e2e/tests/functional-tests/view-recordings/view-recordings-functional.spec.ts`
+** File:** `playwright-e2e/tests/pre-power-app/functional-tests/view-recordings/view-recordings-functional.spec.ts`
 
 ## Verify user is able to search for a case and confirm the list search details are correct
 - Verify recording can be found in view recordings page
