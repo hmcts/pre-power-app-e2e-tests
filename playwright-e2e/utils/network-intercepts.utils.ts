@@ -1,11 +1,11 @@
 import path from 'path';
 import fs from 'fs';
 import { Page, expect } from '@playwright/test';
-import { HomePage } from '../page-objects/power-app/pages';
+import { PowerAppHomePage } from '../page-objects/pre-power-app/pages';
 
 export class NetworkInterceptUtils {
   constructor(public readonly page: Page) {}
-  private homePage = new HomePage(this.page);
+  private homePage = new PowerAppHomePage(this.page);
 
   /**
    * Intercepts the network response for the user data and stores it in a specified file.
@@ -107,11 +107,13 @@ export class NetworkInterceptUtils {
    * If the expected request is not received within the specified timeout, an error is thrown.
    * @param timeoutMs - The maximum time to wait for the expected request.
    */
-  public async interceptNetworkRequestToVerifyVideoStreamIsReceivedFromMediaKind(timeoutMs: number): Promise<void> {
+  public async interceptNetworkRequestToVerifyVideoStreamIsReceivedFromMediaKind(timeoutMs: number, pageContext?: Page): Promise<void> {
+    const activePage = pageContext ?? this.page;
+
     await expect
       .poll(
         async () => {
-          const response = await this.page
+          const response = await activePage
             .waitForResponse((res) => res.request().method() === 'GET' && res.url().includes('streaming.mediakind') && res.url().includes('video'), {
               timeout: 5000,
             })
@@ -135,11 +137,13 @@ export class NetworkInterceptUtils {
    * If the expected request is not received within the specified timeout, an error is thrown.
    * @param timeoutMs - The maximum time to wait for the expected request.
    */
-  public async interceptNetworkRequestToVerifyAudioStreamIsReceivedFromMediaKind(timeoutMs: number): Promise<void> {
+  public async interceptNetworkRequestToVerifyAudioStreamIsReceivedFromMediaKind(timeoutMs: number, pageContext?: Page): Promise<void> {
+    const activePage = pageContext ?? this.page;
+
     await expect
       .poll(
         async () => {
-          const response = await this.page
+          const response = await activePage
             .waitForResponse((res) => res.request().method() === 'GET' && res.url().includes('streaming.mediakind') && res.url().includes('audio'), {
               timeout: 5000,
             })
@@ -163,11 +167,13 @@ export class NetworkInterceptUtils {
    * If the expected request is not received within the specified timeout, an error is thrown.
    * @param timeoutMs - The maximum time to wait for the expected request.
    */
-  public async interceptNetworkRequestToVerifyClearKeyRequestIsSuccessful(timeoutMs: number): Promise<void> {
+  public async interceptNetworkRequestToVerifyClearKeyRequestIsSuccessful(timeoutMs: number, pageContext?: Page): Promise<void> {
+    const activePage = pageContext ?? this.page;
+
     await expect
       .poll(
         async () => {
-          const response = await this.page
+          const response = await activePage
             .waitForResponse((res) => res.request().method() === 'GET' && res.url().includes('clear-key'), {
               timeout: 5000,
             })
