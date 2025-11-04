@@ -89,8 +89,7 @@ export const config: Config = {
 export function getEnvVar(name: string): string {
   const value = process.env[name];
   if (process.env.CI === 'true' && !value) {
-    console.warn(`Warning: ${name} environment variable is not set in CI environment`);
-    return '';
+    return ''; // Not all env variables required for certian CI jobs for example portal specific variables not required for power app tests
   } else if (!value) {
     throw new Error(`Error: ${name} environment variable is not set`);
   }
