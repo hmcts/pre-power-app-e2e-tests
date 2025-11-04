@@ -9,7 +9,6 @@ dotenv.config();
  */
 export default defineConfig({
   ...CommonConfig.recommended,
-  snapshotDir: './playwright-e2e/snapshots',
   reporter: [['list'], ['html', { outputFolder: 'playwright-report' }]],
   timeout: 120_000,
     expect: {
@@ -40,10 +39,11 @@ export default defineConfig({
     },
     {
       ...ProjectsConfig.chromium,
-      name: 'Pre-Power-App-Chromium',
+      name: 'Pre-Power-App-Chromium', // Chromium project for visual tests only for power app
       dependencies: ['pre-power-app-setup'],
       teardown: 'pre-power-app-teardown',
       testDir: 'playwright-e2e/tests/pre-power-app',
+      snapshotDir: './playwright-e2e/snapshots/pre-power-app',
       testMatch: ['**/*visual*.spec.ts'],
       use: {
         ...ProjectsConfig.chromium.use,
@@ -53,7 +53,7 @@ export default defineConfig({
     },
     {
       ...ProjectsConfig.edge,
-      name: 'Pre-Power-App-Edge',
+      name: 'Pre-Power-App-Edge', // Edge project for all tests besides visual tests for power app
       dependencies: ['pre-power-app-setup'],
       teardown: 'pre-power-app-teardown',
       testDir: 'playwright-e2e/tests/pre-power-app',
@@ -72,7 +72,7 @@ export default defineConfig({
     },  
     {
       ...ProjectsConfig.edge,
-      name: 'Pre-Portal-Edge',
+      name: 'Pre-Portal-Edge', // Edge project for all tests besides visual tests for portal
       dependencies: ['pre-portal-setup'],
       teardown: 'pre-portal-teardown',
       testDir: 'playwright-e2e/tests/pre-portal',

@@ -18,6 +18,6 @@ node_modules/
 .dynamic/
 *ignore*
 # Ignore all PNGs in the snapshot folder
-/playwright-e2e/snapshots/tests/**/*.png
+/playwright-e2e/snapshots/**/*.png
 # But do NOT ignore PNGs that end in linux.png
-!/playwright-e2e/snapshots/tests/**/*linux.png
+!/playwright-e2e/snapshots/**/*linux.png
