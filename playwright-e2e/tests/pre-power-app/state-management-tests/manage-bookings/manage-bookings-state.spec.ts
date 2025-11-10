@@ -15,7 +15,8 @@ test.describe('Set of tests to verify buttons on the manage booking page are in 
     },
     async ({ powerApp_ManageBookingsPage, apiClient }) => {
       await test.step('Pre-requisite step in order to create and select a exising case via api', async () => {
-        const caseData = await apiClient.createBooking(2, 2, 'today');
+        await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
+        const caseData = await apiClient.getCaseData();
         await powerApp_ManageBookingsPage.searchForABooking(caseData.caseReference);
       });
 
@@ -39,7 +40,8 @@ test.describe('Set of tests to verify buttons on the manage booking page are in 
     },
     async ({ powerApp_ManageBookingsPage, apiClient }) => {
       await test.step('Pre-requisite step in order to select the option to manage an exisitng case', async () => {
-        const caseData = await apiClient.createBooking(2, 2, 'today');
+        await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
+        const caseData = await apiClient.getCaseData();
         await powerApp_ManageBookingsPage.searchForABooking(caseData.caseReference);
         await powerApp_ManageBookingsPage.$interactive.manageButton.click();
       });
@@ -70,7 +72,8 @@ test.describe('Set of tests to verify buttons on the manage booking page are in 
     },
     async ({ powerApp_ManageBookingsPage, apiClient }) => {
       await test.step('Pre-requisite step in order to select the option to share an exisitng case', async () => {
-        const caseData = await apiClient.createBooking(2, 2, 'today');
+        await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
+        const caseData = await apiClient.getCaseData();
         await powerApp_ManageBookingsPage.searchForABooking(caseData.caseReference);
         await powerApp_ManageBookingsPage.$interactive.manageButton.click();
         await powerApp_ManageBookingsPage.$manageCaseModal.shareButton.click();
@@ -97,7 +100,8 @@ test.describe('Set of tests to verify buttons on the manage booking page are in 
     },
     async ({ powerApp_ManageBookingsPage, apiClient }) => {
       await test.step('Pre-requisite step in order to select the option to audit an exisitng case', async () => {
-        const caseData = await apiClient.createBooking(2, 2, 'today');
+        await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
+        const caseData = await apiClient.getCaseData();
         await powerApp_ManageBookingsPage.searchForABooking(caseData.caseReference);
         await powerApp_ManageBookingsPage.$interactive.manageButton.click();
         await powerApp_ManageBookingsPage.$manageCaseModal.auditButton.click();
@@ -121,7 +125,8 @@ test.describe('Set of tests to verify buttons on the manage booking page are in 
     },
     async ({ powerApp_ManageBookingsPage, apiClient }) => {
       await test.step('Pre-requisite step in order to select the option to amend an exisiitng case', async () => {
-        const caseData = await apiClient.createBooking(2, 2, 'today');
+        await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
+        const caseData = await apiClient.getCaseData();
         await powerApp_ManageBookingsPage.searchForABooking(caseData.caseReference);
         await powerApp_ManageBookingsPage.$interactive.amendButton.click();
       });
@@ -152,7 +157,8 @@ test.describe('Set of tests to verify buttons on the manage booking page are in 
     },
     async ({ powerApp_ManageBookingsPage, apiClient }) => {
       await test.step('Pre-requisite step in order to cancel amendment of an exisitng case', async () => {
-        const caseData = await apiClient.createBooking(2, 2, 'today');
+        await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
+        const caseData = await apiClient.getCaseData();
         await powerApp_ManageBookingsPage.searchForABooking(caseData.caseReference);
         await powerApp_ManageBookingsPage.$interactive.amendButton.click();
         await powerApp_ManageBookingsPage.$amendCaseModal.cancelButton.click();
@@ -175,7 +181,8 @@ test.describe('Set of tests to verify buttons on the manage booking page are in 
     },
     async ({ powerApp_ManageBookingsPage, apiClient }) => {
       await test.step('Pre-requisite step in order to delete an exisitng case', async () => {
-        const caseData = await apiClient.createBooking(2, 2, 'today');
+        await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
+        const caseData = await apiClient.getCaseData();
         await powerApp_ManageBookingsPage.searchForABooking(caseData.caseReference);
         await powerApp_ManageBookingsPage.$interactive.amendButton.click();
         await expect(powerApp_ManageBookingsPage.$amendCaseModal.modalWindow).toBeVisible();
@@ -203,7 +210,8 @@ test.describe('Set of tests to verify buttons on the manage booking page are in 
     },
     async ({ powerApp_ManageBookingsPage, apiClient, powerApp_ViewLiveFeedPage }) => {
       await test.step('Pre-requisite step in order to select the option to record an exisiting case', async () => {
-        const caseData = await apiClient.createBooking(2, 2, 'today');
+        await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
+        const caseData = await apiClient.getCaseData();
         await powerApp_ManageBookingsPage.searchForABooking(caseData.caseReference);
         await powerApp_ManageBookingsPage.$interactive.recordButton.click();
         await powerApp_ViewLiveFeedPage.verifyUserIsOnViewLiveFeedPage();

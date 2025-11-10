@@ -6,8 +6,9 @@ test.describe('Set of tests to verify functionality of view live feed page for L
   test.use({ storageState: user.sessionFile });
 
   test.beforeEach(async ({ navigateToPowerAppViewLiveFeedPage, apiClient }) => {
-    const bookingData = await apiClient.createBooking(2, 2, 'today');
-    await navigateToPowerAppViewLiveFeedPage(bookingData.caseReference);
+    await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
+    const caseData = await apiClient.getCaseData();
+    await navigateToPowerAppViewLiveFeedPage(caseData.caseReference);
   });
 
   test(
