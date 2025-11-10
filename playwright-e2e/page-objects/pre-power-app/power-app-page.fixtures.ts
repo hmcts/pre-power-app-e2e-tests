@@ -75,8 +75,8 @@ export const powerAppPageFixtures = {
     const powerApp_ProcessingRecordingsPage = new PowerAppProcessingRecordingsPage(determinePage);
     await use(powerApp_ProcessingRecordingsPage);
   },
-  powerApp_ViewRecordingsPage: async ({ determinePage }, use) => {
-    const powerApp_ViewRecordingsPage = new PowerAppViewRecordingsPage(determinePage);
+  powerApp_ViewRecordingsPage: async ({ determinePage, apiClient }, use) => {
+    const powerApp_ViewRecordingsPage = new PowerAppViewRecordingsPage(determinePage, apiClient);
     await use(powerApp_ViewRecordingsPage);
   },
   navigateToPowerAppHomePage: async ({ powerApp_HomePage, determinePage, powerApp_NavBarComponent }: PowerAppPageFixtures, use) => {

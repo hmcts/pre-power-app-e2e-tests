@@ -1,12 +1,14 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { Base } from '../../base';
 import { NavBarComponent } from '../../components';
+import { ApiClient } from '../../../../api-requests';
 
 export class PowerAppViewRecordingsPage extends Base {
-  constructor(page: Page) {
+  private apiClient: ApiClient;
+  constructor(page: Page, apiClient: ApiClient) {
     super(page);
+    this.apiClient = apiClient;
   }
-
   private navBar = new NavBarComponent(this.page);
 
   public readonly $inputs = {
@@ -56,25 +58,70 @@ export class PowerAppViewRecordingsPage extends Base {
   }
 
   /**
-   * Verifies that the case reference is visible in the search results.
-   * Checks that the case reference label in the search list contains the provided case reference.
-   * Ensures only one case reference is present in the search results.
-   * @param caseReference - The case reference to check for visibility in the search results.
+   * Searches for a case reference in the view recordings page.
+   * If the recording is not found and was assigned via API, it will create a new booking and assign the recording.
+   * @param caseReference - The case reference to search for.
+   * @param recordingCreationMethod - The method by which the recording was created/assigned.
    */
-  public async searchForCaseReference(caseReference: string): Promise<void> {
+  public async searchForCaseReference(
+    caseReference: string,
+    recordingCreationMethod: 'recordingAssignedByApi' | 'recordingCreatedByUi',
+  ): Promise<void> {
+    switch (recordingCreationMethod) {
+      case 'recordingAssignedByApi':
+        try {
+          await this.verifyCaseReferanceCanBeFoundInSearchResults(caseReference);
+        } catch {
+          const caseData = await this.apiClient.getCaseData();
+          const bookingData = await this.apiClient.getBookingData();
+          const recordingData = await this.apiClient.getRecordingData();
+          const response = await this.apiClient.getRecordingDetailsByCaseReferenceApi(caseReference);
+          const responseBody = await response.json();
+
+          const recordings = responseBody?._embedded?.recordingDTOList || [];
+          const idFound = recordings.some((r) => r.id === recordingData.recordingId);
+
+          if (idFound) {
+            throw new Error(
+              `Case Reference ${caseReference} has a recording assigned during test run however unable to be found when searched for on view recordings page. Recording ID: ${recordingData.recordingId}`,
+            );
+          } else {
+            const newBooking = await this.apiClient.createBookingForAnExistingCase(
+              caseData.caseId,
+              caseData.participants.witnesses.filter((w) => `${w.first_name} ${w.last_name}` === bookingData.witnessSelectedForCaseRecording)[0],
+              caseData.participants.defendants,
+              'today',
+            );
+            await this.apiClient.assignRecordingToAnExistingBooking(newBooking.bookingId);
+            await this.$inputs.caseReference.clear();
+            await this.verifyCaseReferanceCanBeFoundInSearchResults(caseData.caseReference);
+          }
+        }
+        break;
+      case 'recordingCreatedByUi':
+        await this.verifyCaseReferanceCanBeFoundInSearchResults(caseReference);
+        break;
+    }
+  }
+
+  private async verifyCaseReferanceCanBeFoundInSearchResults(caseReference: string): Promise<void> {
     await this.$inputs.caseReference.fill(caseReference);
     await expect(this.$inputs.caseReference).toHaveValue(caseReference);
 
     await expect(async () => {
-      await this.refreshResultsIfMoreThenOneCaseReference();
+      await this.refreshResultsUntilASingleCaseReferenceIsReturned();
       await expect(this.$static.caseReferenceLabelInSearchList).toContainText(caseReference, { timeout: 2000 });
-    }).toPass({ intervals: [2500], timeout: 10000 });
+    }).toPass({ intervals: [1_000], timeout: 15_000 });
   }
 
-  public async refreshResultsIfMoreThenOneCaseReference(): Promise<void> {
+  /**
+   * Refreshes the search results until exactly one case reference is returned.
+   */
+  private async refreshResultsUntilASingleCaseReferenceIsReturned(): Promise<void> {
     const caseReferenceList = this.iFrame.locator('[data-control-name*="viewRecordingsScrn_RecordingsGallery_Gal"]').locator('[role="listitem"]');
 
-    if ((await caseReferenceList.count()) > 1) {
+    const count = await caseReferenceList.count();
+    if (count > 1 || count < 1) {
       await this.$interactive.refreshResultsButton.click();
       await expect(caseReferenceList).toHaveCount(1);
     }

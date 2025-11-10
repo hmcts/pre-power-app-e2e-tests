@@ -15,7 +15,7 @@ test.describe('Set of tests to verify functionality of manage bookings page', ()
     },
     async ({ powerApp_ManageBookingsPage, apiClient, dataUtils }) => {
       await test.step('Pre-requisite step in order to create a booking for tomorrow via api', async () => {
-        await apiClient.createBooking(2, 2, 'tomorrow');
+        await apiClient.createNewCaseAndScheduleABooking(2, 2, 'tomorrow');
       });
 
       await test.step('Verify todays date is default within date picker', async () => {

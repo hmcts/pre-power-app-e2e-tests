@@ -44,7 +44,8 @@ test.describe('Set of tests to verify the schedule recording page UI is visually
     },
     async ({ page, powerApp_ScheduleRecordingPage, apiClient, navigateToPowerAppScheduleRecordingsPage, userInterfaceUtils }) => {
       await test.step('Pre-requisite step in order to create a case and navigate to schedule recording page', async () => {
-        const caseData = await apiClient.createBooking(2, 2, 'today');
+        await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
+        const caseData = await apiClient.getCaseData();
         await navigateToPowerAppScheduleRecordingsPage(caseData.caseReference);
       });
       const maskedElements = [
@@ -54,11 +55,12 @@ test.describe('Set of tests to verify the schedule recording page UI is visually
       ];
 
       await test.step('Redact dynamic test data', async () => {
-        const caseData = await apiClient.getBookingData();
+        const caseData = await apiClient.getCaseData();
+        const bookingData = await apiClient.getBookingData();
 
         await userInterfaceUtils.replaceTextWithinStaticElement(powerApp_ScheduleRecordingPage.$static.listOfScheduledRecordings, [
           [/(\d{2}\/\d{2}\/\d{4})/, '01/01/0001'],
-          [caseData.witnessSelectedForCaseRecording, '{redacted-witness}'],
+          [bookingData.witnessSelectedForCaseRecording, '{redacted-witness}'],
         ]);
 
         for (const defendant of caseData.defendantNames) {
@@ -87,7 +89,8 @@ test.describe('Set of tests to verify the schedule recording page UI is visually
     },
     async ({ page, powerApp_ScheduleRecordingPage, apiClient, navigateToPowerAppScheduleRecordingsPage, userInterfaceUtils }) => {
       await test.step('Pre-requisite step in order to create a case, navigate to schedule recording page', async () => {
-        const caseData = await apiClient.createBooking(2, 2, 'today');
+        await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
+        const caseData = await apiClient.getCaseData();
         await navigateToPowerAppScheduleRecordingsPage(caseData.caseReference);
       });
       const maskedElements = [
@@ -102,7 +105,8 @@ test.describe('Set of tests to verify the schedule recording page UI is visually
       });
 
       await test.step('Redact dynamic test data', async () => {
-        const caseData = await apiClient.getBookingData();
+        const caseData = await apiClient.getCaseData();
+        const bookingData = await apiClient.getBookingData();
 
         await userInterfaceUtils.replaceTextWithinStaticElement(powerApp_ScheduleRecordingPage.$static.scheduledRecordingStartDateLabel, [
           [/(\d{2}\/\d{2}\/\d{4})/, '01/01/0001'],
@@ -111,7 +115,7 @@ test.describe('Set of tests to verify the schedule recording page UI is visually
         await userInterfaceUtils.replaceTextWithinStaticElement(powerApp_ScheduleRecordingPage.$deleteScheduleModal.modalBody, [
           [caseData.caseReference, '{redacted}'],
           [/\b\d{2}\/\d{2}\/\d{4}\b/, '01/01/0001'],
-          [caseData.witnessSelectedForCaseRecording, '{redacted-witness}'],
+          [bookingData.witnessSelectedForCaseRecording, '{redacted-witness}'],
         ]);
 
         for (const defendant of caseData.defendantNames) {
@@ -140,20 +144,21 @@ test.describe('Set of tests to verify the schedule recording page UI is visually
     },
     async ({ page, powerApp_ScheduleRecordingPage, apiClient, navigateToPowerAppScheduleRecordingsPage, userInterfaceUtils }) => {
       await test.step('Pre-requisite step in order to create a case and navigate to schedule recording page', async () => {
-        await apiClient.createANewCaseAndAssignRecording(2, 2);
+        await apiClient.createANewCaseAndAssignRecording(2, 2, 'today');
         const caseData = await apiClient.getCaseData();
         await navigateToPowerAppScheduleRecordingsPage(caseData.caseReference);
       });
 
       await test.step('Redact dynamic test data', async () => {
-        const caseData = await apiClient.getBookingData();
+        const caseData = await apiClient.getCaseData();
+        const bookingData = await apiClient.getBookingData();
 
         await userInterfaceUtils.replaceTextWithinStaticElement(powerApp_ScheduleRecordingPage.$static.scheduledRecordingStartDateLabel, [
           [/(\d{2}\/\d{2}\/\d{4})/, '01/01/0001'],
         ]);
 
         await userInterfaceUtils.replaceTextWithinStaticElement(powerApp_ScheduleRecordingPage.$static.scheduledRecordingWitnessLabel, [
-          [caseData.witnessSelectedForCaseRecording, '{redacted-witness}'],
+          [bookingData.witnessSelectedForCaseRecording, '{redacted-witness}'],
         ]);
 
         for (const defendant of caseData.defendantNames) {

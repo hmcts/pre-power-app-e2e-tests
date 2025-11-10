@@ -81,13 +81,18 @@ export class PowerAppManageBookingsPage extends Base {
     await expect(this.$inputs.caseReference).toHaveValue(caseReference);
 
     await expect(async () => {
-      await this.refreshResultsIfMoreThenOneCaseReference();
+      await this.refreshResultsUntilASingleCaseReferenceIsReturned();
       await expect(this.$static.caseReferenceLabelInSearchList).toHaveText(caseReference);
-    }).toPass({ intervals: [2500], timeout: 10000 });
+    }).toPass({ intervals: [1_000], timeout: 15_000 });
   }
 
-  public async refreshResultsIfMoreThenOneCaseReference(): Promise<void> {
-    if ((await this.$static.listItemsInSearchResultsGallery.count()) > 1) {
+  /**
+   * Refreshes the search results until exactly one case reference is returned.
+   */
+  public async refreshResultsUntilASingleCaseReferenceIsReturned(): Promise<void> {
+    const count = await this.$static.listItemsInSearchResultsGallery.count();
+
+    if (count > 1 || count < 1) {
       await this.$interactive.refreshResultsButton.click();
       await expect(this.$static.listItemsInSearchResultsGallery).toHaveCount(1);
     }

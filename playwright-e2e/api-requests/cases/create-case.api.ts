@@ -20,57 +20,70 @@ export class CreateNewCaseApi {
    * @returns A promise that resolves to the created case summary.
    */
   public async request(numberOfDefendants: number, numberOfWitnesses: number): Promise<CreatedCaseSummary> {
-    const caseDetails = this.dataUtils.generateRandomCaseDetails(numberOfDefendants, numberOfWitnesses);
-    const caseId = uuidv4();
+    let createdCaseSummary: CreatedCaseSummary | undefined;
 
-    const witnessParticipants = caseDetails.witnessNames.map((nameOfWitness) => ({
-      first_name: nameOfWitness,
-      last_name: '',
-      id: uuidv4(),
-      participant_type: 'WITNESS',
-    }));
+    await expect(async () => {
+      const caseDetails = this.dataUtils.generateRandomCaseDetails(numberOfDefendants, numberOfWitnesses);
+      const caseId = uuidv4();
 
-    const defendantParticipants = caseDetails.defendantNames.map((nameOfDefendant) => {
-      const [first_name, ...lastNameParts] = nameOfDefendant.split(' ');
-      return {
-        first_name,
-        last_name: lastNameParts.join(' '),
+      const witnessParticipants = caseDetails.witnessNames.map((nameOfWitness) => ({
+        first_name: nameOfWitness,
+        last_name: '',
         id: uuidv4(),
-        participant_type: 'DEFENDANT',
+        participant_type: 'WITNESS',
+      }));
+
+      const defendantParticipants = caseDetails.defendantNames.map((nameOfDefendant) => {
+        const [first_name, ...lastNameParts] = nameOfDefendant.split(' ');
+        return {
+          first_name,
+          last_name: lastNameParts.join(' '),
+          id: uuidv4(),
+          participant_type: 'DEFENDANT',
+        };
+      });
+
+      const participants = [...witnessParticipants, ...defendantParticipants];
+      const dateTimeNow = new Date().toISOString();
+
+      const requestBody = {
+        closed_at: null,
+        court_id: this.courtId,
+        id: caseId,
+        origin: 'PRE',
+        participants,
+        reference: caseDetails.caseReference,
+        state: 'OPEN',
+        test: false,
+        created_at: dateTimeNow,
+        modified_at: dateTimeNow,
       };
+
+      const response = await this.apiContext.put('/cases/' + caseId, {
+        data: requestBody,
+      });
+
+      await expect(response).toBeOK();
+
+      createdCaseSummary = {
+        caseReference: caseDetails.caseReference,
+        caseId,
+        defendantNames: caseDetails.defendantNames,
+        witnessNames: caseDetails.witnessNames,
+        participants: {
+          defendants: defendantParticipants,
+          witnesses: witnessParticipants,
+        },
+      };
+    }).toPass({
+      timeout: 25_000,
+      intervals: [1_000],
     });
 
-    const participants = [...witnessParticipants, ...defendantParticipants];
-    const dateTimeNow = new Date().toISOString();
+    if (!createdCaseSummary) {
+      throw new Error('No case was successfully created within the polling window.');
+    }
 
-    const requestBody = {
-      closed_at: null,
-      court_id: this.courtId,
-      id: caseId,
-      origin: 'PRE',
-      participants,
-      reference: caseDetails.caseReference,
-      state: 'OPEN',
-      test: false,
-      created_at: dateTimeNow,
-      modified_at: dateTimeNow,
-    };
-
-    const response = await this.apiContext.put('/cases/' + caseId, {
-      data: requestBody,
-    });
-
-    await expect(response).toBeOK();
-
-    return {
-      caseReference: caseDetails.caseReference,
-      caseId: caseId,
-      defendantNames: caseDetails.defendantNames,
-      witnessNames: caseDetails.witnessNames,
-      participants: {
-        defendants: defendantParticipants,
-        witnesses: witnessParticipants,
-      },
-    };
+    return createdCaseSummary;
   }
 }

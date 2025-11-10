@@ -6,7 +6,7 @@ test.describe('Set of tests to verify functionality of view recordings page for 
   test.use({ storageState: user.sessionFile });
 
   test.beforeEach(async ({ navigateToPowerAppViewRecordingsPage, apiClient }) => {
-    await apiClient.createANewCaseAndAssignRecording(2, 2);
+    await apiClient.createANewCaseAndAssignRecording(2, 2, 'today');
     await navigateToPowerAppViewRecordingsPage();
   });
 
@@ -16,22 +16,24 @@ test.describe('Set of tests to verify functionality of view recordings page for 
       tag: ['@regression', '@functional'],
     },
     async ({ apiClient, powerApp_ViewRecordingsPage }) => {
-      const bookingData = await apiClient.getBookingData();
-      const recordingData = await apiClient.getRecordingData();
+      const caseData = await apiClient.getCaseData();
 
       await test.step('Verify recording can be found in view recordings page', async () => {
-        await powerApp_ViewRecordingsPage.searchForCaseReference(bookingData.caseReference);
+        await powerApp_ViewRecordingsPage.searchForCaseReference(caseData.caseReference, 'recordingAssignedByApi');
       });
 
       await test.step('Verify case and recording details are correct in search list', async () => {
-        await expect(powerApp_ViewRecordingsPage.$static.caseReferenceLabelInSearchList).toHaveText(`Case Reference: ${bookingData.caseReference}`);
+        const bookingData = await apiClient.getBookingData();
+        const recordingData = await apiClient.getRecordingData();
+
+        await expect(powerApp_ViewRecordingsPage.$static.caseReferenceLabelInSearchList).toHaveText(`Case Reference: ${caseData.caseReference}`);
         await expect(powerApp_ViewRecordingsPage.$static.recordingVersionLabelInSearchList).toHaveText('V.1');
         await expect(powerApp_ViewRecordingsPage.$static.courtLabelInSearchList).toContainText('Court:');
         await expect(powerApp_ViewRecordingsPage.$static.recordingIdLabelInSearchList).toHaveText(`Recording UID: ${recordingData.recordingId}`);
         await expect(powerApp_ViewRecordingsPage.$static.WitnessLabelInSearchList).toHaveText(
           `Witness: ${bookingData.witnessSelectedForCaseRecording}`,
         );
-        for (const defendantName of bookingData.defendantNames) {
+        for (const defendantName of caseData.defendantNames) {
           await expect(powerApp_ViewRecordingsPage.$static.defendantLabelInSearchList.filter({ hasText: 'Defendants:' })).toContainText(
             defendantName,
           );
@@ -58,7 +60,7 @@ test.describe('Set of tests to verify functionality of view recordings page for 
       const caseData = await apiClient.getCaseData();
 
       await test.step('Search and select an existing recording', async () => {
-        await powerApp_ViewRecordingsPage.searchForCaseReference(caseData.caseReference);
+        await powerApp_ViewRecordingsPage.searchForCaseReference(caseData.caseReference, 'recordingAssignedByApi');
         await powerApp_ViewRecordingsPage.$interactive.viewRecordingButton.click();
       });
 

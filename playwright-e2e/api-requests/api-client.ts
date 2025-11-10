@@ -1,11 +1,12 @@
-import { APIRequestContext, expect } from '@playwright/test';
+import { APIRequestContext, APIResponse, expect } from '@playwright/test';
 import { BookingDetails, CreatedCaseSummary, RecordingDetails } from '../types';
 import {
   CreateNewCaseApi,
   CreateBookingApi,
   GetCaseDetailsByCaseReferenceApi,
   CreateOrUpdateCaptureSessionApi,
-  GetRecordingDetailsApi,
+  GetRecordingDetailsAtRandomApi,
+  GetRecordingDetailsByCaseRefApi,
   CreateOrUpdateRecordingApi,
   GetBookingDetailsByCaseReferenceApi,
   DeleteCaseApi,
@@ -21,7 +22,8 @@ export class ApiClient {
   private createOrUpdateCaptureSessionApi: CreateOrUpdateCaptureSessionApi;
   private createOrUpdateRecordingApi: CreateOrUpdateRecordingApi;
   private getCaseDetailsByCaseReferenceApi: GetCaseDetailsByCaseReferenceApi;
-  private geRecordingDetailsApi: GetRecordingDetailsApi;
+  private geRecordingDetailsAtRandomApi: GetRecordingDetailsAtRandomApi;
+  private getRecordingDetailsByCaseRefApi: GetRecordingDetailsByCaseRefApi;
   private getBookingDetailsByCaseReferenceApi: GetBookingDetailsByCaseReferenceApi;
   private deleteCaseApi: DeleteCaseApi;
 
@@ -31,7 +33,8 @@ export class ApiClient {
     this.createOrUpdateCaptureSessionApi = new CreateOrUpdateCaptureSessionApi(apiContext, userId);
     this.createOrUpdateRecordingApi = new CreateOrUpdateRecordingApi(apiContext);
     this.getCaseDetailsByCaseReferenceApi = new GetCaseDetailsByCaseReferenceApi(apiContext, courtId);
-    this.geRecordingDetailsApi = new GetRecordingDetailsApi(apiContext);
+    this.geRecordingDetailsAtRandomApi = new GetRecordingDetailsAtRandomApi(apiContext);
+    this.getRecordingDetailsByCaseRefApi = new GetRecordingDetailsByCaseRefApi(apiContext);
     this.getBookingDetailsByCaseReferenceApi = new GetBookingDetailsByCaseReferenceApi(apiContext, courtId);
     this.deleteCaseApi = new DeleteCaseApi(apiContext);
   }
@@ -73,47 +76,50 @@ export class ApiClient {
   }
 
   /**
-   * Creates a booking for a new case with the specified details.
-   * Stores the booking data internally.
-   * @param numberOfDefendants - Number of defendants for the case.
-   * @param numberOfWitnesses - Number of witnesses for the case.
-   * @param scheduleDate - The date to schedule the booking ('today' or 'tomorrow').
-   * @returns The booking details.
+   * Creates a booking for an existing case using the provided witness and defendants.
+   * Stores the created booking data internally.
+   * @param caseId - The ID of the case for which the booking is being created.
+   * @param witnessToSelectForCaseBooking - The witness details.
+   * @param defendantsToAssignForCaseBooking - An array of defendant details.
+   * @param scheduledFor - The date for which the recording is scheduled ('today' or 'tomorrow').
+   * @returns The created booking details.
    */
-  public async createBooking(numberOfDefendants: number, numberOfWitnesses: number, scheduleDate: 'today' | 'tomorrow'): Promise<BookingDetails> {
-    const caseData: CreatedCaseSummary = await this.createCase(numberOfDefendants, numberOfWitnesses);
-    const bookingId = await this.createBookingApi.request(
-      caseData.caseId,
-      caseData.participants.witnesses[0],
-      caseData.participants.defendants,
-      scheduleDate,
-    );
+  public async createBookingForAnExistingCase(
+    caseId: string,
+    witnessToSelectForCaseBooking: {
+      first_name: string;
+      last_name: string;
+      id: string;
+      participant_type: string;
+    },
+    defendantsToAssignForCaseBooking: {
+      first_name: string;
+      last_name: string;
+      id: string;
+      participant_type: string;
+    }[],
+    scheduledFor: 'today' | 'tomorrow',
+  ): Promise<BookingDetails> {
+    const bookingId = await this.createBookingApi.request(caseId, witnessToSelectForCaseBooking, defendantsToAssignForCaseBooking, scheduledFor);
     const bookingData: BookingDetails = {
-      caseReference: caseData.caseReference,
-      defendantNames: caseData.defendantNames,
-      witnessNames: caseData.witnessNames,
       bookingId: bookingId,
-      witnessSelectedForCaseRecording: caseData.witnessNames[0],
+      witnessSelectedForCaseRecording: witnessToSelectForCaseBooking.first_name,
     };
     this.bookingData = bookingData;
     return bookingData;
   }
 
   /**
-   * Creates a new case, schedules a booking and assigns a recording.
-   * This method creates a case and booking, captures a session, retrieves the latest recording,
-   * and updates the capture session with the recording details.
-   * @param numberOfDefendants - Number of defendants for the case.
-   * @param numberOfWitnesses - Number of witnesses for the case.
-   * @return A promise that resolves when the recording is created and assigned.
+   * Assigns a recording to a booking by creating and updating capture sessions and recordings.
+   * Stores the created recording data internally.
+   * @param bookingId - The ID of the booking to which the recording will be assigned.
+   * @returns The created recording details.
    */
-  public async createANewCaseAndAssignRecording(numberOfDefendants: number, numberOfWitnesses: number): Promise<RecordingDetails> {
-    // Create a new case and schedules a recording (Booking)
-    const bookingDetails = await this.createBooking(numberOfDefendants, numberOfWitnesses, 'today');
+  public async assignRecordingToAnExistingBooking(bookingId: string): Promise<RecordingDetails> {
     // Create a capture session for the booking with status 'STANDBY'
-    const captureSessionDetails = await this.createOrUpdateCaptureSessionApi.request(bookingDetails.bookingId, 'STANDBY');
+    const captureSessionDetails = await this.createOrUpdateCaptureSessionApi.request(bookingId, 'STANDBY');
     // Retrieve the latest recording created by the test suite
-    const recordingDetailsFetched = await this.geRecordingDetailsApi.request();
+    const recordingDetailsFetched = await this.geRecordingDetailsAtRandomApi.request();
     // Update the capture session with the recording details obtained from the latest recording
     await this.createOrUpdateRecordingApi.request(captureSessionDetails.captureSessionId, {
       recordingDuration: recordingDetailsFetched.recordingDuration,
@@ -122,7 +128,7 @@ export class ApiClient {
     });
     // Complete the capture session with the recording details by setting the status to 'RECORDING_AVAILABLE'
     const captureSessionDetailsUponCompletion = await this.createOrUpdateCaptureSessionApi.request(
-      bookingDetails.bookingId,
+      bookingId,
       'RECORDING_AVAILABLE',
       captureSessionDetails.captureSessionId,
     );
@@ -140,6 +146,48 @@ export class ApiClient {
       recordingDuration: await this.formatDuration(recordingDetailsFetched.recordingDuration),
     };
     this.recordingData = recordingData;
+    return recordingData;
+  }
+
+  /**
+   * Creates a new case and schedules a booking for it.
+   * @param numberOfDefendants - Number of defendants for the case.
+   * @param numberOfWitnesses - Number of witnesses for the case.
+   * @param scheduledFor - The date for which the recording is scheduled ('today' or 'tomorrow').
+   */
+  public async createNewCaseAndScheduleABooking(
+    numberOfDefendants: number,
+    numberOfWitnesses: number,
+    scheduledFor: 'today' | 'tomorrow',
+  ): Promise<BookingDetails> {
+    const caseData = await this.createCase(numberOfDefendants, numberOfWitnesses);
+    const bookingData = await this.createBookingForAnExistingCase(
+      caseData.caseId,
+      caseData.participants.witnesses[0],
+      caseData.participants.defendants,
+      scheduledFor,
+    );
+    return bookingData;
+  }
+  /**
+   * Creates a new case, booking, and assigns a recording to the booking.
+   * @param numberOfDefendants - Number of defendants for the case.
+   * @param numberOfWitnesses - Number of witnesses for the case.
+   * @param dateOfRecording - The date for which the recording is scheduled ('today' or 'tomorrow').
+   */
+  public async createANewCaseAndAssignRecording(
+    numberOfDefendants: number,
+    numberOfWitnesses: number,
+    dateOfRecording: 'today' | 'tomorrow',
+  ): Promise<RecordingDetails> {
+    const caseData = await this.createCase(numberOfDefendants, numberOfWitnesses);
+    const bookingData = await this.createBookingForAnExistingCase(
+      caseData.caseId,
+      caseData.participants.witnesses[0],
+      caseData.participants.defendants,
+      dateOfRecording,
+    );
+    const recordingData = await this.assignRecordingToAnExistingBooking(bookingData.bookingId);
     return recordingData;
   }
 
@@ -162,6 +210,10 @@ export class ApiClient {
     const paddedSeconds = String(seconds).padStart(2, '0');
 
     return `${paddedHours}:${paddedMinutes}:${paddedSeconds}`;
+  }
+
+  public async getRecordingDetailsByCaseReferenceApi(caseReference: string): Promise<APIResponse> {
+    return this.getRecordingDetailsByCaseRefApi.request(caseReference);
   }
 
   /**

@@ -143,7 +143,7 @@ test.describe('Ensure e2e journey is working as expected', () => {
         await powerApp_HomePage.verifyUserIsOnHomePage();
         await powerApp_HomePage.$interactive.viewRecordingsButton.click();
         await powerApp_ViewRecordingsPage.verifyUserIsOnViewRecordingsPage();
-        await powerApp_ViewRecordingsPage.searchForCaseReference(caseDetails.caseReference);
+        await powerApp_ViewRecordingsPage.searchForCaseReference(caseDetails.caseReference, 'recordingCreatedByUi');
       });
     },
   );

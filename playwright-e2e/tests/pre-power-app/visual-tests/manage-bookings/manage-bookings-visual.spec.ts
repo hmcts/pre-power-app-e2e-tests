@@ -45,16 +45,17 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
     },
     async ({ page, powerApp_ManageBookingsPage, apiClient, userInterfaceUtils }) => {
       await test.step('Pre-requisite step in order to create a case and assign a booking via api', async () => {
-        await apiClient.createBooking(2, 2, 'today');
+        await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
       });
 
       await test.step('Search for an existing case and redact test data', async () => {
-        const caseData = await apiClient.getBookingData();
+        const caseData = await apiClient.getCaseData();
+        const bookingData = await apiClient.getBookingData();
         await powerApp_ManageBookingsPage.searchForABooking(caseData.caseReference);
 
         await userInterfaceUtils.replaceTextWithinStaticElement(powerApp_ManageBookingsPage.$static.listItemsInSearchResultsGallery, [
           [caseData.caseReference, '{Redacted}'],
-          [caseData.witnessSelectedForCaseRecording, '{Redacted}'],
+          [bookingData.witnessSelectedForCaseRecording, '{Redacted}'],
           [/\b\d{2}\/\d{2}\/\d{4}\b/g, '{Redacted}'],
         ]);
 
@@ -94,7 +95,7 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
     },
     async ({ page, powerApp_ManageBookingsPage, apiClient, userInterfaceUtils }) => {
       await test.step('Pre-requisite step in order to create a case and assign a booking via api', async () => {
-        await apiClient.createBooking(2, 2, 'today');
+        await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
       });
 
       const maskedElements = [
@@ -103,7 +104,8 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
         powerApp_ManageBookingsPage.$globalMaskedlocatorsForVisualTesting.applicationEnvironment,
       ];
 
-      const caseData = await apiClient.getBookingData();
+      const caseData = await apiClient.getCaseData();
+      const bookingData = await apiClient.getBookingData();
 
       await test.step('Search for an existing case and select option to manage case', async () => {
         await powerApp_ManageBookingsPage.searchForABooking(caseData.caseReference);
@@ -114,7 +116,7 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
       await test.step('Redact dynamic test data', async () => {
         await userInterfaceUtils.replaceTextWithinStaticElement(powerApp_ManageBookingsPage.$static.listItemsInSearchResultsGallery, [
           [caseData.caseReference, '{Redacted}'],
-          [caseData.witnessSelectedForCaseRecording, '{Redacted}'],
+          [bookingData.witnessSelectedForCaseRecording, '{Redacted}'],
         ]);
 
         await userInterfaceUtils.hideElements(powerApp_ManageBookingsPage.$inputs.caseReference);
@@ -139,7 +141,7 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
         await userInterfaceUtils.replaceTextWithinStaticElement(powerApp_ManageBookingsPage.$manageCaseModal.auditCaseInformationText, [
           [caseData.caseReference, '{Redacted}'],
           [/\b\d{2}\/\d{2}\/\d{4}\b/g, '{Redacted}'],
-          [caseData.witnessSelectedForCaseRecording, '{Redacted}'],
+          [bookingData.witnessSelectedForCaseRecording, '{Redacted}'],
         ]);
 
         for (const defendant of caseData.defendantNames) {
@@ -189,7 +191,7 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
     },
     async ({ page, powerApp_ManageBookingsPage, apiClient, userInterfaceUtils }) => {
       await test.step('Pre-requisite step in order to create a case and assign a booking via api', async () => {
-        await apiClient.createBooking(2, 2, 'today');
+        await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
       });
 
       const maskedElements = [
@@ -198,7 +200,8 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
         powerApp_ManageBookingsPage.$globalMaskedlocatorsForVisualTesting.applicationEnvironment,
       ];
 
-      const caseData = await apiClient.getBookingData();
+      const caseData = await apiClient.getCaseData();
+      const bookingData = await apiClient.getBookingData();
 
       await test.step('Search for an existing case and select option to manage case', async () => {
         await powerApp_ManageBookingsPage.searchForABooking(caseData.caseReference);
@@ -209,7 +212,7 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
       await test.step('Redact dynamic test data', async () => {
         await userInterfaceUtils.replaceTextWithinStaticElement(powerApp_ManageBookingsPage.$static.listItemsInSearchResultsGallery, [
           [caseData.caseReference, '{Redacted}'],
-          [caseData.witnessSelectedForCaseRecording, '{Redacted}'],
+          [bookingData.witnessSelectedForCaseRecording, '{Redacted}'],
         ]);
 
         await userInterfaceUtils.hideElements(powerApp_ManageBookingsPage.$inputs.caseReference);
@@ -218,7 +221,7 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
           [caseData.caseReference, '{Redacted}'],
         ]);
         await userInterfaceUtils.replaceTextWithinStaticElement(powerApp_ManageBookingsPage.$amendCaseModal.witnessDropdown, [
-          [caseData.witnessSelectedForCaseRecording, '{Redacted}'],
+          [bookingData.witnessSelectedForCaseRecording, '{Redacted}'],
         ]);
         for (const defendant of caseData.defendantNames) {
           await userInterfaceUtils.replaceTextWithinStaticElement(powerApp_ManageBookingsPage.$amendCaseModal.defendantsDropdown, [
@@ -249,7 +252,7 @@ test.describe('Set of tests to verify the manage bookings page UI is visually co
         await userInterfaceUtils.replaceTextWithinStaticElement(powerApp_ManageBookingsPage.$amendCaseModal.deleteCaseText, [
           [caseData.caseReference, '{Redacted}'],
           [/\b\d{2}\/\d{2}\/\d{4}\b/g, '01/01/0001'],
-          [caseData.witnessSelectedForCaseRecording, '{Redacted}'],
+          [bookingData.witnessSelectedForCaseRecording, '{Redacted}'],
         ]);
 
         for (const defendant of caseData.defendantNames) {

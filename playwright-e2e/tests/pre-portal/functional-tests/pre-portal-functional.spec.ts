@@ -11,7 +11,7 @@ test.describe('Set of tests to verify functionality of pre portal as a Level 3 u
     },
     async ({ context, powerApp_MsSignInPage, powerApp_HomePage, powerApp_ViewRecordingsPage, networkInterceptUtils, apiClient }) => {
       await test.step('Pre-Rquisite step in order to create a case and assign a recording via API', async () => {
-        await apiClient.createANewCaseAndAssignRecording(2, 2);
+        await apiClient.createANewCaseAndAssignRecording(2, 2, 'today');
       });
 
       const caseData = await apiClient.getCaseData();
@@ -27,7 +27,7 @@ test.describe('Set of tests to verify functionality of pre portal as a Level 3 u
 
       const userToShareRecordingWith = config.portalUsers.preLevel3User.username;
       await test.step('Search for recording by case reference and select option to share', async () => {
-        await powerApp_ViewRecordingsPage.searchForCaseReference(caseData.caseReference);
+        await powerApp_ViewRecordingsPage.searchForCaseReference(caseData.caseReference, 'recordingAssignedByApi');
         await powerApp_ViewRecordingsPage.$interactive.shareRecordingButton.click();
         await expect(powerApp_ViewRecordingsPage.$shareRecordingModal.modalWindow).toBeVisible();
         await powerApp_ViewRecordingsPage.$shareRecordingModal.shareButton.click();

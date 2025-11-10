@@ -119,7 +119,7 @@ test.describe('Set of tests to verify accessibility of pages within pre power ap
     },
     async ({ navigateToPowerAppScheduleRecordingsPage, axeUtils, apiClient }) => {
       await test.step('Pre-requisite step in order to setup an existing case with a booking assigned via api', async () => {
-        await apiClient.createBooking(2, 2, 'today');
+        await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
       });
 
       await test.step('Select option to book a recording in order to navigate to schedule recording page', async () => {
@@ -156,7 +156,7 @@ test.describe('Set of tests to verify accessibility of pages within pre power ap
     },
     async ({ navigateToPowerAppManageBookingsPage, powerApp_ManageBookingsPage, axeUtils, apiClient }) => {
       await test.step('Pre-requisite step in order to setup an existing case with a booking assigned via api', async () => {
-        await apiClient.createBooking(2, 2, 'today');
+        await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
       });
 
       await test.step('Navigate to manage bookings page and search for an existing case', async () => {
@@ -205,7 +205,7 @@ test.describe('Set of tests to verify accessibility of pages within pre power ap
     },
     async ({ navigateToPowerAppManageBookingsPage, powerApp_ManageBookingsPage, axeUtils, apiClient }) => {
       await test.step('Pre-requisite step in order to setup an existing case with a booking assigned via api', async () => {
-        await apiClient.createBooking(2, 2, 'today');
+        await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
       });
 
       await test.step('Navigate to manage bookings page and search for an existing case', async () => {
@@ -243,7 +243,7 @@ test.describe('Set of tests to verify accessibility of pages within pre power ap
       test.fail(true, 'Bug raised on PRE team board - S28-4336');
 
       await test.step('Pre-requisite step in order to setup an existing case with a booking assigned via api', async () => {
-        await apiClient.createBooking(2, 2, 'today');
+        await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
       });
 
       await test.step('Select option to record on manage bookings page in order to navigate to view live recording page', async () => {

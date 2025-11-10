@@ -51,7 +51,8 @@ test.describe('Set of tests to verify functionality of schedule a recording page
       navigateToPowerAppScheduleRecordingsPage,
     }) => {
       await test.step('Pre-requisite step in order to create a booking via api and navigate to schedule recordings page', async () => {
-        const caseData = await apiClient.createBooking(2, 2, 'today');
+        await apiClient.createNewCaseAndScheduleABooking(2, 2, 'today');
+        const caseData = await apiClient.getCaseData();
         await navigateToPowerAppScheduleRecordingsPage(caseData.caseReference);
       });
 
@@ -98,7 +99,7 @@ test.describe('Set of tests to verify functionality of schedule a recording page
     },
     async ({ powerApp_ScheduleRecordingPage, apiClient, navigateToPowerAppScheduleRecordingsPage }) => {
       await test.step('Pre-requisite step in order to create a case / assign a recording via api and navigate to schedule recordings page', async () => {
-        await apiClient.createANewCaseAndAssignRecording(2, 2);
+        await apiClient.createANewCaseAndAssignRecording(2, 2, 'today');
         const caseData = await apiClient.getCaseData();
         await navigateToPowerAppScheduleRecordingsPage(caseData.caseReference);
       });
