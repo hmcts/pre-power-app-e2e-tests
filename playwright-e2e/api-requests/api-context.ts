@@ -10,6 +10,7 @@ export class ApiContext {
   public async createPowerAppApiContext(x_userId: string): Promise<APIRequestContext> {
     return request.newContext({
       baseURL: config.urls.prePowerAppApiUrl,
+      timeout: 5_000,
       extraHTTPHeaders: {
         accept: '*/*',
         'Content-Type': 'application/json',

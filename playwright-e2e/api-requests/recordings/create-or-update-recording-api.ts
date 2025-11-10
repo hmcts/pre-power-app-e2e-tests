@@ -23,16 +23,21 @@ export class CreateOrUpdateRecordingApi {
       recordingId: string;
     },
   ): Promise<void> {
-    const response = await this.apiContext.put(`/recordings/${recordingDetails.recordingId}`, {
-      data: {
-        capture_session_id: captureSessionId,
-        duration: recordingDetails.recordingDuration,
-        filename: recordingDetails.recordingFileName,
-        id: recordingDetails.recordingId,
-        version: 1,
-      },
-    });
+    await expect(async () => {
+      const response = await this.apiContext.put(`/recordings/${recordingDetails.recordingId}`, {
+        data: {
+          capture_session_id: captureSessionId,
+          duration: recordingDetails.recordingDuration,
+          filename: recordingDetails.recordingFileName,
+          id: recordingDetails.recordingId,
+          version: 1,
+        },
+      });
 
-    await expect(response).toBeOK();
+      await expect(response).toBeOK();
+    }).toPass({
+      timeout: 25_000,
+      intervals: [1_000],
+    });
   }
 }

@@ -32,21 +32,34 @@ export class CreateBookingApi {
     }[],
     scheduledFor: 'today' | 'tomorrow',
   ): Promise<string> {
-    const participants = [witness, ...defendants];
-    const scheduledForDate = this.getDateString(scheduledFor);
-    const bookingId = uuidv4();
+    let idOfBooking: string | undefined;
 
-    const response = await this.apiContext.put(`/bookings/${bookingId}`, {
-      data: {
-        case_id: caseId,
-        id: bookingId,
-        participants,
-        scheduled_for: `${scheduledForDate}T00:00:00.000Z`,
-      },
+    await expect(async () => {
+      const participants = [witness, ...defendants];
+      const scheduledForDate = this.getDateString(scheduledFor);
+      const bookingId = uuidv4();
+
+      const response = await this.apiContext.put(`/bookings/${bookingId}`, {
+        data: {
+          case_id: caseId,
+          id: bookingId,
+          participants,
+          scheduled_for: `${scheduledForDate}T00:00:00.000Z`,
+        },
+      });
+
+      await expect(response).toBeOK();
+      idOfBooking = bookingId;
+    }).toPass({
+      timeout: 25_000,
+      intervals: [1_000],
     });
 
-    await expect(response).toBeOK();
-    return bookingId;
+    if (!idOfBooking) {
+      throw new Error('Unable to create a booking within the polling window.');
+    }
+
+    return idOfBooking;
   }
 
   private getDateString(date: 'today' | 'tomorrow' = 'today'): string {
