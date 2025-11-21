@@ -15,20 +15,27 @@ export class GetCaseDetailsByCaseReferenceApi {
    * @returns A promise that resolves to the case details.
    */
   public async request(caseReference: string): Promise<object> {
-    const response = await this.apiContext.get('/cases', {
-      params: {
-        reference: caseReference,
-        courtId: this.courtId,
-        includeDeleted: 'true',
-        page: '0',
-        size: '1',
-      },
+    let responseBody: object | undefined;
+
+    await expect(async () => {
+      const response = await this.apiContext.get('/cases', {
+        params: {
+          reference: caseReference,
+          courtId: this.courtId,
+          includeDeleted: 'true',
+          page: '0',
+          size: '1',
+        },
+      });
+
+      await expect(response).toBeOK();
+
+      responseBody = await response.json();
+    }).toPass({
+      timeout: 25_000,
+      intervals: [1_000],
     });
 
-    await expect(response).toBeOK();
-
-    const responseBody = await response.json();
-
-    return responseBody;
+    return responseBody!;
   }
 }
