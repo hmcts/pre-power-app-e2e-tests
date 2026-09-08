@@ -46,6 +46,8 @@ export class PowerAppViewLiveFeedPage extends PowerAppBase {
 
     await expect(this.$startRecordingModal.recordingLinkIsBeingGeneratedText).toBeVisible();
     await expect(this.$startRecordingModal.recordingLinkIsBeingGeneratedSpinner).toBeHidden({ timeout: 90_000 });
+    await expect(this.$startRecordingModal.generatedRtmpsLink).toBeVisible();
+    await expect(this.$startRecordingModal.copyLinkButton).toBeVisible();
 
     const rtmpsLinkValue = await this.$startRecordingModal.generatedRtmpsLink.inputValue();
     expect(rtmpsLinkValue).not.toBeNull();
@@ -80,7 +82,6 @@ export class PowerAppViewLiveFeedPage extends PowerAppBase {
 
     await expect(this.$interactive.showLinkButton).toBeVisible({ timeout: 30_000 });
   }
-
   /**
    * Selects the "Show Link" button and waits for the link modal content to become visible.
    * Power Apps can intermittently render overlapping controls that intercept pointer events,
@@ -88,15 +89,12 @@ export class PowerAppViewLiveFeedPage extends PowerAppBase {
    */
   public async selectShowLinkButton(): Promise<void> {
     await expect(async () => {
-      await expect(this.$interactive.showLinkButton).toBeVisible({ timeout: 5_000 });
-      await expect(this.$interactive.showLinkButton).toBeEnabled({ timeout: 5_000 });
-
-      await this.$interactive.showLinkButton.click().catch(async () => {
-        await this.$interactive.showLinkButton.click({ force: true });
-      });
-
+      await this.$interactive.showLinkButton.click();
       await expect(this.$startRecordingModal.generatedRtmpsLink).toBeVisible({ timeout: 5_000 });
     }).toPass({ intervals: [1_000], timeout: 20_000 });
+
+    await expect(this.$interactive.showLinkButton).toBeVisible({ timeout: 5_000 });
+    await expect(this.$interactive.showLinkButton).toBeEnabled({ timeout: 5_000 });
   }
 
   /**
