@@ -88,13 +88,15 @@ export class PowerAppViewLiveFeedPage extends PowerAppBase {
    * so this uses a retry loop and falls back to force click when needed.
    */
   public async selectShowLinkButton(): Promise<void> {
+    await expect(this.$interactive.showLinkButton).toBeVisible();
+    await expect(this.$interactive.showLinkButton).toBeEnabled();
+
     await expect(async () => {
-      await this.$interactive.showLinkButton.click();
+      if ((await this.$interactive.showLinkButton.isVisible()) && (await this.$interactive.showLinkButton.isEnabled())) {
+        await this.$interactive.showLinkButton.click();
+      }
       await expect(this.$startRecordingModal.generatedRtmpsLink).toBeVisible({ timeout: 5_000 });
     }).toPass({ intervals: [1_000], timeout: 20_000 });
-
-    await expect(this.$interactive.showLinkButton).toBeVisible({ timeout: 5_000 });
-    await expect(this.$interactive.showLinkButton).toBeEnabled({ timeout: 5_000 });
   }
 
   /**
