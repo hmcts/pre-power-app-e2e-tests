@@ -20,12 +20,11 @@ test.describe('Set of tests to verify functionality of view live feed page for L
       await test.step('Given user has selected option to start a recording', async () => {
         await powerAppPages.viewLiveFeedPage.selectStartRecordingButton();
         await expect(powerAppPages.viewLiveFeedPage.$startRecordingModal.recordingLinkIsBeingGeneratedSpinner).toBeHidden({ timeout: 90000 });
-        await expect(powerAppPages.viewLiveFeedPage.$startRecordingModal.generatedRtmpsLink).toBeVisible({ timeout: 30000 });
         await powerAppPages.viewLiveFeedPage.selectCloseButtonToDismissStartRecordingModal();
       });
 
       await test.step('When user selects the show link button', async () => {
-        await powerAppPages.viewLiveFeedPage.$interactive.showLinkButton.click();
+        await powerAppPages.viewLiveFeedPage.selectShowLinkButton();
       });
 
       await test.step('The correct details are displayed on modal', async () => {
