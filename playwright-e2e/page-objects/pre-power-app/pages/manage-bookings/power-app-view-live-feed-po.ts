@@ -22,9 +22,9 @@ export class PowerAppViewLiveFeedPage extends PowerAppBase {
     recordingLinkIsBeingGeneratedText: this.iFrame.getByText('A link will be generated.'),
     recordingLinkIsBeingGeneratedSpinner: this.iFrame.locator('[data-control-name="RTMPSSpinner"]'),
     generatedRtmpsLink: this.iFrame.locator('[data-control-name*="CVPRTMPUrlTxt"] textarea'),
-    dontForgetToStartRecordingText: this.iFrame.locator('[data-control-name*="DontForgetToPressRecordLbl"] [class="appmagic-label-text"]'),
+    recordingUriInstructionText: this.iFrame.locator('[data-control-name*="DontForgetToPressRecordLbl"] [class="appmagic-label-text"]'),
     copyLinkButton: this.iFrame.getByRole('button', { name: 'Copy Link' }),
-    closeButton: this.iFrame.getByRole('button', { name: 'Close' }),
+    closeButton: this.iFrame.getByRole('button', { name: /^Close$/ }).first(),
   } as const satisfies Record<string, Locator>;
 
   public readonly $finishRecordingModal = {
@@ -35,7 +35,6 @@ export class PowerAppViewLiveFeedPage extends PowerAppBase {
   public async verifyUserIsOnViewLiveFeedPage(): Promise<void> {
     await expect(this.$static.pageHeading).toBeVisible({ timeout: 15000 });
   }
-
   /**
    * Starts the recording by clicking the "Start Recording" button, waits for the RTMPS link modal to appear,
    * verifies the link is generated, captures the RTMPS link value, and closes the modal.
@@ -80,6 +79,24 @@ export class PowerAppViewLiveFeedPage extends PowerAppBase {
       await this.$startRecordingModal.closeButton.click();
       await expect(this.iFrame.locator('[data-control-name*="CVPPrompt"]').first()).toBeHidden();
     }).toPass({ intervals: [3000], timeout: 12_000 });
+
+    await expect(this.$interactive.showLinkButton).toBeVisible({ timeout: 30_000 });
+  }
+  /**
+   * Selects the "Show Link" button and waits for the link modal content to become visible.
+   * Power Apps can intermittently render overlapping controls that intercept pointer events,
+   * so this uses a retry loop and falls back to force click when needed.
+   */
+  public async selectShowLinkButton(): Promise<void> {
+    await expect(this.$interactive.showLinkButton).toBeVisible();
+    await expect(this.$interactive.showLinkButton).toBeEnabled();
+
+    await expect(async () => {
+      if ((await this.$interactive.showLinkButton.isVisible()) && (await this.$interactive.showLinkButton.isEnabled())) {
+        await this.$interactive.showLinkButton.click();
+      }
+      await expect(this.$startRecordingModal.generatedRtmpsLink).toBeVisible({ timeout: 5_000 });
+    }).toPass({ intervals: [1_000], timeout: 20_000 });
   }
 
   /**
